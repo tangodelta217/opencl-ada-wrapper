@@ -1,23 +1,11 @@
 project OpenCL_Wrapper is
+   OpenCL_Link_Flag := external ("OPENCL_LINK_FLAG", "-lOpenCL");
+
    for Languages use ("Ada");
    for Source_Dirs use ("src/opencl", "src/opencl/raw");
-   for Object_Dir use "obj/opencl_wrapper";
-   for Library_Dir use "lib";
-   for Library_Name use "opencl_wrapper";
-   for Library_Kind use "static";
-   for Library_Interface use
-     ("opencl.ads", "opencl-raw.ads", "opencl-raw-api.ads");
-   for Create_Missing_Dirs use "True";
-
-   Default_OpenCL_Library : constant String := "OpenCL";
-   OpenCL_Library : constant String :=
-     External ("OPENCL_LIB_NAME", Default_OpenCL_Library);
-
-   package Compiler is
-      for Default_Switches ("Ada") use ("-gnat2022", "-gnatwa");
-   end Compiler;
+   for Object_Dir use "obj";
 
    package Linker is
-      for Linker_Options ("Ada") use ("-l" & OpenCL_Library);
+      for Switches ("Ada") use (OpenCL_Link_Flag);
    end Linker;
 end OpenCL_Wrapper;

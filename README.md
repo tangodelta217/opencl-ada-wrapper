@@ -4,27 +4,36 @@
 Repositorio para un wrapper en Ada de OpenCL y su infraestructura asociada.
 
 **Compilacion**
-- Requisito: `gprbuild` con toolchain GNAT (Ada 2012/2022).
-- Build de wrapper:
-  - `gprbuild -P opencl_wrapper.gpr -p`
-  - salida esperada: `lib/libopencl_wrapper.a`
+- Herramientas requeridas:
+  - `gprbuild`
+  - `gnatls` (toolchain GNAT Ada 2012/2022)
+  - `gcc`
 - Build de tests:
-  - `gprbuild -P tests/tests.gpr -p`
+  - `gprbuild -P tests/tests.gpr`
 - Build combinado (script):
   - `./tools/build.sh`
+- Logs de build local:
+  - `docs/VV/Execution_Logs/local/<UTC_TIMESTAMP>_build.log`
 
 **Configuracion de Link OpenCL**
 - Valor por defecto en Linux: `-lOpenCL`.
 - Override por variable de entorno:
-  - `OPENCL_LIB_NAME=OpenCL gprbuild -P tests/tests.gpr -p`
-- Override en atributo del `.gpr`:
-  - editar `Default_OpenCL_Library` o `package Linker / Linker_Options` en `opencl_wrapper.gpr` y `tests/tests.gpr`.
+  - `export OPENCL_LINK_FLAG=-lOpenCL`
+  - `gprbuild -P tests/tests.gpr`
+- En entornos no estandar, `OPENCL_LINK_FLAG` puede incluir rutas:
+  - `export OPENCL_LINK_FLAG=\"-L/ruta/opencl -lOpenCL\"`
 
 **Smoke Test**
 - Test minimo implementado: `OCLW-TST-0002` (enumeracion de plataformas/dispositivos OpenCL).
 - Compilar y ejecutar:
-  - `gprbuild -P tests/tests.gpr -p`
-  - `./bin/tests/smoke_platforms`
+  - `gprbuild -P tests/tests.gpr`
+  - `./tests/bin/smoke_platforms`
+  - o localizarlo: `find . -name smoke_platforms -type f -executable -print -quit`
+- Flujo recomendado (build + run + evidencias):
+  - `./tools/run_smoke.sh`
+- Guardar evidencia en logs:
+  - Build: `docs/VV/Execution_Logs/local/<UTC_TIMESTAMP>_build.log`
+  - Run: `docs/VV/Execution_Logs/local/<UTC_TIMESTAMP>_smoke_run.log`
 
 **Documentacion**
 - `docs/ARCH/SDD.md` Arquitectura por capas y diseno de alto nivel.
