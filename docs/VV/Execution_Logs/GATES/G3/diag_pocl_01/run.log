@@ -1,0 +1,7 @@
+[2026-02-09 22:35:16.045150487] POCL: in fn pocl_cache_init_topdir at line 585:
+  *** ERROR ***  |     ERROR |  Could not create top directory (/home/tangodelta/.cache/pocl/uncached) for cache. 
+
+Note: if you have proper rights to create that directory, and still get the error, then most likely pocl and the program you're trying to run are linked to different versions of libstdc++ library. 
+This is not a bug in pocl and there's nothing we can do to fix it - you need both pocl and your program to be compiled for your system. This is known to happen with Luxmark benchmark binaries downloaded from website; Luxmark installed from your linux distribution's packages should work.
+[2026-02-09 22:35:16.045191305] POCL: in fn pocl_init_devices at line 526:
+  *** ERROR ***  |     ERROR | CL_DEVICE_NOT_FOUND Cache directory initialization failedRESULT=SKIP reason=CL_DEVICE_NOT_FOUND

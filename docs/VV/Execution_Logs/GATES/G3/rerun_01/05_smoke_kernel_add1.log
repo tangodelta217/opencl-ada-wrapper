@@ -1,0 +1,6 @@
+ERROR build_program: CL_BUILD_PROGRAM_FAILURE
+BUILD_LOG_BEGIN
+Device cpu-haswell-Intel(R) Core(TM) i5-14600K failed to build the program
+
+BUILD_LOG_END
+RESULT=FAIL

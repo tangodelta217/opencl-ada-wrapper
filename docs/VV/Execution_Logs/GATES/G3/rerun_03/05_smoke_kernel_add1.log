@@ -1,0 +1,15 @@
+INFO device_opencl_c_version=OpenCL C 1.2 PoCL
+INFO build_retry first_status=CL_BUILD_PROGRAM_FAILURE status_int=-11 retry_options=-cl-std=CL1.2
+ERROR build_program: CL_BUILD_PROGRAM_FAILURE status_int=-11
+BUILD_STATUS=CL_BUILD_ERROR
+build_options_bytes_reported=14
+BUILD_OPTIONS=-cl-std=CL1.2
+build_log_bytes_reported=76
+BUILD_LOG_BEGIN
+Device cpu-haswell-Intel(R) Core(TM) i5-14600K failed to build the program
+
+BUILD_LOG_END
+PROGRAM_SOURCE_HEAD_BEGIN
+__kernel void add1(__global const uchar* src, __global uchar* dst) { const size_t gid = get_global_id(0); dst[gid] = (uchar)(src[gid] + (uchar)1); }
+PROGRAM_SOURCE_HEAD_END
+RESULT=FAIL

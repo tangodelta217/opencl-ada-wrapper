@@ -169,4 +169,9 @@ package body OpenCL.Core.Buffers is
       end if;
    end Read;
 
+   function Raw_Handle (B : Buffer) return OpenCL.Raw.API.cl_mem is
+   begin
+      return B.Handle;
+   end Raw_Handle;
+
 end OpenCL.Core.Buffers;

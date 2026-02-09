@@ -35,6 +35,9 @@ package OpenCL.Core.Buffers is
       Bytes : size_t;
       Status : out Status_Code);
 
+   --  Helper required by sibling child package Kernels.
+   function Raw_Handle (B : Buffer) return OpenCL.Raw.API.cl_mem;
+
 private
    package API renames OpenCL.Raw.API;
 

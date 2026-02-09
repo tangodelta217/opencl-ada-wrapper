@@ -1,0 +1,7 @@
+# cache permissions / ownership
+$ ls -ld ~/.cache ~/.cache/pocl ~/.cache/pocl/kcache
+drwx------ 47 tangodelta tangodelta 4096 Feb  9 19:26 /home/tangodelta/.cache
+drwx------  3 tangodelta tangodelta 4096 Feb  9 19:26 /home/tangodelta/.cache/pocl
+drwx------  2 tangodelta tangodelta 4096 Feb  9 19:26 /home/tangodelta/.cache/pocl/kcache
+
+$ find ~/.cache/pocl -maxdepth 3 -not -user "tangodelta" -ls | head -n 50

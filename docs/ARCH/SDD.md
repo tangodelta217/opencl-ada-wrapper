@@ -55,6 +55,7 @@ Se enfoca en la estructura modular, responsabilidades y limites de cada capa, si
 ## 5. Gestion de Errores
 - Raw/Thin: retorna codigos/valores tal cual la API C (`cl_int`).
 - Core/Thick: usa un modelo de estado explicito (codigo + `out` params) como via primaria.
+- Program/Kernel path: usa `Status_Code + Logs` (build log y mensajes de diagnostico acotados).
 - RT/EW: no usa excepciones como camino principal; solo resultados deterministas.
 - Wrappers de conveniencia con excepciones (si se agregan) se limitan a tooling/no RT.
 
@@ -133,3 +134,41 @@ sin introducir complejidad no necesaria para G0.
 - No usar excepciones como camino principal en Core.
 - Las excepciones, si existen en APIs de conveniencia futuras, se restringen a
   tooling/no RT y deben mapear 1:1 con `Status_Code`.
+
+## 14. OpenCL.Core.Programs
+**Objetivo:** Exponer ciclo minimo de programa OpenCL para integracion y diagnostico.
+
+**14.1 Build desde source (dev/test path)**
+- API para crear programa desde source en entorno de desarrollo/pruebas.
+- Build options deben ser parametro explicito de API (sin defaults ocultos).
+- Resultado de build siempre se reporta por `Status_Code`.
+
+**14.2 Build log retrieval**
+- El wrapper debe exponer recuperacion del build log por programa/dispositivo.
+- Se define un limite explicito `Max_Build_Log_Bytes` para evitar reservas no acotadas.
+- Politica de clamp:
+  - Si el log reportado excede `Max_Build_Log_Bytes`, truncar de forma controlada.
+  - Reportar estado y dejar traza de truncamiento en logs de V&V.
+
+**14.3 Politica dev/test vs RT**
+- **Nota explicita:** "Build from source = dev/test path; RT profile usara binaries".
+- Perfil RT/EW no depende de compilador OpenCL en runtime; usara artefactos
+  precompilados/validados del baseline.
+
+**14.4 Casos esperados**
+- `CL_COMPILER_NOT_AVAILABLE`: no crash; clasificar como caso controlado
+  (`SKIP`) en smoke de compilacion, con evidencia explicita.
+
+## 15. OpenCL.Core.Kernels
+**Objetivo:** Exponer ejecucion minima de kernels para flujo host->device.
+
+**15.1 Operaciones minimas**
+- Crear kernel por nombre desde programa construido.
+- Set de argumentos por `Address + Size` (wrappers tipados pueden agregarse despues).
+- Enqueue NDRange 1D con tamanos de trabajo explicitos.
+- Sincronizacion final por `Finish`.
+
+**15.2 Politica de errores**
+- Camino principal: `Status_Code` + informacion de diagnostico (sin excepciones).
+- Fallos en create/set/enqueue/finish deben propagarse sin ambiguedad y con
+  contexto minimo para IV&V.
