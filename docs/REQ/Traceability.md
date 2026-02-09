@@ -54,3 +54,17 @@ Primary gate evidence:
 | OCLW-REQ-0005 | Explicit status-based error flow for create/release/read/write/finish | Test | OCLW-TST-0002 | `src/opencl/core/opencl-core-contexts.adb`, `src/opencl/core/opencl-core-queues.adb`, `src/opencl/core/opencl-core-buffers.adb`, `tests/smoke/smoke_buffer_roundtrip.adb` | `docs/VV/Execution_Logs/GATES/G2/rerun_01/G2_Report.md` | PASS |
 | OCLW-REQ-0008 | Explicit resource lifecycle for context/queue/buffer | Test | OCLW-TST-0002 | `tests/smoke/smoke_buffer_roundtrip.adb` (create/write/read/release reverse order) | `docs/VV/Execution_Logs/GATES/G2/rerun_01/G2_Report.md` (`RESULT=PASS`) | PASS |
 | OCLW-REQ-0010 | Traceability maintained through Gate G2 closure artifacts | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure + HW fingerprint | `docs/VV/Execution_Logs/GATES/G2/Closure.md`, `docs/HW/Platform_Fingerprint.md` | PASS |
+
+## G3 Addendum (Program/Kernel Build + NDRange)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G3/rerun_05/G3_Report.md`
+- `docs/VV/Execution_Logs/GATES/G3/Closure.md`
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0001 | Thin FFI expansion for program/kernel host API (`clCreateProgramWithSource`, `clBuildProgram`, `clGetProgramBuildInfo`, `clCreateKernel`, `clSetKernelArg`, `clEnqueueNDRangeKernel`) | Inspection + build | OCLW-TST-0002 | `src/opencl/raw/opencl-raw-api.ads` | `docs/VV/Execution_Logs/GATES/G3/rerun_05/G3_Report.md` (build + run via harness) | PASS |
+| OCLW-REQ-0002 | Thick wrappers for program build diagnostics and kernel execution | Inspection + test | OCLW-TST-0002 | `src/opencl/core/opencl-core-programs.ads`, `src/opencl/core/opencl-core-programs.adb`, `src/opencl/core/opencl-core-kernels.ads`, `src/opencl/core/opencl-core-kernels.adb` | `docs/VV/Execution_Logs/GATES/G3/rerun_05/G3_Report.md` (`smoke_kernel_add1` path) | PASS |
+| OCLW-REQ-0005 | Status-based error handling plus build diagnostics (`BUILD_STATUS`, options, log bytes, bounded log, source head) | Test | OCLW-TST-0002 | `tests/smoke/smoke_kernel_add1.adb`, `src/opencl/core/opencl-core-programs.adb` | `docs/VV/Execution_Logs/GATES/G3/rerun_05/G3_Report.md` (diagnostic output) | PASS |
+| OCLW-REQ-0008 | Kernel lifecycle and execution flow (create/set args/enqueue/finish/read/verify) | Test | OCLW-TST-0002 | `tests/smoke/smoke_kernel_add1.adb` | `docs/VV/Execution_Logs/GATES/G3/rerun_05/G3_Report.md` (`RESULT=PASS`) | PASS |
+| OCLW-REQ-0010 | End-to-end traceability kept through Gate G3 closure artifacts | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + G3 closure + harness behavior | `docs/VV/Execution_Logs/GATES/G3/Closure.md`, `tools/run_smoke.sh` | PASS |
