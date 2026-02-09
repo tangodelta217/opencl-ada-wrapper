@@ -22,6 +22,7 @@ Repositorio para un wrapper en Ada de OpenCL y su infraestructura asociada.
   - `gprbuild -P tests/tests.gpr`
 - En entornos no estandar, `OPENCL_LINK_FLAG` puede incluir rutas:
   - `export OPENCL_LINK_FLAG=\"-L/ruta/opencl -lOpenCL\"`
+  - `export OPENCL_LINK_FLAG=/usr/lib/x86_64-linux-gnu/libOpenCL.so`
 
 **Smoke Test**
 - Test minimo implementado: `OCLW-TST-0002` (enumeracion de plataformas/dispositivos OpenCL).
