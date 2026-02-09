@@ -1,0 +1,7 @@
+$ gprbuild -P tests/tests.gpr
+Compile
+   [Ada]          opencl.adb
+opencl.adb:1:01: error: spec of this package does not allow a body
+opencl.adb:1:01: error: either remove the body or add pragma Elaborate_Body in the spec
+gprbuild: *** compilation phase failed
+exit_code=4

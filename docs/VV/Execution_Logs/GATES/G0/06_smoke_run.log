@@ -1,0 +1,3 @@
+$ locate smoke_platforms
+ERROR: smoke_platforms executable not found
+exit_code=1

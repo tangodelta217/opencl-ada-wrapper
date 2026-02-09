@@ -1,0 +1,3 @@
+$ find . -name smoke_platforms -type f -executable -print -quit
+ERROR: smoke_platforms executable not found
+exit_code=1

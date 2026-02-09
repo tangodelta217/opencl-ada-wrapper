@@ -1,0 +1,14 @@
+$ gprbuild -P tests/tests.gpr
+Compile
+   [Ada]          smoke_platforms.adb
+opencl-raw-api.ads:22:04: error: representation item not permitted before Ada 2022
+opencl-raw-api.ads:22:04: error: parent type "Address" has primitive operations
+opencl-raw-api.ads:23:04: error: representation item not permitted before Ada 2022
+opencl-raw-api.ads:23:04: error: parent type "Address" has primitive operations
+opencl-raw-api.ads:53:45: error: operator for type "Interfaces.C.int" is not directly visible
+opencl-raw-api.ads:53:45: error: use clause would make operation legal
+opencl-raw-api.ads:54:51: error: operator for type "Interfaces.C.int" is not directly visible
+opencl-raw-api.ads:54:51: error: use clause would make operation legal
+opencl-raw-api.ads:60:04: error: "CL_DEVICE_TYPE" conflicts with declaration at line 18
+gprbuild: *** compilation phase failed
+exit_code=4

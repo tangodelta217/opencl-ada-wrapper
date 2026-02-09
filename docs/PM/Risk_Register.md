@@ -11,4 +11,4 @@
 | OCLW-RSK-0004 | Incompatibilidad ABI/FFI en bindings | Baja | Alta | Validar tipos y tamanos; pruebas de conformidad | <TBD_OWNER> | Abierto |
 | OCLW-RSK-0005 | Deteccion incorrecta de capabilities | Baja | Alta | Tests de enumeracion y validacion en runtime | <TBD_OWNER> | Abierto |
 | OCLW-RSK-0006 | Performance insuficiente por sobrecarga de abstracciones | Media | Media | Medicion de overhead; opcion de usar Raw/Thin | <TBD_OWNER> | Abierto |
-
+| OCLW-RSK-0007 | Dev environment without OpenCL ICD/platforms | Media | Media | Ejecutar smoke en pre-check de entorno; documentar fallback controlado (`CL_PLATFORM_NOT_FOUND_KHR`); para Gate G2 exigir al menos 1 plataforma valida en entorno de integracion | <TBD_OWNER> | Abierto |

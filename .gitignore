@@ -1,7 +1,9 @@
 # Ada/GNAT build artifacts
 obj/
+tests/obj/
 lib/
 bin/
+tests/bin/
 *.ali
 *.o
 *.obj
@@ -14,6 +16,9 @@ bin/
 *.out
 *.map
 *.lst
+*.stdout
+*.stderr
+*.bexch
 b__*
 
 # Temporary files

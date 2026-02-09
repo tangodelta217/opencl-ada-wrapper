@@ -1,0 +1,4 @@
+$ ./tests/bin/smoke_core
+platform_capacity= 16
+platform_count_used= 0
+INFO no platforms: CL_PLATFORM_NOT_FOUND_KHR

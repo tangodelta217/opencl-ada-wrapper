@@ -17,38 +17,73 @@ TIMESTAMP_UTC="$(date -u +"%Y%m%dT%H%M%SZ")"
 SMOKE_LOG="${LOG_DIR}/${TIMESTAMP_UTC}_smoke_run.log"
 
 find_smoke_executable() {
-  if [ -x "${REPO_ROOT}/tests/bin/smoke_platforms" ]; then
-    echo "${REPO_ROOT}/tests/bin/smoke_platforms"
+  local smoke_name="$1"
+  local default_path="${REPO_ROOT}/tests/bin/${smoke_name}"
+
+  if [ -x "${default_path}" ]; then
+    echo "${default_path}"
     return 0
   fi
 
-  find "${REPO_ROOT}" -name "smoke_platforms" -type f -executable -print -quit
+  find "${REPO_ROOT}" -name "${smoke_name}" -type f -executable -print -quit
 }
-
-SMOKE_EXEC="$(find_smoke_executable)"
-if [ -z "${SMOKE_EXEC}" ]; then
-  {
-    echo "ERROR smoke executable not found"
-    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
-  } | tee -a "${SMOKE_LOG}"
-  exit 1
-fi
 
 {
   echo "=== Smoke Run Start ==="
   echo "timestamp_utc=${TIMESTAMP_UTC}"
   echo "repo_root=${REPO_ROOT}"
-  echo "smoke_executable=${SMOKE_EXEC}"
-  echo "\$ ${SMOKE_EXEC}"
 } | tee -a "${SMOKE_LOG}"
 
-set +e
-"${SMOKE_EXEC}" 2>&1 | tee -a "${SMOKE_LOG}"
-SMOKE_RC="${PIPESTATUS[0]}"
-set -e
+SMOKE_PLATFORMS_EXEC="$(find_smoke_executable "smoke_platforms")"
+SMOKE_CORE_EXEC="$(find_smoke_executable "smoke_core")"
+MISSING_BINARIES=0
 
-echo "smoke_exit_code=${SMOKE_RC}" | tee -a "${SMOKE_LOG}"
+if [ -z "${SMOKE_PLATFORMS_EXEC}" ]; then
+  {
+    echo "ERROR missing smoke executable: smoke_platforms"
+    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
+  } | tee -a "${SMOKE_LOG}"
+  MISSING_BINARIES=1
+fi
+
+if [ -z "${SMOKE_CORE_EXEC}" ]; then
+  {
+    echo "ERROR missing smoke executable: smoke_core"
+    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
+  } | tee -a "${SMOKE_LOG}"
+  MISSING_BINARIES=1
+fi
+
+if [ "${MISSING_BINARIES}" -ne 0 ]; then
+  echo "smoke_log=${SMOKE_LOG}" | tee -a "${SMOKE_LOG}"
+  echo "=== Smoke Run End ===" | tee -a "${SMOKE_LOG}"
+  exit 1
+fi
+
+{
+  echo "smoke_platforms_executable=${SMOKE_PLATFORMS_EXEC}"
+  echo "smoke_core_executable=${SMOKE_CORE_EXEC}"
+} | tee -a "${SMOKE_LOG}"
+
+run_and_log_smoke() {
+  local smoke_name="$1"
+  local smoke_exec="$2"
+
+  echo "\$ ${smoke_exec}" | tee -a "${SMOKE_LOG}"
+  set +e
+  "${smoke_exec}" 2>&1 | tee -a "${SMOKE_LOG}"
+  local smoke_rc="${PIPESTATUS[0]}"
+  set -e
+  echo "${smoke_name}_exit_code=${smoke_rc}" | tee -a "${SMOKE_LOG}"
+  return "${smoke_rc}"
+}
+
+OVERALL_RC=0
+run_and_log_smoke "smoke_platforms" "${SMOKE_PLATFORMS_EXEC}" || OVERALL_RC=$?
+run_and_log_smoke "smoke_core" "${SMOKE_CORE_EXEC}" || OVERALL_RC=$?
+
+echo "smoke_exit_code=${OVERALL_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_log=${SMOKE_LOG}" | tee -a "${SMOKE_LOG}"
 echo "=== Smoke Run End ===" | tee -a "${SMOKE_LOG}"
 
-exit "${SMOKE_RC}"
+exit "${OVERALL_RC}"

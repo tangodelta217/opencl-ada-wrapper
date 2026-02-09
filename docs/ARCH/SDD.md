@@ -53,9 +53,10 @@ Se enfoca en la estructura modular, responsabilidades y limites de cada capa, si
 - Optional depende de Core/Thick y/o Raw/Thin segun la feature.
 
 ## 5. Gestion de Errores
-- Raw/Thin: retorna codigos/valores tal cual la API C.
-- Core/Thick: convierte errores a tipos Ada (resultado o excepcion definida).
-- RT: evita excepciones; usa `Result` explicito y codigos deterministas.
+- Raw/Thin: retorna codigos/valores tal cual la API C (`cl_int`).
+- Core/Thick: usa un modelo de estado explicito (codigo + `out` params) como via primaria.
+- RT/EW: no usa excepciones como camino principal; solo resultados deterministas.
+- Wrappers de conveniencia con excepciones (si se agregan) se limitan a tooling/no RT.
 
 ## 6. Capabilities y Versionado
 - Baseline 1.2 con un "mindset 3.0": capacidades se detectan y habilitan explicitamente.
@@ -83,6 +84,52 @@ Se enfoca en la estructura modular, responsabilidades y limites de cada capa, si
 - Proyecto base (library): `opencl_wrapper.gpr`.
 - Proyecto de tests: `tests/tests.gpr`.
 - El link contra OpenCL se define por defecto con `-lOpenCL` en Linux.
-- El valor de libreria se puede ajustar por variable de entorno `OPENCL_LIB_NAME`.
-- El override avanzado se define por edicion del atributo `Linker_Options`
-  en los archivos `.gpr`.
+- El valor de link se puede ajustar por variable de entorno `OPENCL_LINK_FLAG`.
+- En entornos no estandar puede usarse path absoluto a `libOpenCL.so`.
+
+## 12. OpenCL.Errors
+**Rol:** Modelo comun de errores para capa Core y consumidores de alto nivel.
+
+**Que expone:**
+- Tipo `Status_Code` (dominio numerico equivalente a `cl_int`).
+- Constantes de estado relevantes para G0/G1 (`Success`, `Device_Not_Found`,
+  `Platform_Not_Found_KHR`, `Unknown_Error` preservando codigo crudo).
+- Funciones de conversion:
+  - Raw -> Core (`cl_int` a `Status_Code`).
+  - Core -> Raw (para passthrough/control de interoperabilidad).
+- Utilidades de reporte determinista (texto estable para logs/V&V).
+
+**Por que:**
+- Evita mezclar enteros crudos en la capa Core.
+- Mantiene trazabilidad ABI con el raw binding sin perder semantica OpenCL.
+- Permite politicas uniformes de manejo de errores en paths RT/EW.
+- Facilita pruebas de regresion textual y evidencia de gate.
+
+## 13. OpenCL.Core (thick binding minimo)
+**Objetivo:** Exponer una API de enumeracion util, verificable y determinista
+sin introducir complejidad no necesaria para G0.
+
+**13.1 Enumeracion de plataformas/dispositivos**
+- API determinista (primaria): devuelve `Status_Code` + `out` params acotados.
+- API convenience (secundaria): puede empaquetar resultados para tooling, pero
+  sin reemplazar la API primaria ni RT/EW.
+- Orden de salida estable para regresion textual:
+  - Plataformas por `(Vendor, Name)`.
+  - Dispositivos por `(Vendor, Name)`.
+
+**13.2 Politica de strings/info**
+- Toda consulta de info usa `size query` + clamp defensivo a `Max_Info_Bytes`.
+- No se reservan buffers no acotados en stack por tamanos reportados por driver.
+- Si el driver reporta tamanos excesivos, se limita/trunca y se deja advertencia.
+
+**13.3 Casos esperados y manejo controlado**
+- `CL_PLATFORM_NOT_FOUND_KHR`: se trata como "0 plataformas" en entorno valido
+  sin ICD/plataformas; no es fallo catasrofico.
+- `CL_DEVICE_NOT_FOUND`: se trata como "0 dispositivos" para la plataforma.
+- Otros codigos != `CL_SUCCESS`: se reportan con codigo y contexto, continuando
+  de forma controlada cuando sea posible.
+
+**13.4 Politica de excepciones**
+- No usar excepciones como camino principal en Core.
+- Las excepciones, si existen en APIs de conveniencia futuras, se restringen a
+  tooling/no RT y deben mapear 1:1 con `Status_Code`.

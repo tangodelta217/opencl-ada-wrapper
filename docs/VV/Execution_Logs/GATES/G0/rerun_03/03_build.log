@@ -1,0 +1,20 @@
+$ gprbuild -P tests/tests.gpr
+Link
+   [link]         smoke_platforms.adb
+/usr/bin/ld: smoke_platforms.o: in function `_ada_smoke_platforms':
+smoke_platforms.adb:(.text+0x85): undefined reference to `clGetPlatformIDs'
+/usr/bin/ld: smoke_platforms.adb:(.text+0x4b0): undefined reference to `clGetPlatformIDs'
+/usr/bin/ld: smoke_platforms.adb:(.text+0xdea): undefined reference to `clGetDeviceIDs'
+/usr/bin/ld: smoke_platforms.adb:(.text+0x1421): undefined reference to `clGetDeviceIDs'
+/usr/bin/ld: smoke_platforms.o: in function `smoke_platforms__get_platform_info_string.3':
+smoke_platforms.adb:(.text+0x2aca): undefined reference to `clGetPlatformInfo'
+/usr/bin/ld: smoke_platforms.adb:(.text+0x3007): undefined reference to `clGetPlatformInfo'
+/usr/bin/ld: smoke_platforms.o: in function `smoke_platforms__get_device_info_string.10':
+smoke_platforms.adb:(.text+0x32e6): undefined reference to `clGetDeviceInfo'
+/usr/bin/ld: smoke_platforms.adb:(.text+0x3823): undefined reference to `clGetDeviceInfo'
+/usr/bin/ld: smoke_platforms.o: in function `smoke_platforms__get_device_type.11':
+smoke_platforms.adb:(.text+0x3acc): undefined reference to `clGetDeviceInfo'
+collect2: error: ld returned 1 exit status
+gprbuild: link of smoke_platforms.adb failed
+gprbuild: failed command was: /usr/bin/gcc-13 smoke_platforms.o b__smoke_platforms.o /home/tangodelta/opencl-ada-wrapper/obj/opencl.o /home/tangodelta/opencl-ada-wrapper/obj/opencl-raw.o /home/tangodelta/opencl-ada-wrapper/obj/opencl-raw-api.o -L/home/tangodelta/opencl-ada-wrapper/tests/obj/ -L/home/tangodelta/opencl-ada-wrapper/tests/obj/ -L/home/tangodelta/opencl-ada-wrapper/obj/ -L/usr/lib/gcc/x86_64-linux-gnu/13/adalib/ -shared-libgcc -lgnat-13 -ldl -Wl,-rpath-link,/usr/lib/gcc/x86_64-linux-gnu/13//adalib -Wl,-z,origin,-rpath,$ORIGIN/..//obj:$ORIGIN/../..//obj:/usr/lib/gcc/x86_64-linux-gnu/13/adalib -o /home/tangodelta/opencl-ada-wrapper/tests/bin//smoke_platforms
+exit_code=4

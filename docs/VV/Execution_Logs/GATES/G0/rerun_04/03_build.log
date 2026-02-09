@@ -1,0 +1,12 @@
+$ gprbuild -P tests/tests.gpr -v -f
+Changing to object directory of "Tests": "/home/tangodelta/opencl-ada-wrapper/tests/obj/"
+/usr/bin/gcc-13 -c -x ada -gnatA -gnatec=/tmp/GPR.140859/GNAT-TEMP-000003.TMP -gnatem=/tmp/GPR.140859/GNAT-TEMP-000004.TMP /home/tangodelta/opencl-ada-wrapper/tests/smoke/smoke_platforms.adb
+Changing to object directory of "OpenCL_Wrapper": "/home/tangodelta/opencl-ada-wrapper/obj/"
+/usr/bin/gcc-13 -c -x ada -gnatA -gnatec=/tmp/GPR.140859/GNAT-TEMP-000005.TMP -gnatem=/tmp/GPR.140859/GNAT-TEMP-000006.TMP /home/tangodelta/opencl-ada-wrapper/src/opencl/opencl.ads
+/usr/bin/gcc-13 -c -x ada -gnatA -gnatec=/tmp/GPR.140859/GNAT-TEMP-000005.TMP -gnatem=/tmp/GPR.140859/GNAT-TEMP-000006.TMP /home/tangodelta/opencl-ada-wrapper/src/opencl/raw/opencl-raw.ads
+/usr/bin/gcc-13 -c -x ada -gnatA -gnatec=/tmp/GPR.140859/GNAT-TEMP-000005.TMP -gnatem=/tmp/GPR.140859/GNAT-TEMP-000006.TMP /home/tangodelta/opencl-ada-wrapper/src/opencl/raw/opencl-raw-api.ads
+Changing to object directory of "Tests": "/home/tangodelta/opencl-ada-wrapper/tests/obj/"
+/usr/libexec/gprbuild/gprbind smoke_platforms.bexch
+/usr/bin/gnatbind -o b__smoke_platforms.adb /home/tangodelta/opencl-ada-wrapper/tests/obj/smoke_platforms.ali -x -F=/tmp/GPR.140859/GNAT-TEMP-000007.TMP -O=/tmp/GPR.140880/GNAT-TEMP-000001.TMP
+/usr/bin/gcc-13 -c -x ada -gnatA -c -gnatA -gnatWb -gnatiw -gnatws -mtune=generic -march=x86-64 b__smoke_platforms.adb -o b__smoke_platforms.o
+/usr/bin/gcc-13 smoke_platforms.o b__smoke_platforms.o /home/tangodelta/opencl-ada-wrapper/obj/opencl.o /home/tangodelta/opencl-ada-wrapper/obj/opencl-raw.o /home/tangodelta/opencl-ada-wrapper/obj/opencl-raw-api.o -lOpenCL -L/home/tangodelta/opencl-ada-wrapper/tests/obj/ -L/home/tangodelta/opencl-ada-wrapper/tests/obj/ -L/home/tangodelta/opencl-ada-wrapper/obj/ -L/usr/lib/gcc/x86_64-linux-gnu/13/adalib/ -shared-libgcc -lgnat-13 -ldl -Wl,-rpath-link,/usr/lib/gcc/x86_64-linux-gnu/13//adalib -Wl,-z,origin,-rpath,$ORIGIN/..//obj:$ORIGIN/../..//obj:/usr/lib/gcc/x86_64-linux-gnu/13/adalib -o /home/tangodelta/opencl-ada-wrapper/tests/bin//smoke_platforms

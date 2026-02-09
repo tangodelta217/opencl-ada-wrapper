@@ -1,0 +1,22 @@
+$ gnatls -v
+
+GNATLS 13.3.0
+Copyright (C) 1997-2023, Free Software Foundation, Inc.
+
+Source Search Path:
+   <Current_Directory>
+   /usr/lib/gcc/x86_64-linux-gnu/13/adainclude
+
+
+Object Search Path:
+   <Current_Directory>
+   /usr/lib/gcc/x86_64-linux-gnu/13/adalib
+
+
+Project Search Path:
+   <Current_Directory>
+   /usr/x86_64-linux-gnu/lib/gnat
+   /usr/x86_64-linux-gnu/share/gpr
+   /usr/share/gpr
+   /usr/lib/gnat
+

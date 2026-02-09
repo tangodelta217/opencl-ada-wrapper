@@ -1,0 +1,14 @@
+$ gprbuild -P tests/tests.gpr
+tests.gpr:3:30: warning: file name does not match project name, should be "opencl_wrapper_tests.gpr"
+tests.gpr:11:29: identifier expected
+tests.gpr:12:21: identifier expected
+tests.gpr:13:35: unknown variable "Default_Opencl_Library"
+tests.gpr:20:11: the attribute "linker_options" cannot be an associative array
+tests.gpr:20:46: unknown variable "Opencl_Library"
+opencl_wrapper.gpr:12:29: identifier expected
+opencl_wrapper.gpr:13:21: identifier expected
+opencl_wrapper.gpr:14:35: unknown variable "Default_Opencl_Library"
+opencl_wrapper.gpr:21:11: the attribute "linker_options" cannot be an associative array
+opencl_wrapper.gpr:21:46: unknown variable "Opencl_Library"
+gprbuild: "tests/tests.gpr" processing failed
+exit_code=5
