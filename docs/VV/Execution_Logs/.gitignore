@@ -1,0 +1,11 @@
+# Auto-generated execution logs (ignored by default)
+*.log
+*.tmp
+
+# Keep gate evidence content trackable
+!GATES/
+!GATES/**
+
+# Keep control files
+!.gitignore
+!README.md

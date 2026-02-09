@@ -1,0 +1,32 @@
+# Ada/GNAT build artifacts
+obj/
+lib/
+bin/
+*.ali
+*.o
+*.obj
+*.a
+*.so
+*.so.*
+*.dll
+*.dylib
+*.exe
+*.out
+*.map
+*.lst
+b__*
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+
+# Coverage/debug byproducts
+*.gcda
+*.gcno
+*.gcov
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
