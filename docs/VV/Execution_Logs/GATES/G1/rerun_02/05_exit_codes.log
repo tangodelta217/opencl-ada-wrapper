@@ -1,0 +1,3 @@
+build_exit_code=0
+smoke_platforms_exit_code=0
+smoke_core_exit_code=0

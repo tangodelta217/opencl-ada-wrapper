@@ -36,6 +36,7 @@ find_smoke_executable() {
 
 SMOKE_PLATFORMS_EXEC="$(find_smoke_executable "smoke_platforms")"
 SMOKE_CORE_EXEC="$(find_smoke_executable "smoke_core")"
+SMOKE_BUFFER_ROUNDTRIP_EXEC="$(find_smoke_executable "smoke_buffer_roundtrip")"
 MISSING_BINARIES=0
 
 if [ -z "${SMOKE_PLATFORMS_EXEC}" ]; then
@@ -54,6 +55,14 @@ if [ -z "${SMOKE_CORE_EXEC}" ]; then
   MISSING_BINARIES=1
 fi
 
+if [ -z "${SMOKE_BUFFER_ROUNDTRIP_EXEC}" ]; then
+  {
+    echo "ERROR missing smoke executable: smoke_buffer_roundtrip"
+    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
+  } | tee -a "${SMOKE_LOG}"
+  MISSING_BINARIES=1
+fi
+
 if [ "${MISSING_BINARIES}" -ne 0 ]; then
   echo "smoke_log=${SMOKE_LOG}" | tee -a "${SMOKE_LOG}"
   echo "=== Smoke Run End ===" | tee -a "${SMOKE_LOG}"
@@ -63,6 +72,7 @@ fi
 {
   echo "smoke_platforms_executable=${SMOKE_PLATFORMS_EXEC}"
   echo "smoke_core_executable=${SMOKE_CORE_EXEC}"
+  echo "smoke_buffer_roundtrip_executable=${SMOKE_BUFFER_ROUNDTRIP_EXEC}"
 } | tee -a "${SMOKE_LOG}"
 
 run_and_log_smoke() {
@@ -81,6 +91,7 @@ run_and_log_smoke() {
 OVERALL_RC=0
 run_and_log_smoke "smoke_platforms" "${SMOKE_PLATFORMS_EXEC}" || OVERALL_RC=$?
 run_and_log_smoke "smoke_core" "${SMOKE_CORE_EXEC}" || OVERALL_RC=$?
+run_and_log_smoke "smoke_buffer_roundtrip" "${SMOKE_BUFFER_ROUNDTRIP_EXEC}" || OVERALL_RC=$?
 
 echo "smoke_exit_code=${OVERALL_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_log=${SMOKE_LOG}" | tee -a "${SMOKE_LOG}"

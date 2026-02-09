@@ -1,0 +1,4 @@
+$ ./tests/bin/smoke_platforms
+platform_count_reported= 0
+platform_count_used= 0
+INFO no platforms: CL_PLATFORM_NOT_FOUND_KHR

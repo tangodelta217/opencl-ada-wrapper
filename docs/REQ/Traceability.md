@@ -1,4 +1,4 @@
-# Requirements Traceability (G0)
+# Requirements Traceability (G0/G1/G2)
 
 ## Scope
 
@@ -26,3 +26,31 @@ Related test evidence:
 
 - G0 verifies baseline build/link/smoke behavior only.
 - Full feature conformance remains subject to later gates.
+
+## G1 Addendum (Errors/Core)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G1/rerun_01/G1_Report.md`
+- `docs/VV/Execution_Logs/GATES/G1/Closure.md`
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0002 | Core/Thick minimum abstraction for host enumeration | Inspection + test | OCLW-TST-0002 | `src/opencl/core/opencl-core.ads`, `src/opencl/core/opencl-core.adb`, `tests/smoke/smoke_core.adb` | `docs/VV/Execution_Logs/GATES/G1/rerun_01/G1_Report.md` (build + smoke_core run) | PASS (G1 scope) |
+| OCLW-REQ-0003 | Runtime enumeration of platform/device capabilities via Core API | Test | OCLW-TST-0002 | `src/opencl/core/opencl-core.adb`, `tests/smoke/smoke_core.adb` | `docs/VV/Execution_Logs/GATES/G1/rerun_01/G1_Report.md` (platform/device enumeration path) | PASS (no-platform case covered) |
+| OCLW-REQ-0005 | Explicit error model and status reporting in non-exception primary flow | Inspection + test | OCLW-TST-0002 | `src/opencl/opencl-errors.ads`, `src/opencl/opencl-errors.adb`, `src/opencl/core/opencl-core.adb`, `tests/smoke/smoke_core.adb` | `docs/VV/Execution_Logs/GATES/G1/rerun_01/G1_Report.md` (`CL_PLATFORM_NOT_FOUND_KHR` reported via status/image) | PASS |
+| OCLW-REQ-0007 | Ada 2012/2022 compatible public API/build path with Core additions | Analysis + build | OCLW-TST-0002 | `src/opencl/opencl-errors.*`, `src/opencl/core/opencl-core.*`, `opencl_wrapper.gpr`, `tests/tests.gpr` | `docs/VV/Execution_Logs/GATES/G1/rerun_01/G1_Report.md` (successful compile/link/run for both smokes) | PASS |
+| OCLW-REQ-0010 | End-to-end REQ -> implementation -> test -> evidence traceability | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + Gate closure artifacts | `docs/VV/Execution_Logs/GATES/G1/Closure.md` | PASS |
+
+## G2 Addendum (Context/Queue/Buffer I/O)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G2/rerun_01/G2_Report.md`
+- `docs/VV/Execution_Logs/GATES/G2/Closure.md`
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0001 | Thin FFI expansion for context/queue/buffer primitives | Inspection + build | OCLW-TST-0002 | `src/opencl/raw/opencl-raw-api.ads` (`clCreateContext`, `clCreateCommandQueue`, `clCreateBuffer`, `clEnqueueWriteBuffer`, `clEnqueueReadBuffer`, `clFinish`) | `docs/VV/Execution_Logs/GATES/G2/rerun_01/G2_Report.md` (build) | PASS |
+| OCLW-REQ-0002 | Core/Thick wrappers for Contexts/Queues/Buffers | Inspection + test | OCLW-TST-0002 | `src/opencl/core/opencl-core-contexts.*`, `src/opencl/core/opencl-core-queues.*`, `src/opencl/core/opencl-core-buffers.*` | `docs/VV/Execution_Logs/GATES/G2/rerun_01/G2_Report.md` (smoke_buffer_roundtrip run) | PASS |
+| OCLW-REQ-0005 | Explicit status-based error flow for create/release/read/write/finish | Test | OCLW-TST-0002 | `src/opencl/core/opencl-core-contexts.adb`, `src/opencl/core/opencl-core-queues.adb`, `src/opencl/core/opencl-core-buffers.adb`, `tests/smoke/smoke_buffer_roundtrip.adb` | `docs/VV/Execution_Logs/GATES/G2/rerun_01/G2_Report.md` | PASS |
+| OCLW-REQ-0008 | Explicit resource lifecycle for context/queue/buffer | Test | OCLW-TST-0002 | `tests/smoke/smoke_buffer_roundtrip.adb` (create/write/read/release reverse order) | `docs/VV/Execution_Logs/GATES/G2/rerun_01/G2_Report.md` (`RESULT=PASS`) | PASS |
+| OCLW-REQ-0010 | Traceability maintained through Gate G2 closure artifacts | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure + HW fingerprint | `docs/VV/Execution_Logs/GATES/G2/Closure.md`, `docs/HW/Platform_Fingerprint.md` | PASS |

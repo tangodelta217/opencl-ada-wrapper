@@ -12,3 +12,4 @@
 | OCLW-RSK-0005 | Deteccion incorrecta de capabilities | Baja | Alta | Tests de enumeracion y validacion en runtime | <TBD_OWNER> | Abierto |
 | OCLW-RSK-0006 | Performance insuficiente por sobrecarga de abstracciones | Media | Media | Medicion de overhead; opcion de usar Raw/Thin | <TBD_OWNER> | Abierto |
 | OCLW-RSK-0007 | Dev environment without OpenCL ICD/platforms | Media | Media | Ejecutar smoke en pre-check de entorno; documentar fallback controlado (`CL_PLATFORM_NOT_FOUND_KHR`); para Gate G2 exigir al menos 1 plataforma valida en entorno de integracion | <TBD_OWNER> | Abierto |
+| OCLW-RSK-0008 | Dependencia de ICD/driver (COTS) para ejecucion real | Media | Alta | Mantener fingerprint de plataforma/dispositivo por baseline (`docs/HW/Platform_Fingerprint.md`); ejecutar banco HW multi-ICD; controlar versionado de drivers/ICD en entornos de integracion | <TBD_OWNER> | Abierto |

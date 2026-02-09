@@ -1,0 +1,4 @@
+$ gprbuild -P tests/tests.gpr
+gprbuild: "smoke_platforms" up to date
+gprbuild: "smoke_core" up to date
+gprbuild: "smoke_buffer_roundtrip" up to date

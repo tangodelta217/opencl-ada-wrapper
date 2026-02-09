@@ -1,0 +1,69 @@
+# Gate G2 Report (Rerun 01)
+
+- UTC timestamp: 2026-02-09T18:41:01Z
+- Commit (HEAD): ec60900b5e7fe754e5610d9270de51c13781dcaa
+
+## Build
+
+```text
+$ gprbuild -P tests/tests.gpr
+gprbuild: "smoke_platforms" up to date
+gprbuild: "smoke_core" up to date
+gprbuild: "smoke_buffer_roundtrip" up to date
+```
+
+## Run: smoke_platforms
+
+```text
+$ ./tests/bin/smoke_platforms
+platform_count_reported= 1
+platform_count_used= 1
+Platform[ 0]
+  name    : Portable Computing Language
+  vendor  : The pocl project
+  version : OpenCL 3.0 PoCL 5.0+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 16.0.6, SLEEF, DISTRO, POCL_DEBUG
+  device_count_reported= 1
+  device_count_used= 1
+  Device[ 0]
+    name    : cpu-haswell-Intel(R) Core(TM) i5-14600K
+    vendor  : GenuineIntel
+    driver  : 5.0+debian
+    version : OpenCL 3.0 PoCL HSTR: cpu-x86_64-pc-linux-gnu-haswell
+    type    : 2
+```
+
+## Run: smoke_core
+
+```text
+$ ./tests/bin/smoke_core
+platform_capacity= 16
+platform_count_used= 1
+Platform[ 0]
+  name    : Portable Computing Language
+  vendor  : The pocl project
+  version : OpenCL 3.0 PoCL 5.0+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 16.0.6, SLEEF, DISTRO, POCL_DEBUG
+  device_capacity= 64
+  device_count_used= 1
+  Device[ 0]
+    name    : cpu-haswell-Intel(R) Core(TM) i5-14600K
+    vendor  : GenuineIntel
+    version : OpenCL 3.0 PoCL HSTR: cpu-x86_64-pc-linux-gnu-haswell
+    driver  : 5.0+debian
+```
+
+## Run: smoke_buffer_roundtrip
+
+```text
+$ ./tests/bin/smoke_buffer_roundtrip
+RESULT=PASS
+```
+
+## Execution Summary
+
+```text
+build_status=PASS
+smoke_platforms_status=PASS
+smoke_core_status=PASS
+smoke_buffer_roundtrip_status=PASS
+```
+
