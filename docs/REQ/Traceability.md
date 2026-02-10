@@ -1,4 +1,4 @@
-# Requirements Traceability (G0/G1/G2)
+# Requirements Traceability (G0/G1/G2/G3)
 
 ## Scope
 
@@ -60,6 +60,10 @@ Primary gate evidence:
 Primary gate evidence:
 - `docs/VV/Execution_Logs/GATES/G3/rerun_05/G3_Report.md`
 - `docs/VV/Execution_Logs/GATES/G3/Closure.md`
+
+Capabilities under G3 scope:
+- Programs/Kernels API + build diagnostics (`Build_Log` and related telemetry)
+- Validation test: `tests/smoke/smoke_kernel_add1.adb`
 
 | Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
 | --- | --- | --- | --- | --- | --- | --- |
