@@ -216,3 +216,22 @@ Capabilities under G10 scope:
 | OCLW-REQ-0005 | RT fail-closed ante plugin untrusted (`OCLW_PLUGIN_UNTRUSTED`) | Test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-security.adb`, `src/opencl/opencl-errors.ads`, `src/opencl/opencl-errors.adb`, `tests/smoke/smoke_rt_untrusted_plugin.adb` | `docs/VV/Execution_Logs/GATES/G10/rerun_01/G10_Report.md` (extract status `OCLW_PLUGIN_UNTRUSTED`, `RESULT=PASS`) | PASS |
 | OCLW-REQ-0008 | Harness RT incluye validacion de plugin inseguro dentro de flujo smoke integrado | Test | OCLW-TST-0002 | `tools/run_smoke.sh`, `tests/tests.gpr`, `tests/smoke/smoke_rt_untrusted_plugin.adb` | `docs/VV/Execution_Logs/GATES/G10/rerun_01/G10_Report.md` (`run_smoke` exit 0 + smoke dedicated PASS) | PASS |
 | OCLW-REQ-0010 | Gate-level traceability closure for G10 deployment hardening evidence | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G10/Closure.md`, `docs/VV/Execution_Logs/GATES/G10/rerun_01/G10_Report.md` | PASS |
+
+## G11 Addendum (Release/Handover Readiness)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G11/rerun_01/G11_Report.md`
+- `docs/VV/Execution_Logs/GATES/G11/Closure.md`
+
+Capabilities under G11 scope:
+- Operacion RT no-JIT + Kernel Pack documentada para handover.
+- Contenido de entrega release (delivery content) definido y acotado.
+- SBOM minimo documentado para build/runtime.
+- Contrato de integracion C ABI del crypto provider documentado para entrega.
+- Script de empaquetado reproducible de bundle RT.
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0002 | Documentacion operativa RT y contrato de integracion para handover (`RT_Deployment_Guide`, `Crypto_Plugin_C_ABI_Contract`) | Inspection + execution | OCLW-TST-0002 | `docs/OPS/RT_Deployment_Guide.md`, `tools/crypto_provider_ref/README.md`, `tools/package_rt_bundle.sh` | `docs/VV/Execution_Logs/GATES/G11/rerun_01/G11_Report.md` (bundle incluye `docs/OPS/...` y `docs/ARCH/Crypto_Plugin_C_ABI_Contract.md`) | PASS |
+| OCLW-REQ-0008 | Delivery packaging reproducible con artefactos de handover (`Delivery_Content`, `SBOM_Minimal`, bundle tar + checksums) | Test | OCLW-TST-0002 | `docs/CM/Delivery_Content.md`, `docs/CM/SBOM_Minimal.md`, `tools/package_rt_bundle.sh` | `docs/VV/Execution_Logs/GATES/G11/rerun_01/G11_Report.md` (`package_rt_bundle` exit 0 + `tar -tzf` evidencia + `CHECKSUMS`) | PASS |
+| OCLW-REQ-0010 | Gate-level traceability closure para release/handover readiness G11 | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G11/Closure.md`, `docs/VV/Execution_Logs/GATES/G11/rerun_01/G11_Report.md` | PASS |

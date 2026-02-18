@@ -1,0 +1,24 @@
+INFO repo_root=/home/tangodelta/opencl-ada-wrapper
+INFO bundle_dir=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_20260218T203050Z
+INFO timestamp_utc=20260218T203050Z
+INFO build_opencl_wrapper_start
+INFO build_opencl_wrapper_done
+INFO build_tests_start
+gprbuild: "smoke_platforms" up to date
+gprbuild: "smoke_core" up to date
+gprbuild: "gen_pack_add1" up to date
+gprbuild: "smoke_rt_load_pack_add1" up to date
+gprbuild: "smoke_rt_negative_cases" up to date
+gprbuild: "smoke_rt_signature_enforcement" up to date
+gprbuild: "smoke_rt_signature_plugin" up to date
+gprbuild: "smoke_rt_strict_policy" up to date
+gprbuild: "smoke_rt_untrusted_plugin" up to date
+gprbuild: "smoke_buffer_roundtrip" up to date
+gprbuild: "smoke_kernel_add1" up to date
+gprbuild: "smoke_program_binary_roundtrip" up to date
+INFO build_tests_done
+INFO generating_example_pack_start
+INFO generating_example_pack_done
+bundle_archive=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_20260218T203050Z.tar.gz
+bundle_checksums=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_20260218T203050Z/CHECKSUMS.sha256
+bundle_example_pack_status=PASS

@@ -1,0 +1,18 @@
+# G10 rerun_02 extracts
+build_exit_code=0
+run_exit_code=0
+
+## smoke_rt_untrusted_plugin block
+175:$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_untrusted_plugin
+176:INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260218T191733Z_kpack_add1
+177:INFO strict_policy_mode=ENABLED
+178:INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+179:INFO plugin_build_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260218T191733Z_kpack_add1/crypto_plugin_build.log
+180:INFO plugin_path=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+181:INFO chmod_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260218T191733Z_kpack_add1/chmod_plugin.log
+182:INFO configure_plugin_status=OCLW_PLUGIN_UNTRUSTED status_int=-32020
+183:RESULT=PASS
+184:smoke_rt_untrusted_plugin_exit_code=0
+
+## extracted_result
+RESULT=PASS

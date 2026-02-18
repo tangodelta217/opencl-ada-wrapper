@@ -1,0 +1,5 @@
+bundle_name=oclw_rt_bundle_20260218T202951Z
+timestamp_utc=20260218T202951Z
+git_head=77fd6d48a7859c02b2e1dc96834d57e3670edd11
+notes=reference_plugin_is_not_included_as_production_artifact
+example_pack_status=PASS

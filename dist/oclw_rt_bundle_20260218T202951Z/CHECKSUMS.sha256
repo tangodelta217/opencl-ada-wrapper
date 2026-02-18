@@ -1,0 +1,12 @@
+# checksum_tool=sha256sum
+# generated_utc=20260218T202951Z
+678fa6665ccc77602b0dd95e91364af26a57a4148c19889702258cbaca50cb28  ./BUNDLE_INFO.txt
+d6d959ce27e6f890d0a66b07c77ba6f238050f5eb66ae0cd3e5f85ce37dbc57e  ./docs/ARCH/Crypto_Plugin_C_ABI_Contract.md
+84d3bd8c28886a74666e5c8fea4e7e656e6ac6026937f8f197aa9c68ef042a10  ./docs/CM/Delivery_Content.md
+6bbbb6645227c2dea313edb7c121e7e76fcb8e8d15058a04d78722e251c792a8  ./docs/CM/SBOM_Minimal.md
+067cb933fc641ac47213463842d2886d5c494436612a713bbc2d5f30013c9176  ./docs/OPS/RT_Deployment_Guide.md
+efd32293edf3cd7664ad8930d3ac493d5124bb42286cbdc1093a09a40a505459  ./example_pack/manifest.kpack
+06f00527cc77f0c507618909248bdcf19b481c1cb17b15c6b25522dfcf55156c  ./example_pack/program.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./logs/build_opencl_wrapper.log
+3d6e318782e95a4185e88e957e66bbff681260052edeca7f2be9296ed766de40  ./logs/build_tests.log
+837bea78842cfb39ad89099b36e844fcc1e3ef1b20c152e30650e6cc62296115  ./logs/gen_pack_add1.log
