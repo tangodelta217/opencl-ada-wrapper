@@ -1,0 +1,6 @@
+result_line=RESULT=PASS
+binary_size_line=INFO binary_size=48617
+binary_fnv1a32_line=INFO binary_fnv1a32=166242793
+pocl_cache_dir_line=pocl_cache_dir=/home/tangodelta/opencl-ada-wrapper/.pocl_kcache
+build_exit_code=0
+run_smoke_exit_code=0

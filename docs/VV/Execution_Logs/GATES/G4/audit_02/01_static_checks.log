@@ -1,0 +1,50 @@
+
+### File existence
+PASS exists: docs/ARCH/SDD.md
+PASS exists: docs/ARCH/ADR-0007-program-binaries-nojit-rt-path.md
+PASS exists: src/opencl/raw/opencl-raw-api.ads
+PASS exists: src/opencl/core/opencl-core-programs.ads
+PASS exists: tests/smoke/smoke_program_binary_roundtrip.adb
+PASS exists: tests/tests.gpr
+PASS exists: tools/run_smoke.sh
+
+### SDD: Program binaries or no-JIT
+$ rg -n -i Program binaries|no-JIT docs/ARCH/SDD.md
+176:## 16. Program binaries (RT path preliminar)
+177:**Objetivo:** Definir estrategia no-JIT para perfil RT/EW usando programas
+207:- En mision EW/RT: politica no-JIT (sin build from source en runtime).
+[exit_code=0]
+
+### Raw API G4 symbols
+$ rg -n CL_PROGRAM_BINARY_SIZES|CL_PROGRAM_BINARIES|clCreateProgramWithBinary|clGetProgramInfo src/opencl/raw/opencl-raw-api.ads
+164:   CL_PROGRAM_BINARY_SIZES : constant cl_program_info := 16#1165#;
+165:   CL_PROGRAM_BINARIES : constant cl_program_info := 16#1166#;
+322:   function clCreateProgramWithBinary
+333:     External_Name => "clCreateProgramWithBinary";
+347:   function clGetProgramInfo
+356:     External_Name => "clGetProgramInfo";
+[exit_code=0]
+
+### Programs API symbols
+$ rg -n Binary_Size|Get_Binary|Create_From_Binary src/opencl/core/opencl-core-programs.ads
+38:   procedure Binary_Size
+43:   procedure Get_Binary
+49:   procedure Create_From_Binary
+[exit_code=0]
+
+### tests.gpr main
+$ rg -n smoke_program_binary_roundtrip\.adb tests/tests.gpr
+14:      "smoke_program_binary_roundtrip.adb");
+[exit_code=0]
+
+### run_smoke: binary_roundtrip and POCL cache
+$ rg -n smoke_program_binary_roundtrip|POCL_CACHE_DIR tools/run_smoke.sh
+17:if [ -z "${POCL_CACHE_DIR:-}" ]; then
+18:  export POCL_CACHE_DIR="${REPO_ROOT}/.pocl_kcache"
+19:  mkdir -p "${POCL_CACHE_DIR}"
+46:  echo "pocl_cache_dir=${POCL_CACHE_DIR:-<unset>}"
+55:SMOKE_PROGRAM_BINARY_ROUNDTRIP_EXEC="$(find_smoke_executable "smoke_program_binary_roundtrip")"
+92:    echo "ERROR missing smoke executable: smoke_program_binary_roundtrip"
+109:  echo "smoke_program_binary_roundtrip_executable=${SMOKE_PROGRAM_BINARY_ROUNDTRIP_EXEC}"
+130:run_and_log_smoke "smoke_program_binary_roundtrip" "${SMOKE_PROGRAM_BINARY_ROUNDTRIP_EXEC}" || OVERALL_RC=$?
+[exit_code=0]

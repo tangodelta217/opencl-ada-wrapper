@@ -1,4 +1,4 @@
-# Requirements Traceability (G0/G1/G2/G3)
+# Requirements Traceability (G0/G1/G2/G3/G4)
 
 ## Scope
 
@@ -72,3 +72,23 @@ Capabilities under G3 scope:
 | OCLW-REQ-0005 | Status-based error handling plus build diagnostics (`BUILD_STATUS`, options, log bytes, bounded log, source head) | Test | OCLW-TST-0002 | `tests/smoke/smoke_kernel_add1.adb`, `src/opencl/core/opencl-core-programs.adb` | `docs/VV/Execution_Logs/GATES/G3/rerun_05/G3_Report.md` (diagnostic output) | PASS |
 | OCLW-REQ-0008 | Kernel lifecycle and execution flow (create/set args/enqueue/finish/read/verify) | Test | OCLW-TST-0002 | `tests/smoke/smoke_kernel_add1.adb` | `docs/VV/Execution_Logs/GATES/G3/rerun_05/G3_Report.md` (`RESULT=PASS`) | PASS |
 | OCLW-REQ-0010 | End-to-end traceability kept through Gate G3 closure artifacts | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + G3 closure + harness behavior | `docs/VV/Execution_Logs/GATES/G3/Closure.md`, `tools/run_smoke.sh` | PASS |
+
+## G4 Addendum (Program Binaries / no-JIT preliminar)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G4/verify_03/G4_Verification_Report.md`
+- `docs/VV/Execution_Logs/GATES/G4/Closure.md`
+
+Capabilities under G4 scope:
+- Raw constants: `CL_PROGRAM_BINARY_SIZES`, `CL_PROGRAM_BINARIES`
+- Raw API: `clCreateProgramWithBinary` (plus `clGetProgramInfo` para path de binarios)
+- Thick APIs: `Programs.Binary_Size`, `Programs.Get_Binary`, `Programs.Create_From_Binary`
+- Validation test: `tests/smoke/smoke_program_binary_roundtrip.adb`
+- Verification evidence: `docs/VV/Execution_Logs/GATES/G4/verify_03/G4_Verification_Report.md`
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0001 | Thin FFI support for program binary introspection/loading path | Inspection + build | OCLW-TST-0002 | `src/opencl/raw/opencl-raw-api.ads` (`CL_PROGRAM_BINARY_SIZES`, `CL_PROGRAM_BINARIES`, `clGetProgramInfo`, `clCreateProgramWithBinary`) | `docs/VV/Execution_Logs/GATES/G4/verify_03/G4_Verification_Report.md` (checklist B PASS) | PASS |
+| OCLW-REQ-0002 | Thick wrappers for binary size extraction, binary retrieval and program creation from binary | Inspection + test | OCLW-TST-0002 | `src/opencl/core/opencl-core-programs.ads`, `src/opencl/core/opencl-core-programs.adb` (`Binary_Size`, `Get_Binary`, `Create_From_Binary`) | `docs/VV/Execution_Logs/GATES/G4/verify_03/G4_Verification_Report.md` (checklist C PASS) | PASS |
+| OCLW-REQ-0005 | Explicit status-based handling over binary roundtrip path | Test | OCLW-TST-0002 | `tests/smoke/smoke_program_binary_roundtrip.adb`, `src/opencl/core/opencl-core-programs.adb` | `docs/VV/Execution_Logs/GATES/G4/verify_03/03_run_smoke.log`, `docs/VV/Execution_Logs/GATES/G4/verify_03/04_extracts.log` (`RESULT=PASS`, `binary_size`, `binary_fnv1a32`) | PASS |
+| OCLW-REQ-0010 | Gate-level traceability and evidence closure for G4 | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G4/Closure.md`, `docs/VV/Execution_Logs/GATES/G4/verify_03/G4_Verification_Report.md` | PASS |
