@@ -366,20 +366,53 @@ del Kernel Pack.
 - Para mision RT, pipeline release/CM debe entregar packs firmados segun
   politica aprobada.
 
-## 22. Crypto Provider Integration Point
-**Objetivo:** Definir contrato de integracion con proveedor criptografico
-aprobado, desacoplado de implementacion especifica.
+## 22. Crypto Provider Plugin (C ABI) - Integration Point
+**Objetivo:** Definir contrato de integracion defense-grade con proveedor
+criptografico externo, desacoplado de implementacion especifica.
 
-**22.1 Alcance del punto de integracion**
-- Interfaz de verificacion separada de loader RT para evaluar autenticidad de:
-  - manifest canonical (sin `signature_*`)
-  - bytes de `program.bin` (`Used`)
-  - metadatos de firma (`signature_alg`, `signature`, `signer_id`,
-    `cert_fingerprint`)
-- Resultado de verificacion orientado a politica:
-  - `Pass` -> carga puede continuar.
-  - `Fail` o `Not_Implemented` cuando `signature_required=1` -> rechazo.
+**22.1 Descubrimiento y carga de plugin**
+- La integracion se define por plugin dinamico C ABI (`.so`) cargado via
+  `dlopen`/`dlsym`.
+- Variables de entorno:
+  - `OCLW_CRYPTO_PLUGIN`: path al plugin compartido.
+  - `OCLW_CRYPTO_SYMBOL`: simbolo de verificacion (opcional).
+    - Default: `oclw_kpack_verify_v1`.
+- Si el plugin no existe/no carga o el simbolo no se resuelve, se considera
+  proveedor no implementado para el path de firma.
 
-**22.2 Politica de roadmap**
-- G8 integrara verificacion real con proveedor criptografico aprobado.
-- Hasta esa integracion, hash de integridad no sustituye autenticidad.
+**22.2 Contrato C ABI (v1)**
+- Firma propuesta:
+```c
+int oclw_kpack_verify_v1(
+  const char* signature_alg,
+  const char* signer_id,
+  const char* signature_value,
+  const uint8_t* signing_text, size_t signing_text_len,
+  const uint8_t* program_bin, size_t program_bin_len);
+```
+- Semantica de retorno:
+  - `0`: firma valida.
+  - `!= 0`: firma invalida o no verificable por el proveedor.
+
+**22.3 Mapeo a Status_Code del wrapper**
+- Plugin ausente/no cargable/simbolo ausente ->
+  `OCLW_SIGNATURE_NOT_IMPLEMENTED`.
+- Plugin ejecutado y retorno `!= 0` -> `OCLW_SIGNATURE_INVALID`.
+- Plugin ejecutado y retorno `0` -> `Success`.
+
+**22.4 Reglas RT vs DEV**
+- RT/EW:
+  - Si `signature_required=1`, verificacion de firma obligatoria.
+  - Si proveedor/verificador no esta disponible o la verificacion falla:
+    fail-closed (rechazar carga).
+  - No fallback a source/JIT.
+- DEV/Integracion:
+  - Puede usarse verificador inyectable de test para cobertura funcional.
+  - Puede generarse pack sin firma solo cuando `signature_required=0`.
+  - Validaciones de ruta RT deben registrar evidencia del plugin configurado.
+
+**22.5 Roadmap**
+- G8 integra verificacion real con proveedor criptografico aprobado usando este
+  contrato C ABI.
+- El verificador de test queda restringido a DEV/CI y no sustituye control
+  criptografico operativo.

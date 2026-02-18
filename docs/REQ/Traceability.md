@@ -1,4 +1,4 @@
-# Requirements Traceability (G0/G1/G2/G3/G4/G5/G6/G7)
+# Requirements Traceability (G0/G1/G2/G3/G4/G5/G6/G7/G8)
 
 ## Scope
 
@@ -152,3 +152,28 @@ Capabilities under G7 scope:
 | OCLW-REQ-0005 | Fail-closed signature enforcement when `signature_required=1` and verifier is absent/invalid | Test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-loader.adb`, `src/opencl/opencl-errors.ads`, `src/opencl/opencl-errors.adb`, `tests/smoke/smoke_rt_signature_enforcement.adb` | `docs/VV/Execution_Logs/GATES/G7/rerun_01/G7_Report.md` (`caseA=PASS` expected `OCLW_SIGNATURE_NOT_IMPLEMENTED`) | PASS |
 | OCLW-REQ-0008 | Controlled RT execution with signature-verified binary-load workflow (no source fallback in test path) | Test | OCLW-TST-0002 | `tests/smoke/smoke_rt_signature_enforcement.adb`, `tools/run_smoke.sh` | `docs/VV/Execution_Logs/GATES/G7/rerun_01/G7_Report.md` (`caseB=PASS`, `RESULT=PASS`) | PASS |
 | OCLW-REQ-0010 | Gate-level traceability closure for G7 signature enforcement evidence | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G7/Closure.md`, `docs/VV/Execution_Logs/GATES/G7/rerun_01/G7_Report.md` | PASS |
+
+## G8 Addendum (Crypto Provider Plugin Integration)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G8/rerun_01/G8_Report.md`
+- `docs/VV/Execution_Logs/GATES/G8/Closure.md`
+
+Capabilities under G8 scope:
+- Dynamic plugin loading path (`dlopen`/`dlsym`) for external verification
+  backend integration.
+- Status mapping for signature enforcement path:
+  `OCLW_SIGNATURE_NOT_IMPLEMENTED`, `OCLW_SIGNATURE_INVALID`,
+  `OCLW_SIGNATURE_MISSING`.
+- Validation tests:
+  `tests/smoke/smoke_rt_signature_enforcement.adb`,
+  `tests/smoke/smoke_rt_signature_plugin.adb`.
+- Verification evidence:
+  `docs/VV/Execution_Logs/GATES/G8/rerun_01/G8_Report.md`.
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0002 | Plugin-based external signature verification integration (`OCLW_CRYPTO_PLUGIN`/`OCLW_CRYPTO_SYMBOL`) | Inspection + test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-security.adb`, `tests/smoke/smoke_rt_signature_plugin.adb`, `tools/crypto_provider_ref/oclw_crypto_provider_ref.c` | `docs/VV/Execution_Logs/GATES/G8/rerun_01/G8_Report.md` (`smoke_rt_signature_plugin RESULT=PASS`) | PASS |
+| OCLW-REQ-0005 | Fail-closed signature status behavior across not-implemented and invalid-signature outcomes | Test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-security.adb`, `src/opencl/rt/opencl-rt-loader.adb`, `src/opencl/opencl-errors.ads`, `tests/smoke/smoke_rt_signature_enforcement.adb`, `tests/smoke/smoke_rt_signature_plugin.adb` | `docs/VV/Execution_Logs/GATES/G8/rerun_01/G8_Report.md` (`caseA=PASS`, plugin negative case PASS expected `OCLW_SIGNATURE_INVALID`) | PASS |
+| OCLW-REQ-0008 | Controlled RT path with external verifier backend and no source fallback during signature-required execution | Test | OCLW-TST-0002 | `tests/smoke/smoke_rt_signature_enforcement.adb`, `tests/smoke/smoke_rt_signature_plugin.adb`, `tools/run_smoke.sh` | `docs/VV/Execution_Logs/GATES/G8/rerun_01/G8_Report.md` (`smoke_rt_signature_enforcement RESULT=PASS`, `smoke_rt_signature_plugin RESULT=PASS`) | PASS |
+| OCLW-REQ-0010 | Gate-level traceability closure for G8 plugin integration evidence | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G8/Closure.md`, `docs/VV/Execution_Logs/GATES/G8/rerun_01/G8_Report.md` | PASS |
