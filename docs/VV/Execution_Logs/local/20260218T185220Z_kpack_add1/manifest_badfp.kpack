@@ -1,0 +1,19 @@
+kpack_version=1
+pack_id=kpack_add1
+created_utc=2026-02-18T18:52:21Z
+platform_name=Portable Computing Language
+platform_vendor=The pocl project
+platform_version=OpenCL 3.0 PoCL 5.0+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 16.0.6, SLEEF, DISTRO, POCL_DEBUG
+device_name=cpu-haswell-Intel(R) Core(TM) i5-14600K_tamper
+device_vendor=GenuineIntel
+device_version=OpenCL 3.0 PoCL HSTR: cpu-x86_64-pc-linux-gnu-haswell
+driver_version=5.0+debian
+opencl_c_version=OpenCL C 1.2 PoCL
+build_options=-cl-std\=CL1.2
+binary_size=48617
+binary_fnv1a32=534709470
+kernel_name=add1
+signature_required=0
+signature_alg=
+signature_value=
+signer_id=

@@ -197,3 +197,22 @@ Capabilities under G9 scope:
 | OCLW-REQ-0005 | Fail-closed behavior in strict mode (`OCLW_SIGNATURE_MISSING`, `OCLW_SIGNATURE_DISALLOWED|OCLW_SIGNATURE_INVALID`) | Test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-loader.adb`, `src/opencl/opencl-errors.ads`, `src/opencl/opencl-errors.adb`, `tests/smoke/smoke_rt_strict_policy.adb` | `docs/VV/Execution_Logs/GATES/G9/rerun_01/G9_Report.md` (`case1=PASS`, `case2=PASS`) | PASS |
 | OCLW-REQ-0008 | Strict RT execution path with approved-alg style test path and plugin-configured verification | Test | OCLW-TST-0002 | `tests/smoke/smoke_rt_strict_policy.adb`, `tools/run_smoke.sh`, `tools/crypto_provider_ref/oclw_crypto_provider_ref.c` | `docs/VV/Execution_Logs/GATES/G9/rerun_01/G9_Report.md` (`case3=PASS`, `strict_policy_mode=ENABLED`) | PASS |
 | OCLW-REQ-0010 | Gate-level traceability closure for G9 strict policy evidence | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G9/Closure.md`, `docs/VV/Execution_Logs/GATES/G9/rerun_01/G9_Report.md` | PASS |
+
+## G10 Addendum (RT Deployment Hardening)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G10/rerun_01/G10_Report.md`
+- `docs/VV/Execution_Logs/GATES/G10/Closure.md`
+
+Capabilities under G10 scope:
+- Trusted plugin loading with provider trust checks.
+- RT fail-closed when plugin path/file is untrusted.
+- Validation test: `tests/smoke/smoke_rt_untrusted_plugin.adb`.
+- Verification evidence: `docs/VV/Execution_Logs/GATES/G10/rerun_01/G10_Report.md`.
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0002 | Trusted plugin loading (`Configure_Plugin`) with trust checks for provider path/file | Inspection + test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-security.ads`, `src/opencl/rt/opencl-rt-security.adb`, `src/opencl/opencl-errors.ads`, `src/opencl/opencl-errors.adb`, `tests/smoke/smoke_rt_untrusted_plugin.adb` | `docs/VV/Execution_Logs/GATES/G10/rerun_01/G10_Report.md` (`smoke_rt_untrusted_plugin RESULT=PASS`) | PASS |
+| OCLW-REQ-0005 | RT fail-closed ante plugin untrusted (`OCLW_PLUGIN_UNTRUSTED`) | Test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-security.adb`, `src/opencl/opencl-errors.ads`, `src/opencl/opencl-errors.adb`, `tests/smoke/smoke_rt_untrusted_plugin.adb` | `docs/VV/Execution_Logs/GATES/G10/rerun_01/G10_Report.md` (extract status `OCLW_PLUGIN_UNTRUSTED`, `RESULT=PASS`) | PASS |
+| OCLW-REQ-0008 | Harness RT incluye validacion de plugin inseguro dentro de flujo smoke integrado | Test | OCLW-TST-0002 | `tools/run_smoke.sh`, `tests/tests.gpr`, `tests/smoke/smoke_rt_untrusted_plugin.adb` | `docs/VV/Execution_Logs/GATES/G10/rerun_01/G10_Report.md` (`run_smoke` exit 0 + smoke dedicated PASS) | PASS |
+| OCLW-REQ-0010 | Gate-level traceability closure for G10 deployment hardening evidence | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G10/Closure.md`, `docs/VV/Execution_Logs/GATES/G10/rerun_01/G10_Report.md` | PASS |

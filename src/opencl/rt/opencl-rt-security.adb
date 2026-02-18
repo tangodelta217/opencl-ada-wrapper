@@ -2,6 +2,7 @@ with Ada.Environment_Variables;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Unchecked_Conversion;
+with GNAT.OS_Lib;
 with Interfaces.C;
 with Interfaces.C.Strings;
 with OpenCL.Errors;
@@ -12,6 +13,7 @@ package body OpenCL.RT.Security is
 
    use type Interfaces.C.int;
    use type Interfaces.C.size_t;
+   use type Interfaces.C.unsigned;
    use type Interfaces.C.Strings.chars_ptr;
    use type OpenCL.Errors.Status_Code;
    use type System.Address;
@@ -35,6 +37,42 @@ package body OpenCL.RT.Security is
 
    RTLD_NOW : constant Interfaces.C.int := 2;
    Default_Crypto_Symbol : constant String := "oclw_kpack_verify_v1";
+   subtype Mode_T is Interfaces.C.unsigned;
+   S_IFMT : constant Mode_T := 16#F000#;
+   S_IFREG : constant Mode_T := 16#8000#;
+   S_IWOTH : constant Mode_T := 16#0002#;
+
+   type Time_Spec is record
+      Tv_Sec : Interfaces.C.long;
+      Tv_Nsec : Interfaces.C.long;
+   end record;
+   pragma Convention (C, Time_Spec);
+
+   type Stat_Buffer is record
+      St_Dev : Interfaces.C.unsigned_long;
+      St_Ino : Interfaces.C.unsigned_long;
+      St_Nlink : Interfaces.C.unsigned_long;
+      St_Mode : Mode_T;
+      St_Uid : Interfaces.C.unsigned;
+      St_Gid : Interfaces.C.unsigned;
+      Pad_0 : Interfaces.C.int;
+      St_Rdev : Interfaces.C.unsigned_long;
+      St_Size : Interfaces.C.long;
+      St_Blksize : Interfaces.C.long;
+      St_Blocks : Interfaces.C.long;
+      St_Atim : Time_Spec;
+      St_Mtim : Time_Spec;
+      St_Ctim : Time_Spec;
+      Glibc_Reserved_0 : Interfaces.C.long;
+      Glibc_Reserved_1 : Interfaces.C.long;
+      Glibc_Reserved_2 : Interfaces.C.long;
+   end record;
+   pragma Convention (C, Stat_Buffer);
+
+   function C_Stat
+     (Path : Interfaces.C.Strings.chars_ptr;
+      Info : access Stat_Buffer) return Interfaces.C.int;
+   pragma Import (C, C_Stat, "stat");
 
    type Plugin_Verify_Fn is access function
      (Signature_Alg : Interfaces.C.Strings.chars_ptr;
@@ -96,6 +134,34 @@ package body OpenCL.RT.Security is
       Plugin_Verifier := null;
       Plugin_State := Unavailable;
    end Mark_Unavailable;
+
+   function Path_Is_Trusted_Plugin_File (Path : String) return Boolean is
+      C_Path : Interfaces.C.Strings.chars_ptr :=
+        Interfaces.C.Strings.Null_Ptr;
+      Info : aliased Stat_Buffer;
+      Stat_Result : Interfaces.C.int := -1;
+   begin
+      if not GNAT.OS_Lib.Is_Absolute_Path (Path) then
+         return False;
+      end if;
+
+      C_Path := Interfaces.C.Strings.New_String (Path);
+      Stat_Result := C_Stat (Path => C_Path, Info => Info'Access);
+      Free_If_Needed (C_Path);
+      if Stat_Result /= 0 then
+         return False;
+      end if;
+
+      if (Info.St_Mode and S_IFMT) /= S_IFREG then
+         return False;
+      end if;
+
+      if (Info.St_Mode and S_IWOTH) /= 0 then
+         return False;
+      end if;
+
+      return True;
+   end Path_Is_Trusted_Plugin_File;
 
    function Optional_Env
      (Name : String;
@@ -218,13 +284,23 @@ package body OpenCL.RT.Security is
       Symbol : String := "oclw_kpack_verify_v1";
       Status : out OpenCL.Errors.Status_Code)
    is
+      Effective_Path : constant String := Trimmed (Path);
       Effective_Symbol : constant String :=
         (if Trimmed (Symbol)'Length = 0
          then Default_Crypto_Symbol
          else Trimmed (Symbol));
    begin
       Reset_Cached_Plugin;
-      Status := Load_Plugin (Path => Path, Symbol => Effective_Symbol);
+
+      if not Path_Is_Trusted_Plugin_File (Effective_Path) then
+         Mark_Unavailable;
+         Status := OpenCL.Errors.OCLW_Plugin_Untrusted;
+         return;
+      end if;
+
+      Status := Load_Plugin
+        (Path => Effective_Path,
+         Symbol => Effective_Symbol);
    end Configure_Plugin;
 
    function Ensure_Plugin_Available

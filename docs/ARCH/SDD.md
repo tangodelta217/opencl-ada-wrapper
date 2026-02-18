@@ -461,3 +461,43 @@ perfil RT.
 **24.3 Politica de rechazo**
 - Si no hay proveedor configurado de forma valida para RT, o la configuracion
   no cumple baseline CM, comportamiento fail-closed.
+
+## 25. Trusted Crypto Provider Loading (RT)
+**Objetivo:** Endurecer la carga dinamica del proveedor cripto en perfil RT con
+controles minimos verificables y auditable por CM/IV&V.
+
+**25.1 Ignorar env vars en RT estricto**
+- En RT strict mode se ignoran `OCLW_CRYPTO_PLUGIN` y `OCLW_CRYPTO_SYMBOL`.
+- Estas variables quedan permitidas solo para DEV/integracion.
+- En RT, la seleccion de proveedor no puede depender del entorno del proceso.
+
+**25.2 Configuracion explicita obligatoria**
+- El proveedor debe configurarse explicitamente al arranque mediante
+  `Configure_Plugin`.
+- La ruta/simbolo deben provenir de configuracion controlada por CM
+  (baseline release), no de entrada ad-hoc.
+
+**25.3 Checks minimos del plugin**
+- `path` absoluto.
+- objetivo es archivo regular.
+- archivo no world-writable.
+- (opcional por politica del sistema) validar owner/permisos estrictos.
+
+**25.4 Politica de rechazo**
+- Si falla cualquiera de los checks anteriores, o no hay proveedor valido
+  configurado cuando la firma es obligatoria: fail-closed.
+- No fallback a source/JIT en RT.
+
+## 26. Operational hardening checklist
+**Objetivo:** Checklist operacional minima para despliegue RT del proveedor
+cripto.
+
+- Proveedor configurado por `Configure_Plugin` durante startup controlado.
+- Ruta del plugin absoluta, fuera de directorios temporales/escribibles.
+- Archivo plugin regular y no world-writable.
+- Baseline CM incluye ruta, version y hash esperado del plugin.
+- En RT strict mode, env vars `OCLW_CRYPTO_PLUGIN`/`OCLW_CRYPTO_SYMBOL`
+  deshabilitadas/ignoradas.
+- Fallo de carga/resolucion/verificacion del proveedor tratado como
+  fail-closed.
+- Evidencia de verificacion y configuracion registrada en logs de gate/V&V.

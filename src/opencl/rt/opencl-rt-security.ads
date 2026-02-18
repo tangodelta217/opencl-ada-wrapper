@@ -11,8 +11,9 @@ package OpenCL.RT.Security is
 
    procedure Install_Verifier (V : Verify_Fn);
 
-   --  Explicit plugin configuration path for RT integrations. If loading or
-   --  symbol resolution fails, Status is OCLW_SIGNATURE_NOT_IMPLEMENTED.
+   --  Explicit plugin configuration path for RT integrations. Path hardening:
+   --  absolute path, regular file and not world-writable. If trust checks
+   --  fail, Status is OCLW_PLUGIN_UNTRUSTED.
    procedure Configure_Plugin
      (Path : String;
       Symbol : String := "oclw_kpack_verify_v1";

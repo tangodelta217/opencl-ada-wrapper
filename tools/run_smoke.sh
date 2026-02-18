@@ -61,6 +61,7 @@ SMOKE_RT_NEGATIVE_CASES_EXEC="$(find_smoke_executable "smoke_rt_negative_cases")
 SMOKE_RT_SIGNATURE_ENFORCEMENT_EXEC="$(find_smoke_executable "smoke_rt_signature_enforcement")"
 SMOKE_RT_SIGNATURE_PLUGIN_EXEC="$(find_smoke_executable "smoke_rt_signature_plugin")"
 SMOKE_RT_STRICT_POLICY_EXEC="$(find_smoke_executable "smoke_rt_strict_policy")"
+SMOKE_RT_UNTRUSTED_PLUGIN_EXEC="$(find_smoke_executable "smoke_rt_untrusted_plugin")"
 SMOKE_BUFFER_ROUNDTRIP_EXEC="$(find_smoke_executable "smoke_buffer_roundtrip")"
 SMOKE_KERNEL_ADD1_EXEC="$(find_smoke_executable "smoke_kernel_add1")"
 SMOKE_PROGRAM_BINARY_ROUNDTRIP_EXEC="$(find_smoke_executable "smoke_program_binary_roundtrip")"
@@ -130,6 +131,14 @@ if [ -z "${SMOKE_RT_STRICT_POLICY_EXEC}" ]; then
   MISSING_BINARIES=1
 fi
 
+if [ -z "${SMOKE_RT_UNTRUSTED_PLUGIN_EXEC}" ]; then
+  {
+    echo "ERROR missing smoke executable: smoke_rt_untrusted_plugin"
+    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
+  } | tee -a "${SMOKE_LOG}"
+  MISSING_BINARIES=1
+fi
+
 if [ -z "${SMOKE_BUFFER_ROUNDTRIP_EXEC}" ]; then
   {
     echo "ERROR missing smoke executable: smoke_buffer_roundtrip"
@@ -169,6 +178,7 @@ fi
   echo "smoke_rt_signature_enforcement_executable=${SMOKE_RT_SIGNATURE_ENFORCEMENT_EXEC}"
   echo "smoke_rt_signature_plugin_executable=${SMOKE_RT_SIGNATURE_PLUGIN_EXEC}"
   echo "smoke_rt_strict_policy_executable=${SMOKE_RT_STRICT_POLICY_EXEC}"
+  echo "smoke_rt_untrusted_plugin_executable=${SMOKE_RT_UNTRUSTED_PLUGIN_EXEC}"
   echo "smoke_buffer_roundtrip_executable=${SMOKE_BUFFER_ROUNDTRIP_EXEC}"
   echo "smoke_kernel_add1_executable=${SMOKE_KERNEL_ADD1_EXEC}"
   echo "smoke_program_binary_roundtrip_executable=${SMOKE_PROGRAM_BINARY_ROUNDTRIP_EXEC}"
@@ -194,6 +204,7 @@ SMOKE_RT_NEGATIVE_CASES_RC=0
 SMOKE_RT_SIGNATURE_ENFORCEMENT_RC=0
 SMOKE_RT_SIGNATURE_PLUGIN_RC=0
 SMOKE_RT_STRICT_POLICY_RC=0
+SMOKE_RT_UNTRUSTED_PLUGIN_RC=0
 run_and_log_smoke "smoke_platforms" "${SMOKE_PLATFORMS_EXEC}" || OVERALL_RC=$?
 run_and_log_smoke "smoke_core" "${SMOKE_CORE_EXEC}" || OVERALL_RC=$?
 run_and_log_smoke "gen_pack_add1" "${GEN_PACK_ADD1_EXEC}" || GEN_PACK_ADD1_RC=$?
@@ -220,6 +231,10 @@ run_and_log_smoke "smoke_rt_strict_policy" "${SMOKE_RT_STRICT_POLICY_EXEC}" || S
 if [ "${SMOKE_RT_STRICT_POLICY_RC}" -ne 0 ]; then
   OVERALL_RC="${SMOKE_RT_STRICT_POLICY_RC}"
 fi
+run_and_log_smoke "smoke_rt_untrusted_plugin" "${SMOKE_RT_UNTRUSTED_PLUGIN_EXEC}" || SMOKE_RT_UNTRUSTED_PLUGIN_RC=$?
+if [ "${SMOKE_RT_UNTRUSTED_PLUGIN_RC}" -ne 0 ]; then
+  OVERALL_RC="${SMOKE_RT_UNTRUSTED_PLUGIN_RC}"
+fi
 run_and_log_smoke "smoke_buffer_roundtrip" "${SMOKE_BUFFER_ROUNDTRIP_EXEC}" || OVERALL_RC=$?
 run_and_log_smoke "smoke_kernel_add1" "${SMOKE_KERNEL_ADD1_EXEC}" || OVERALL_RC=$?
 run_and_log_smoke "smoke_program_binary_roundtrip" "${SMOKE_PROGRAM_BINARY_ROUNDTRIP_EXEC}" || OVERALL_RC=$?
@@ -230,6 +245,7 @@ echo "smoke_rt_negative_cases_exit_code=${SMOKE_RT_NEGATIVE_CASES_RC}" | tee -a 
 echo "smoke_rt_signature_enforcement_exit_code=${SMOKE_RT_SIGNATURE_ENFORCEMENT_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_rt_signature_plugin_exit_code=${SMOKE_RT_SIGNATURE_PLUGIN_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_rt_strict_policy_exit_code=${SMOKE_RT_STRICT_POLICY_RC}" | tee -a "${SMOKE_LOG}"
+echo "smoke_rt_untrusted_plugin_exit_code=${SMOKE_RT_UNTRUSTED_PLUGIN_RC}" | tee -a "${SMOKE_LOG}"
 echo "pack_dir=${PACK_DIR}" | tee -a "${SMOKE_LOG}"
 echo "smoke_exit_code=${OVERALL_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_log=${SMOKE_LOG}" | tee -a "${SMOKE_LOG}"

@@ -58,6 +58,7 @@ package OpenCL.Errors is
    OCLW_Signature_Invalid : constant Status_Code := Status_Code (-32_011);
    OCLW_Signature_Missing : constant Status_Code := Status_Code (-32_012);
    OCLW_Signature_Disallowed : constant Status_Code := Status_Code (-32_013);
+   OCLW_Plugin_Untrusted : constant Status_Code := Status_Code (-32_020);
 
    function Is_Success (Code : Status_Code) return Boolean;
    function Image (Code : Status_Code) return String;
