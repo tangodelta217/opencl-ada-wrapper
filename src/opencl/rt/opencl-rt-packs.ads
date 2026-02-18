@@ -44,6 +44,11 @@ package OpenCL.RT.Packs is
       Meta : out Pack_Metadata;
       Status : out Status_Code);
 
+   --  Canonical writer policy:
+   --  - fixed key order;
+   --  - each line encoded as key=value + LF;
+   --  - '\' and '=' are escaped as '\\' and '\=';
+   --  - values containing LF/CR are rejected (format error).
    procedure Write_Manifest
      (Path : String;
       Meta : Pack_Metadata;

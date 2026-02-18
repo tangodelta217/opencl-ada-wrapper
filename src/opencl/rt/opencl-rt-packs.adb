@@ -1,4 +1,5 @@
 with Ada.Characters.Handling;
+with Ada.Characters.Latin_1;
 with Ada.Streams;
 with Ada.Streams.Stream_IO;
 with Ada.Strings;
@@ -20,6 +21,7 @@ package body OpenCL.RT.Packs is
    use type SIO.Count;
 
    Max_Manifest_Line_Length : constant Positive := 2_048;
+   Max_Encoded_Field_Length : constant Positive := Max_Field_Length * 2;
 
    function Trimmed (Value : String) return String is
    begin
@@ -36,15 +38,6 @@ package body OpenCL.RT.Packs is
          return Fields.To_Bounded_String (Value);
       end if;
    end To_Bounded;
-
-   procedure Warn_Truncated (Key : String) is
-   begin
-      TIO.Put_Line
-        ("WARN OpenCL.RT.Packs: value truncated key="
-         & Key
-         & " max="
-         & Natural'Image (Max_Field_Length));
-   end Warn_Truncated;
 
    function Parse_Natural (Text : String; Value : out Natural) return Boolean is
       Clean : constant String := Trimmed (Text);
@@ -128,6 +121,163 @@ package body OpenCL.RT.Packs is
       return Ada.Strings.Fixed.Trim (Raw, Ada.Strings.Both);
    end U32_Image;
 
+   function Has_Outer_Whitespace (Value : String) return Boolean is
+   begin
+      if Value'Length = 0 then
+         return False;
+      end if;
+
+      return
+        (Value (Value'First) <= ' ')
+        or else (Value (Value'Last) <= ' ');
+   end Has_Outer_Whitespace;
+
+   function Has_Forbidden_Field_Char (C : Character) return Boolean is
+      Pos : constant Natural := Character'Pos (C);
+   begin
+      return
+        Pos < 16#20#
+        or else Pos = 16#7F#;
+   end Has_Forbidden_Field_Char;
+
+   function Find_Separator (Line : String) return Natural is
+      Escaped : Boolean := False;
+   begin
+      for I in Line'Range loop
+         if Escaped then
+            Escaped := False;
+         elsif Line (I) = '\' then
+            Escaped := True;
+         elsif Line (I) = '=' then
+            return I;
+         end if;
+      end loop;
+
+      return 0;
+   end Find_Separator;
+
+   function Encode_Field
+     (Value : String;
+      Encoded : out String;
+      Last : out Natural) return Boolean
+   is
+      Cursor : Natural := 0;
+
+      procedure Append (C : Character; Ok : in out Boolean) is
+      begin
+         if Cursor = Encoded'Length then
+            Ok := False;
+            return;
+         end if;
+
+         Cursor := Cursor + 1;
+         Encoded (Cursor) := C;
+      end Append;
+
+      Ok : Boolean := True;
+   begin
+      Last := 0;
+
+      if Value'Length > Max_Field_Length then
+         return False;
+      end if;
+
+      if Has_Outer_Whitespace (Value) then
+         return False;
+      end if;
+
+      for C of Value loop
+         if C = Ada.Characters.Latin_1.LF or else C = Ada.Characters.Latin_1.CR then
+            return False;
+         end if;
+
+         if Has_Forbidden_Field_Char (C) then
+            return False;
+         end if;
+
+         if C = '\' or else C = '=' then
+            Append ('\', Ok);
+            if not Ok then
+               return False;
+            end if;
+         end if;
+
+         Append (C, Ok);
+         if not Ok then
+            return False;
+         end if;
+      end loop;
+
+      Last := Cursor;
+      return True;
+   end Encode_Field;
+
+   function Decode_Field
+     (Encoded : String;
+      Decoded : out Bounded_String) return Boolean
+   is
+      Buffer : String (1 .. Max_Field_Length);
+      Cursor : Natural := 0;
+      Escaped : Boolean := False;
+
+      procedure Append (C : Character; Ok : in out Boolean) is
+      begin
+         if Cursor = Buffer'Length then
+            Ok := False;
+            return;
+         end if;
+
+         Cursor := Cursor + 1;
+         Buffer (Cursor) := C;
+      end Append;
+
+      Ok : Boolean := True;
+   begin
+      Decoded := Fields.To_Bounded_String ("");
+
+      if Has_Outer_Whitespace (Encoded) then
+         return False;
+      end if;
+
+      for C of Encoded loop
+         if Escaped then
+            if C = '\' or else C = '=' then
+               Append (C, Ok);
+               if not Ok then
+                  return False;
+               end if;
+            else
+               return False;
+            end if;
+
+            Escaped := False;
+         elsif C = '\' then
+            Escaped := True;
+         elsif C = '=' then
+            return False;
+         else
+            if Has_Forbidden_Field_Char (C) then
+               return False;
+            end if;
+
+            Append (C, Ok);
+            if not Ok then
+               return False;
+            end if;
+         end if;
+      end loop;
+
+      if Escaped then
+         return False;
+      end if;
+
+      if Cursor > 0 then
+         Decoded := Fields.To_Bounded_String (Buffer (1 .. Cursor));
+      end if;
+
+      return True;
+   end Decode_Field;
+
    procedure Read_Manifest
      (Path : String;
       Meta : out Pack_Metadata;
@@ -136,7 +286,6 @@ package body OpenCL.RT.Packs is
       File : TIO.File_Type;
       Line_Buffer : String (1 .. Max_Manifest_Line_Length);
       Last : Natural := 0;
-      Line_No : Natural := 0;
 
       Seen_Kpack_Version : Boolean := False;
       Seen_Pack_Id : Boolean := False;
@@ -148,22 +297,11 @@ package body OpenCL.RT.Packs is
       Seen_Device_Vendor : Boolean := False;
       Seen_Device_Version : Boolean := False;
       Seen_Driver_Version : Boolean := False;
+      Seen_OpenCL_C_Version : Boolean := False;
+      Seen_Build_Options : Boolean := False;
       Seen_Binary_Size : Boolean := False;
       Seen_Binary_FNV1a32 : Boolean := False;
       Seen_Kernel_Name : Boolean := False;
-
-      procedure Set_Field
-        (Target : out Bounded_String;
-         Key : String;
-         Value : String)
-      is
-      begin
-         if Value'Length > Max_Field_Length then
-            Warn_Truncated (Key);
-         end if;
-
-         Target := To_Bounded (Value);
-      end Set_Field;
    begin
       Meta := (others => <>);
       Status := OpenCL.Errors.Success;
@@ -172,117 +310,226 @@ package body OpenCL.RT.Packs is
 
       while not TIO.End_Of_File (File) loop
          TIO.Get_Line (File, Line_Buffer, Last);
-         Line_No := Line_No + 1;
 
          if Last = Line_Buffer'Last and then not TIO.End_Of_Line (File) then
-            TIO.Skip_Line (File);
-            TIO.Put_Line
-              ("WARN OpenCL.RT.Packs: manifest line truncated line="
-               & Natural_Image (Line_No)
-               & " max="
-               & Natural'Image (Max_Manifest_Line_Length));
+            Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+            TIO.Close (File);
+            return;
          end if;
 
          declare
             Raw_Line : constant String :=
               (if Last = 0 then "" else Line_Buffer (1 .. Last));
             Line_Text : constant String := Trimmed (Raw_Line);
-            Sep : Natural := 0;
          begin
             if Line_Text'Length = 0 then
                null;
             elsif Line_Text (Line_Text'First) = '#' then
                null;
             else
-               Sep := Ada.Strings.Fixed.Index (Line_Text, "=");
-
-               if Sep = 0 or else Sep = Line_Text'First then
-                  Status := OpenCL.Errors.OCLW_Pack_Format_Error;
-                  TIO.Close (File);
-                  return;
-               end if;
-
                declare
-                  Key_Raw : constant String :=
-                    Trimmed (Line_Text (Line_Text'First .. Sep - 1));
-                  Value_Raw : constant String :=
-                    (if Sep < Line_Text'Last
-                     then Trimmed (Line_Text (Sep + 1 .. Line_Text'Last))
-                     else "");
-                  Key : constant String :=
-                    Ada.Characters.Handling.To_Lower (Key_Raw);
-                  Parsed_Natural : Natural := 0;
-                  Parsed_U32 : Interfaces.Unsigned_32 := 0;
+                  Sep : constant Natural := Find_Separator (Raw_Line);
                begin
-                  if Key'Length = 0 then
+                  if Raw_Line /= Line_Text then
                      Status := OpenCL.Errors.OCLW_Pack_Format_Error;
                      TIO.Close (File);
                      return;
                   end if;
 
-                  if Key = "kpack_version" then
-                     if not Parse_Natural (Value_Raw, Parsed_Natural) then
-                        Status := OpenCL.Errors.OCLW_Pack_Format_Error;
-                        TIO.Close (File);
-                        return;
-                     end if;
-                     Meta.Kpack_Version := Parsed_Natural;
-                     Seen_Kpack_Version := True;
-                  elsif Key = "pack_id" then
-                     Set_Field (Meta.Pack_Id, Key, Value_Raw);
-                     Seen_Pack_Id := True;
-                  elsif Key = "created_utc" then
-                     Set_Field (Meta.Created_Utc, Key, Value_Raw);
-                     Seen_Created_Utc := True;
-                  elsif Key = "platform_name" then
-                     Set_Field (Meta.Platform_Name, Key, Value_Raw);
-                     Seen_Platform_Name := True;
-                  elsif Key = "platform_vendor" then
-                     Set_Field (Meta.Platform_Vendor, Key, Value_Raw);
-                     Seen_Platform_Vendor := True;
-                  elsif Key = "platform_version" then
-                     Set_Field (Meta.Platform_Version, Key, Value_Raw);
-                     Seen_Platform_Version := True;
-                  elsif Key = "device_name" then
-                     Set_Field (Meta.Device_Name, Key, Value_Raw);
-                     Seen_Device_Name := True;
-                  elsif Key = "device_vendor" then
-                     Set_Field (Meta.Device_Vendor, Key, Value_Raw);
-                     Seen_Device_Vendor := True;
-                  elsif Key = "device_version" then
-                     Set_Field (Meta.Device_Version, Key, Value_Raw);
-                     Seen_Device_Version := True;
-                  elsif Key = "driver_version" then
-                     Set_Field (Meta.Driver_Version, Key, Value_Raw);
-                     Seen_Driver_Version := True;
-                  elsif Key = "opencl_c_version" then
-                     Set_Field (Meta.OpenCL_C_Version, Key, Value_Raw);
-                  elsif Key = "build_options" then
-                     Set_Field (Meta.Build_Options, Key, Value_Raw);
-                  elsif Key = "binary_size" then
-                     if not Parse_Natural (Value_Raw, Parsed_Natural) then
-                        Status := OpenCL.Errors.OCLW_Pack_Format_Error;
-                        TIO.Close (File);
-                        return;
-                     end if;
-                     Meta.Binary_Size := Interfaces.C.size_t (Parsed_Natural);
-                     Seen_Binary_Size := True;
-                  elsif Key = "binary_fnv1a32" then
-                     if not Parse_Unsigned_32 (Value_Raw, Parsed_U32) then
-                        Status := OpenCL.Errors.OCLW_Pack_Format_Error;
-                        TIO.Close (File);
-                        return;
-                     end if;
-                     Meta.Binary_FNV1a32 := Parsed_U32;
-                     Seen_Binary_FNV1a32 := True;
-                  elsif Key = "kernel_name" then
-                     Set_Field (Meta.Kernel_Name, Key, Value_Raw);
-                     Seen_Kernel_Name := True;
-                  else
+                  if Sep = 0 or else Sep = Raw_Line'First then
                      Status := OpenCL.Errors.OCLW_Pack_Format_Error;
                      TIO.Close (File);
                      return;
                   end if;
+
+                  declare
+                     Key_Raw : constant String :=
+                       Raw_Line (Raw_Line'First .. Sep - 1);
+                     Value_Encoded : constant String :=
+                       (if Sep < Raw_Line'Last
+                        then Raw_Line (Sep + 1 .. Raw_Line'Last)
+                        else "");
+                     Key : constant String :=
+                       Ada.Characters.Handling.To_Lower (Key_Raw);
+                     Decoded_Value : Bounded_String := Fields.To_Bounded_String ("");
+                     Parsed_Natural : Natural := 0;
+                     Parsed_U32 : Interfaces.Unsigned_32 := 0;
+                  begin
+                     if Key'Length = 0 then
+                        Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                        TIO.Close (File);
+                        return;
+                     end if;
+
+                     --  Strict policy: no whitespace around '=' and no silent
+                     --  normalization for canonical lines.
+                     if Has_Outer_Whitespace (Key_Raw)
+                       or else Has_Outer_Whitespace (Value_Encoded)
+                     then
+                        Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                        TIO.Close (File);
+                        return;
+                     end if;
+
+                     if not Decode_Field (Value_Encoded, Decoded_Value) then
+                        Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                        TIO.Close (File);
+                        return;
+                     end if;
+
+                     if Key = "kpack_version" then
+                        if Seen_Kpack_Version then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+
+                        if not Parse_Natural
+                          (To_String (Decoded_Value), Parsed_Natural)
+                        then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+
+                        Meta.Kpack_Version := Parsed_Natural;
+                        Seen_Kpack_Version := True;
+                     elsif Key = "pack_id" then
+                        if Seen_Pack_Id then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Pack_Id := Decoded_Value;
+                        Seen_Pack_Id := True;
+                     elsif Key = "created_utc" then
+                        if Seen_Created_Utc then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Created_Utc := Decoded_Value;
+                        Seen_Created_Utc := True;
+                     elsif Key = "platform_name" then
+                        if Seen_Platform_Name then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Platform_Name := Decoded_Value;
+                        Seen_Platform_Name := True;
+                     elsif Key = "platform_vendor" then
+                        if Seen_Platform_Vendor then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Platform_Vendor := Decoded_Value;
+                        Seen_Platform_Vendor := True;
+                     elsif Key = "platform_version" then
+                        if Seen_Platform_Version then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Platform_Version := Decoded_Value;
+                        Seen_Platform_Version := True;
+                     elsif Key = "device_name" then
+                        if Seen_Device_Name then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Device_Name := Decoded_Value;
+                        Seen_Device_Name := True;
+                     elsif Key = "device_vendor" then
+                        if Seen_Device_Vendor then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Device_Vendor := Decoded_Value;
+                        Seen_Device_Vendor := True;
+                     elsif Key = "device_version" then
+                        if Seen_Device_Version then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Device_Version := Decoded_Value;
+                        Seen_Device_Version := True;
+                     elsif Key = "driver_version" then
+                        if Seen_Driver_Version then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Driver_Version := Decoded_Value;
+                        Seen_Driver_Version := True;
+                     elsif Key = "opencl_c_version" then
+                        if Seen_OpenCL_C_Version then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.OpenCL_C_Version := Decoded_Value;
+                        Seen_OpenCL_C_Version := True;
+                     elsif Key = "build_options" then
+                        if Seen_Build_Options then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Build_Options := Decoded_Value;
+                        Seen_Build_Options := True;
+                     elsif Key = "binary_size" then
+                        if Seen_Binary_Size then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+
+                        if not Parse_Natural
+                          (To_String (Decoded_Value), Parsed_Natural)
+                        then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+
+                        Meta.Binary_Size := Interfaces.C.size_t (Parsed_Natural);
+                        Seen_Binary_Size := True;
+                     elsif Key = "binary_fnv1a32" then
+                        if Seen_Binary_FNV1a32 then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+
+                        if not Parse_Unsigned_32
+                          (To_String (Decoded_Value), Parsed_U32)
+                        then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+
+                        Meta.Binary_FNV1a32 := Parsed_U32;
+                        Seen_Binary_FNV1a32 := True;
+                     elsif Key = "kernel_name" then
+                        if Seen_Kernel_Name then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Kernel_Name := Decoded_Value;
+                        Seen_Kernel_Name := True;
+                     else
+                        Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                        TIO.Close (File);
+                        return;
+                     end if;
+                  end;
                end;
             end if;
          end;
@@ -317,6 +564,11 @@ package body OpenCL.RT.Packs is
             TIO.Close (File);
          end if;
          Status := OpenCL.Errors.OCLW_IO_Error;
+      when Constraint_Error =>
+         if TIO.Is_Open (File) then
+            TIO.Close (File);
+         end if;
+         Status := OpenCL.Errors.OCLW_Pack_Format_Error;
       when others =>
          if TIO.Is_Open (File) then
             TIO.Close (File);
@@ -329,54 +581,153 @@ package body OpenCL.RT.Packs is
       Meta : Pack_Metadata;
       Status : out Status_Code)
    is
-      File : TIO.File_Type;
+      File : SIO.File_Type;
+
+      procedure Write_Field (Key : String; Value : String) is
+         Encoded_Buffer : String (1 .. Max_Encoded_Field_Length);
+         Encoded_Last : Natural := 0;
+      begin
+         if not Encode_Field
+           (Value => Value,
+            Encoded => Encoded_Buffer,
+            Last => Encoded_Last)
+         then
+            Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+            return;
+         end if;
+
+         if Key'Length + 1 + Encoded_Last + 1 > Max_Manifest_Line_Length then
+            Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+            return;
+         end if;
+
+         declare
+            Encoded_Value : constant String :=
+              (if Encoded_Last = 0 then "" else Encoded_Buffer (1 .. Encoded_Last));
+            Line : constant String :=
+              Key & "=" & Encoded_Value & Ada.Characters.Latin_1.LF;
+            Bytes : Ada.Streams.Stream_Element_Array
+              (1 .. Ada.Streams.Stream_Element_Offset (Line'Length));
+         begin
+            for I in Line'Range loop
+               Bytes
+                 (Bytes'First
+                  + Ada.Streams.Stream_Element_Offset (I - Line'First)) :=
+                 Ada.Streams.Stream_Element (Character'Pos (Line (I)));
+            end loop;
+
+            SIO.Write (File => File, Item => Bytes);
+         end;
+      end Write_Field;
    begin
       Status := OpenCL.Errors.Success;
 
-      TIO.Create (File => File, Mode => TIO.Out_File, Name => Path);
+      SIO.Create (File => File, Mode => SIO.Out_File, Name => Path);
 
-      TIO.Put_Line (File, "# OpenCL RT Kernel Pack Manifest");
-      TIO.Put_Line (File, "kpack_version=" & Natural_Image (Meta.Kpack_Version));
-      TIO.Put_Line (File, "pack_id=" & To_String (Meta.Pack_Id));
-      TIO.Put_Line (File, "created_utc=" & To_String (Meta.Created_Utc));
+      Write_Field ("kpack_version", Natural_Image (Meta.Kpack_Version));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
 
-      TIO.Put_Line (File, "platform_name=" & To_String (Meta.Platform_Name));
-      TIO.Put_Line (File, "platform_vendor=" & To_String (Meta.Platform_Vendor));
-      TIO.Put_Line
-        (File,
-         "platform_version=" & To_String (Meta.Platform_Version));
+      Write_Field ("pack_id", To_String (Meta.Pack_Id));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
 
-      TIO.Put_Line (File, "device_name=" & To_String (Meta.Device_Name));
-      TIO.Put_Line (File, "device_vendor=" & To_String (Meta.Device_Vendor));
-      TIO.Put_Line (File, "device_version=" & To_String (Meta.Device_Version));
-      TIO.Put_Line
-        (File,
-         "driver_version=" & To_String (Meta.Driver_Version));
+      Write_Field ("created_utc", To_String (Meta.Created_Utc));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
 
-      TIO.Put_Line
-        (File,
-         "opencl_c_version=" & To_String (Meta.OpenCL_C_Version));
-      TIO.Put_Line (File, "build_options=" & To_String (Meta.Build_Options));
+      Write_Field ("platform_name", To_String (Meta.Platform_Name));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
 
-      TIO.Put_Line (File, "binary_size=" & Size_T_Image (Meta.Binary_Size));
-      TIO.Put_Line
-        (File,
-         "binary_fnv1a32=" & U32_Image (Meta.Binary_FNV1a32));
-      TIO.Put_Line (File, "kernel_name=" & To_String (Meta.Kernel_Name));
+      Write_Field ("platform_vendor", To_String (Meta.Platform_Vendor));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
 
-      TIO.Close (File);
+      Write_Field ("platform_version", To_String (Meta.Platform_Version));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("device_name", To_String (Meta.Device_Name));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("device_vendor", To_String (Meta.Device_Vendor));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("device_version", To_String (Meta.Device_Version));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("driver_version", To_String (Meta.Driver_Version));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("opencl_c_version", To_String (Meta.OpenCL_C_Version));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("build_options", To_String (Meta.Build_Options));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("binary_size", Size_T_Image (Meta.Binary_Size));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("binary_fnv1a32", U32_Image (Meta.Binary_FNV1a32));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("kernel_name", To_String (Meta.Kernel_Name));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      SIO.Close (File);
    exception
-      when TIO.Name_Error
-         | TIO.Use_Error
-         | TIO.Status_Error
-         | TIO.Device_Error =>
-         if TIO.Is_Open (File) then
-            TIO.Close (File);
+      when SIO.Name_Error
+         | SIO.Use_Error
+         | SIO.Status_Error
+         | SIO.Device_Error
+         | Constraint_Error =>
+         if SIO.Is_Open (File) then
+            SIO.Close (File);
          end if;
          Status := OpenCL.Errors.OCLW_IO_Error;
       when others =>
-         if TIO.Is_Open (File) then
-            TIO.Close (File);
+         if SIO.Is_Open (File) then
+            SIO.Close (File);
          end if;
          Status := OpenCL.Errors.OCLW_IO_Error;
    end Write_Manifest;

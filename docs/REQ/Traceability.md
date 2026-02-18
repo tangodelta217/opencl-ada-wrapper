@@ -112,3 +112,24 @@ Capabilities under G5 scope:
 | OCLW-REQ-0005 | Fail-closed status behavior for hash/fingerprint mismatch in RT load path | Test | OCLW-TST-0002 | `tests/smoke/smoke_rt_load_pack_add1.adb`, `src/opencl/rt/opencl-rt-loader.adb`, `src/opencl/rt/opencl-rt-packs.adb` | `docs/VV/Execution_Logs/GATES/G5/rerun_01/G5_Report.md` (`negative_fingerprint_check=PASS`) | PASS |
 | OCLW-REQ-0008 | Controlled lifecycle for offline pack generation and RT-only pack loading | Test | OCLW-TST-0002 | `tests/smoke/gen_pack_add1.adb`, `tests/smoke/smoke_rt_load_pack_add1.adb`, `tools/run_smoke.sh` | `docs/VV/Execution_Logs/GATES/G5/rerun_01/G5_Report.md` (`pack_dir`, `binary_size`, `binary_fnv1a32`, run exit code 0) | PASS |
 | OCLW-REQ-0010 | Traceability closure for Gate G5 evidence and QA closeout | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G5/Closure.md`, `docs/VV/Execution_Logs/GATES/G5/rerun_01/G5_Report.md` | PASS |
+
+## G6 Addendum (Canonical Manifest + RT Tamper Detection)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G6/rerun_01/G6_Report.md`
+- `docs/VV/Execution_Logs/GATES/G6/Closure.md`
+
+Capabilities under G6 scope:
+- Canonical manifest deterministic path (`Write_Manifest`) and strict parser (`Read_Manifest`).
+- Tamper detection by explicit status code:
+  - `OCLW_HASH_MISMATCH`
+  - `OCLW_FINGERPRINT_MISMATCH`
+  - `OCLW_PACK_FORMAT_ERROR`
+- Validation test: `tests/smoke/smoke_rt_negative_cases.adb`.
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0002 | RT pack handling with canonical manifest generation and strict parse | Inspection + test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-packs.ads`, `src/opencl/rt/opencl-rt-packs.adb`, `tests/smoke/smoke_rt_negative_cases.adb` | `docs/VV/Execution_Logs/GATES/G6/rerun_01/G6_Report.md` (`smoke_rt_negative_cases RESULT=PASS`) | PASS |
+| OCLW-REQ-0005 | Fail-closed tamper detection via explicit error statuses (hash/fingerprint/format) | Test | OCLW-TST-0002 | `src/opencl/opencl-errors.ads`, `src/opencl/opencl-errors.adb`, `src/opencl/rt/opencl-rt-packs.adb`, `src/opencl/rt/opencl-rt-loader.adb`, `tests/smoke/smoke_rt_negative_cases.adb` | `docs/VV/Execution_Logs/GATES/G6/rerun_01/G6_Report.md` (`case1/2/3 tamper PASS`) | PASS |
+| OCLW-REQ-0008 | RT execution path remains no-JIT with pack-based runtime validation | Test | OCLW-TST-0002 | `tests/smoke/smoke_rt_load_pack_add1.adb`, `tests/smoke/smoke_rt_negative_cases.adb`, `tools/run_smoke.sh` | `docs/VV/Execution_Logs/GATES/G6/rerun_01/G6_Report.md` (`smoke_rt_load_pack_add1 RESULT=PASS`) | PASS |
+| OCLW-REQ-0010 | Gate-level traceability closure for canonical/tamper verification evidence | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G6/Closure.md`, `docs/VV/Execution_Logs/GATES/G6/rerun_01/G6_Report.md` | PASS |

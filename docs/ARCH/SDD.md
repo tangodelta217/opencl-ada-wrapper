@@ -278,3 +278,72 @@ OpenCL precompilados/validados.
   de corrupcion/cambio accidental).
 - Para seguridad operacional real (anti-tamper/anti-spoof), se requiere hash
   criptografico y/o firma digital aprobada por politica (trabajo futuro).
+
+## 19. Kernel Pack Canonical Manifest
+**Objetivo:** Establecer serializacion determinista y auditable del manifiesto
+del Kernel Pack.
+
+**19.1 Reglas canonical**
+- Codificacion: UTF-8 sin BOM.
+- Terminador de linea: `LF` (`\n`) en todas las lineas.
+- Formato de linea: exactamente `key=value`.
+- Sin espacios iniciales/finales en linea, clave o valor.
+- Sin lineas vacias ni comentarios en la representacion canonical.
+- Orden de claves fijo y obligatorio:
+  - `kpack_version`
+  - `pack_id`
+  - `created_utc`
+  - `platform_name`
+  - `platform_vendor`
+  - `platform_version`
+  - `device_name`
+  - `device_vendor`
+  - `device_version`
+  - `driver_version`
+  - `opencl_c_version`
+  - `build_options`
+  - `binary_size`
+  - `binary_fnv1a32`
+  - `kernel_name`
+
+**19.2 Politica de caracteres**
+- Rechazar claves fuera del conjunto canonical.
+- Rechazar caracteres de control en valores (excepto `space`) y `DEL`.
+- Rechazar manifiestos con UTF-8 invalido.
+- Escape solo por esquema versionado explicito (`kpack_version`), nunca por
+  reglas ad-hoc en runtime.
+
+**19.3 Parse estricto**
+- Rechazar manifest por clave faltante, clave duplicada, clave desconocida,
+  formato invalido o conversion numerica invalida.
+- Mantener fail-closed: si el parse no es 100% valido, no se carga programa.
+
+## 20. RT Negative Testing (tamper detection)
+**Objetivo:** Exigir evidencia negativa de deteccion de manipulacion en ruta RT.
+
+**20.1 Casos negativos obligatorios**
+- Tamper de binario (`program.bin`) -> hash mismatch detectado.
+- Tamper de fingerprint en `manifest.kpack` -> fingerprint mismatch detectado.
+- Tamper de formato manifest (claves invalidas/duplicadas/faltantes o sintaxis
+  invalida) -> pack format error detectado.
+
+**20.2 Criterio de aceptacion**
+- La verificacion de gate debe incluir evidencia de los casos negativos con
+  resultado esperado de rechazo controlado (fail-closed).
+- El rechazo debe ser explicito y trazable por estado de error interno.
+
+## 21. Crypto Provider Integration Point (future)
+**Objetivo:** Definir punto de integracion para autenticidad/firma sin acoplar
+dependencia criptografica en esta fase.
+
+**21.1 Alcance del punto de integracion**
+- Interfaz de verificacion de artefacto (`manifest canonical + program.bin +
+  metadata`) separada de la logica de loader RT.
+- Contrato orientado a proveedor intercambiable (plugin/adapter) aprobado por
+  politica del programa.
+
+**21.2 Politica transitoria**
+- En G5, `FNV1a32` cubre solo integridad basica, no autenticidad.
+- En G6/G7 se integrara firma/verificacion criptografica aprobada.
+- La politica RT mantiene fail-closed cuando la verificacion requerida no pueda
+  completarse de forma valida.

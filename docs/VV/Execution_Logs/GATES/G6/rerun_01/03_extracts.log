@@ -1,0 +1,5 @@
+smoke_rt_load_pack_add1_RESULT=RESULT=PASS
+smoke_rt_negative_cases_RESULT=RESULT=PASS
+smoke_rt_load_pack_add1_exit_code=0
+smoke_rt_negative_cases_exit_code=0
+run_smoke_exit_code=0
