@@ -92,3 +92,23 @@ Capabilities under G4 scope:
 | OCLW-REQ-0002 | Thick wrappers for binary size extraction, binary retrieval and program creation from binary | Inspection + test | OCLW-TST-0002 | `src/opencl/core/opencl-core-programs.ads`, `src/opencl/core/opencl-core-programs.adb` (`Binary_Size`, `Get_Binary`, `Create_From_Binary`) | `docs/VV/Execution_Logs/GATES/G4/verify_03/G4_Verification_Report.md` (checklist C PASS) | PASS |
 | OCLW-REQ-0005 | Explicit status-based handling over binary roundtrip path | Test | OCLW-TST-0002 | `tests/smoke/smoke_program_binary_roundtrip.adb`, `src/opencl/core/opencl-core-programs.adb` | `docs/VV/Execution_Logs/GATES/G4/verify_03/03_run_smoke.log`, `docs/VV/Execution_Logs/GATES/G4/verify_03/04_extracts.log` (`RESULT=PASS`, `binary_size`, `binary_fnv1a32`) | PASS |
 | OCLW-REQ-0010 | Gate-level traceability and evidence closure for G4 | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G4/Closure.md`, `docs/VV/Execution_Logs/GATES/G4/verify_03/G4_Verification_Report.md` | PASS |
+
+## G5 Addendum (RT Kernel Pack / strict no-JIT path)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G5/rerun_01/G5_Report.md`
+- `docs/VV/Execution_Logs/GATES/G5/Closure.md`
+
+Capabilities under G5 scope:
+- Kernel Pack artifact: `manifest.kpack` + `program.bin`
+- Fingerprint verification for platform/device/driver (strict match)
+- Binary integrity verification via `binary_size` + `binary_fnv1a32`
+- RT no-JIT path (RT smoke uses binary-load path only)
+- Validation tests: `tests/smoke/gen_pack_add1.adb`, `tests/smoke/smoke_rt_load_pack_add1.adb`
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0002 | RT APIs for pack parsing, hash verification and binary load workflow | Inspection + test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-packs.ads`, `src/opencl/rt/opencl-rt-loader.ads`, `src/opencl/rt/opencl-rt-hash.ads`, `tests/smoke/gen_pack_add1.adb`, `tests/smoke/smoke_rt_load_pack_add1.adb` | `docs/VV/Execution_Logs/GATES/G5/rerun_01/G5_Report.md` (`gen_pack_add1` and `smoke_rt_load_pack_add1` PASS) | PASS |
+| OCLW-REQ-0005 | Fail-closed status behavior for hash/fingerprint mismatch in RT load path | Test | OCLW-TST-0002 | `tests/smoke/smoke_rt_load_pack_add1.adb`, `src/opencl/rt/opencl-rt-loader.adb`, `src/opencl/rt/opencl-rt-packs.adb` | `docs/VV/Execution_Logs/GATES/G5/rerun_01/G5_Report.md` (`negative_fingerprint_check=PASS`) | PASS |
+| OCLW-REQ-0008 | Controlled lifecycle for offline pack generation and RT-only pack loading | Test | OCLW-TST-0002 | `tests/smoke/gen_pack_add1.adb`, `tests/smoke/smoke_rt_load_pack_add1.adb`, `tools/run_smoke.sh` | `docs/VV/Execution_Logs/GATES/G5/rerun_01/G5_Report.md` (`pack_dir`, `binary_size`, `binary_fnv1a32`, run exit code 0) | PASS |
+| OCLW-REQ-0010 | Traceability closure for Gate G5 evidence and QA closeout | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G5/Closure.md`, `docs/VV/Execution_Logs/GATES/G5/rerun_01/G5_Report.md` | PASS |

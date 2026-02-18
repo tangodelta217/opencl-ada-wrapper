@@ -49,6 +49,12 @@ package OpenCL.Errors is
 
    Platform_Not_Found_KHR : constant Status_Code := Status_Code (-1001);
 
+   --  Wrapper-internal status domain (outside standard OpenCL error range).
+   OCLW_Fingerprint_Mismatch : constant Status_Code := Status_Code (-32_001);
+   OCLW_Pack_Format_Error : constant Status_Code := Status_Code (-32_002);
+   OCLW_Hash_Mismatch : constant Status_Code := Status_Code (-32_003);
+   OCLW_IO_Error : constant Status_Code := Status_Code (-32_004);
+
    function Is_Success (Code : Status_Code) return Boolean;
    function Image (Code : Status_Code) return String;
 end OpenCL.Errors;

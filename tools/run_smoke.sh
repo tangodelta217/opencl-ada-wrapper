@@ -26,6 +26,9 @@ fi
 
 TIMESTAMP_UTC="$(date -u +"%Y%m%dT%H%M%SZ")"
 SMOKE_LOG="${LOG_DIR}/${TIMESTAMP_UTC}_smoke_run.log"
+PACK_DIR="${REPO_ROOT}/docs/VV/Execution_Logs/local/${TIMESTAMP_UTC}_kpack_add1"
+export OCLW_PACK_DIR="${PACK_DIR}"
+mkdir -p "${PACK_DIR}"
 
 find_smoke_executable() {
   local smoke_name="$1"
@@ -43,6 +46,8 @@ find_smoke_executable() {
   echo "=== Smoke Run Start ==="
   echo "timestamp_utc=${TIMESTAMP_UTC}"
   echo "repo_root=${REPO_ROOT}"
+  echo "pack_dir=${PACK_DIR}"
+  echo "oclw_pack_dir=${OCLW_PACK_DIR}"
   echo "pocl_cache_dir=${POCL_CACHE_DIR:-<unset>}"
   echo "pocl_kernel_cache=${POCL_KERNEL_CACHE:-<unset>}"
   echo "pocl_cache_configured_by_harness=${POCL_CACHE_CONFIGURED_BY_HARNESS}"
@@ -50,6 +55,8 @@ find_smoke_executable() {
 
 SMOKE_PLATFORMS_EXEC="$(find_smoke_executable "smoke_platforms")"
 SMOKE_CORE_EXEC="$(find_smoke_executable "smoke_core")"
+GEN_PACK_ADD1_EXEC="$(find_smoke_executable "gen_pack_add1")"
+SMOKE_RT_LOAD_PACK_ADD1_EXEC="$(find_smoke_executable "smoke_rt_load_pack_add1")"
 SMOKE_BUFFER_ROUNDTRIP_EXEC="$(find_smoke_executable "smoke_buffer_roundtrip")"
 SMOKE_KERNEL_ADD1_EXEC="$(find_smoke_executable "smoke_kernel_add1")"
 SMOKE_PROGRAM_BINARY_ROUNDTRIP_EXEC="$(find_smoke_executable "smoke_program_binary_roundtrip")"
@@ -66,6 +73,22 @@ fi
 if [ -z "${SMOKE_CORE_EXEC}" ]; then
   {
     echo "ERROR missing smoke executable: smoke_core"
+    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
+  } | tee -a "${SMOKE_LOG}"
+  MISSING_BINARIES=1
+fi
+
+if [ -z "${GEN_PACK_ADD1_EXEC}" ]; then
+  {
+    echo "ERROR missing smoke executable: gen_pack_add1"
+    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
+  } | tee -a "${SMOKE_LOG}"
+  MISSING_BINARIES=1
+fi
+
+if [ -z "${SMOKE_RT_LOAD_PACK_ADD1_EXEC}" ]; then
+  {
+    echo "ERROR missing smoke executable: smoke_rt_load_pack_add1"
     echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
   } | tee -a "${SMOKE_LOG}"
   MISSING_BINARIES=1
@@ -104,6 +127,8 @@ fi
 {
   echo "smoke_platforms_executable=${SMOKE_PLATFORMS_EXEC}"
   echo "smoke_core_executable=${SMOKE_CORE_EXEC}"
+  echo "gen_pack_add1_executable=${GEN_PACK_ADD1_EXEC}"
+  echo "smoke_rt_load_pack_add1_executable=${SMOKE_RT_LOAD_PACK_ADD1_EXEC}"
   echo "smoke_buffer_roundtrip_executable=${SMOKE_BUFFER_ROUNDTRIP_EXEC}"
   echo "smoke_kernel_add1_executable=${SMOKE_KERNEL_ADD1_EXEC}"
   echo "smoke_program_binary_roundtrip_executable=${SMOKE_PROGRAM_BINARY_ROUNDTRIP_EXEC}"
@@ -123,12 +148,25 @@ run_and_log_smoke() {
 }
 
 OVERALL_RC=0
+GEN_PACK_ADD1_RC=0
+SMOKE_RT_LOAD_PACK_ADD1_RC=0
 run_and_log_smoke "smoke_platforms" "${SMOKE_PLATFORMS_EXEC}" || OVERALL_RC=$?
 run_and_log_smoke "smoke_core" "${SMOKE_CORE_EXEC}" || OVERALL_RC=$?
+run_and_log_smoke "gen_pack_add1" "${GEN_PACK_ADD1_EXEC}" || GEN_PACK_ADD1_RC=$?
+if [ "${GEN_PACK_ADD1_RC}" -ne 0 ]; then
+  OVERALL_RC="${GEN_PACK_ADD1_RC}"
+fi
+run_and_log_smoke "smoke_rt_load_pack_add1" "${SMOKE_RT_LOAD_PACK_ADD1_EXEC}" || SMOKE_RT_LOAD_PACK_ADD1_RC=$?
+if [ "${SMOKE_RT_LOAD_PACK_ADD1_RC}" -ne 0 ]; then
+  OVERALL_RC="${SMOKE_RT_LOAD_PACK_ADD1_RC}"
+fi
 run_and_log_smoke "smoke_buffer_roundtrip" "${SMOKE_BUFFER_ROUNDTRIP_EXEC}" || OVERALL_RC=$?
 run_and_log_smoke "smoke_kernel_add1" "${SMOKE_KERNEL_ADD1_EXEC}" || OVERALL_RC=$?
 run_and_log_smoke "smoke_program_binary_roundtrip" "${SMOKE_PROGRAM_BINARY_ROUNDTRIP_EXEC}" || OVERALL_RC=$?
 
+echo "gen_pack_add1_exit_code=${GEN_PACK_ADD1_RC}" | tee -a "${SMOKE_LOG}"
+echo "smoke_rt_load_pack_add1_exit_code=${SMOKE_RT_LOAD_PACK_ADD1_RC}" | tee -a "${SMOKE_LOG}"
+echo "pack_dir=${PACK_DIR}" | tee -a "${SMOKE_LOG}"
 echo "smoke_exit_code=${OVERALL_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_log=${SMOKE_LOG}" | tee -a "${SMOKE_LOG}"
 echo "=== Smoke Run End ===" | tee -a "${SMOKE_LOG}"

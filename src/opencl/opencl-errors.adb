@@ -104,6 +104,14 @@ package body OpenCL.Errors is
             return "CL_INVALID_GLOBAL_WORK_SIZE";
          when Platform_Not_Found_KHR =>
             return "CL_PLATFORM_NOT_FOUND_KHR";
+         when OCLW_Fingerprint_Mismatch =>
+            return "OCLW_FINGERPRINT_MISMATCH";
+         when OCLW_Pack_Format_Error =>
+            return "OCLW_PACK_FORMAT_ERROR";
+         when OCLW_Hash_Mismatch =>
+            return "OCLW_HASH_MISMATCH";
+         when OCLW_IO_Error =>
+            return "OCLW_IO_ERROR";
          when others =>
             return
               "CL_UNKNOWN_ERROR("

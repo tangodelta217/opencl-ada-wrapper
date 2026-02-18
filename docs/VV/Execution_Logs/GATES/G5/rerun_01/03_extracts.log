@@ -1,0 +1,9 @@
+timestamp_utc=2026-02-18T09:55:28Z
+head_sha=f277c919c393db10547ff14550a85745698e916b
+build_exit_code=0
+run_smoke_exit_code=0
+gen_pack_add1_result=RESULT=PASS
+gen_pack_add1_pack_dir=INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260218T095529Z_kpack_add1
+gen_pack_add1_binary_size=INFO binary_size=48617
+gen_pack_add1_binary_fnv1a32=INFO binary_fnv1a32=1462011723
+smoke_rt_load_pack_add1_result=RESULT=PASS

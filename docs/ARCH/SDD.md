@@ -208,3 +208,73 @@ OpenCL precompilados/validados.
 - Build from source queda restringido a flujo offline controlado de laboratorio.
 - El pipeline de baseline debe incluir generacion, validacion y trazabilidad de
   binarios por configuracion de HW/SW aprobada.
+
+## 17. RT Profile (EW/Defense): No-JIT mandatory
+**Objetivo:** Fijar reglas operativas obligatorias para mision RT/EW.
+
+**17.1 Politica obligatoria en runtime**
+- En RT/EW, la compilacion JIT de kernels/programas esta prohibida.
+- La ruta permitida es exclusivamente carga desde binario prevalidado
+  (`Create_From_Binary` o equivalente).
+- No se permite fallback automatico a source/JIT ante errores de carga.
+- La validacion de artefacto debe incluir:
+  - Verificacion de fingerprint del entorno objetivo.
+  - Verificacion de integridad del binario por hash declarado.
+- Ante mismatch o evidencia incompleta: comportamiento **fail-closed**
+  (rechazar carga y devolver error explicito).
+
+**17.2 DEV vs RT**
+- DEV/Integracion:
+  - Puede compilar desde source y generar Kernel Packs offline.
+  - Debe registrar evidencia de build y metadatos para trazabilidad.
+- RT/EW:
+  - Solo consume Kernel Packs aprobados por pipeline de release/CM.
+  - No genera binarios en runtime.
+
+## 18. Kernel Pack (manifest + program.bin)
+**Objetivo:** Estandarizar artefacto de despliegue no-JIT para RT/EW.
+
+**18.1 Estructura minima de artefacto**
+- `manifest.kpack`
+- `program.bin`
+
+**18.2 Formato de `manifest.kpack`**
+- Texto UTF-8, una entrada por linea con formato `key=value`.
+- Comentarios permitidos con prefijo `#`.
+- Lineas vacias permitidas.
+- Claves en minuscula con separador `_`.
+
+**18.3 Campos minimos requeridos**
+- `kpack_version`
+- `pack_id`
+- `created_utc`
+- `platform_name`
+- `platform_vendor`
+- `platform_version`
+- `device_name`
+- `device_vendor`
+- `device_version`
+- `driver_version`
+- `opencl_c_version` (opcional, recomendado)
+- `build_options` (opcional)
+- `binary_size`
+- `binary_fnv1a32`
+- `kernel_name`
+
+**18.4 Politica de verificacion RT**
+- Parse estricto de `manifest.kpack` y presencia de todos los campos requeridos.
+- Verificar `binary_size` contra el tamano real de `program.bin`.
+- Verificar `binary_fnv1a32` contra hash calculado del binario.
+- Verificar fingerprint runtime (`platform_*`, `device_*`, `driver_version`)
+  contra valores declarados en manifiesto.
+- Si cualquier check falla: **fail-closed**.
+- Fail-closed implica:
+  - No cargar el programa.
+  - No fallback a source/JIT.
+  - Retornar estado explicito para log y V&V.
+
+**18.5 Nota de seguridad/integridad**
+- `FNV1a32` se usa como control de integridad no-criptografico (deteccion basica
+  de corrupcion/cambio accidental).
+- Para seguridad operacional real (anti-tamper/anti-spoof), se requiere hash
+  criptografico y/o firma digital aprobada por politica (trabajo futuro).
