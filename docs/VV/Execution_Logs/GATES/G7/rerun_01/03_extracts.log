@@ -1,0 +1,29 @@
+# G7 extracts from run_smoke
+
+## smoke_rt_signature_enforcement lines
+54:gprbuild: "smoke_rt_signature_enforcement" up to date
+74:smoke_rt_signature_enforcement_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_signature_enforcement
+115:RESULT=PASS
+122:RESULT=PASS
+131:RESULT=PASS
+133:$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_signature_enforcement
+139:INFO caseA=PASS expected=OCLW_SIGNATURE_NOT_IMPLEMENTED
+140:INFO caseB=PASS
+141:RESULT=PASS
+142:smoke_rt_signature_enforcement_exit_code=0
+144:RESULT=PASS
+148:RESULT=PASS
+153:RESULT=PASS
+158:smoke_rt_signature_enforcement_exit_code=0
+
+## explicit RESULT for smoke_rt_signature_enforcement
+133:$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_signature_enforcement
+134:INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260218T172236Z_kpack_add1
+135:INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260218T172236Z_kpack_add1/manifest.kpack
+136:INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260218T172236Z_kpack_add1/program.bin
+137:INFO verifier_mode=TEST-FNV1A32 (NOT CRYPTO)
+138:INFO gen_pack_add1_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260218T172236Z_kpack_add1/gen_pack_add1.log
+139:INFO caseA=PASS expected=OCLW_SIGNATURE_NOT_IMPLEMENTED
+140:INFO caseB=PASS
+141:RESULT=PASS
+142:smoke_rt_signature_enforcement_exit_code=0

@@ -103,6 +103,25 @@ package body OpenCL.RT.Packs is
       return True;
    end Parse_Unsigned_32;
 
+   function Parse_Boolean_01
+     (Text : String;
+      Value : out Boolean) return Boolean
+   is
+      Clean : constant String := Trimmed (Text);
+   begin
+      Value := False;
+
+      if Clean = "0" then
+         Value := False;
+         return True;
+      elsif Clean = "1" then
+         Value := True;
+         return True;
+      else
+         return False;
+      end if;
+   end Parse_Boolean_01;
+
    function Natural_Image (Value : Natural) return String is
       Raw : constant String := Natural'Image (Value);
    begin
@@ -120,6 +139,15 @@ package body OpenCL.RT.Packs is
    begin
       return Ada.Strings.Fixed.Trim (Raw, Ada.Strings.Both);
    end U32_Image;
+
+   function Boolean_01_Image (Value : Boolean) return String is
+   begin
+      if Value then
+         return "1";
+      else
+         return "0";
+      end if;
+   end Boolean_01_Image;
 
    function Has_Outer_Whitespace (Value : String) return Boolean is
    begin
@@ -302,6 +330,10 @@ package body OpenCL.RT.Packs is
       Seen_Binary_Size : Boolean := False;
       Seen_Binary_FNV1a32 : Boolean := False;
       Seen_Kernel_Name : Boolean := False;
+      Seen_Signature_Required : Boolean := False;
+      Seen_Signature_Alg : Boolean := False;
+      Seen_Signature_Value : Boolean := False;
+      Seen_Signer_Id : Boolean := False;
    begin
       Meta := (others => <>);
       Status := OpenCL.Errors.Success;
@@ -354,6 +386,7 @@ package body OpenCL.RT.Packs is
                      Decoded_Value : Bounded_String := Fields.To_Bounded_String ("");
                      Parsed_Natural : Natural := 0;
                      Parsed_U32 : Interfaces.Unsigned_32 := 0;
+                     Parsed_Boolean : Boolean := False;
                   begin
                      if Key'Length = 0 then
                         Status := OpenCL.Errors.OCLW_Pack_Format_Error;
@@ -524,6 +557,47 @@ package body OpenCL.RT.Packs is
                         end if;
                         Meta.Kernel_Name := Decoded_Value;
                         Seen_Kernel_Name := True;
+                     elsif Key = "signature_required" then
+                        if Seen_Signature_Required then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+
+                        if not Parse_Boolean_01
+                          (To_String (Decoded_Value), Parsed_Boolean)
+                        then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+
+                        Meta.Signature_Required := Parsed_Boolean;
+                        Seen_Signature_Required := True;
+                     elsif Key = "signature_alg" then
+                        if Seen_Signature_Alg then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Signature_Alg := Decoded_Value;
+                        Seen_Signature_Alg := True;
+                     elsif Key = "signature_value" then
+                        if Seen_Signature_Value then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Signature_Value := Decoded_Value;
+                        Seen_Signature_Value := True;
+                     elsif Key = "signer_id" then
+                        if Seen_Signer_Id then
+                           Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+                           TIO.Close (File);
+                           return;
+                        end if;
+                        Meta.Signer_Id := Decoded_Value;
+                        Seen_Signer_Id := True;
                      else
                         Status := OpenCL.Errors.OCLW_Pack_Format_Error;
                         TIO.Close (File);
@@ -553,6 +627,18 @@ package body OpenCL.RT.Packs is
          and Seen_Kernel_Name)
       then
          Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+         return;
+      end if;
+
+      if Meta.Signature_Required then
+         if not Seen_Signature_Alg
+           or else not Seen_Signature_Value
+           or else To_String (Meta.Signature_Alg)'Length = 0
+           or else To_String (Meta.Signature_Value)'Length = 0
+         then
+            Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+            return;
+         end if;
       end if;
    exception
       when TIO.Name_Error
@@ -621,6 +707,15 @@ package body OpenCL.RT.Packs is
       end Write_Field;
    begin
       Status := OpenCL.Errors.Success;
+
+      if Meta.Signature_Required
+        and then
+          (To_String (Meta.Signature_Alg)'Length = 0
+           or else To_String (Meta.Signature_Value)'Length = 0)
+      then
+         Status := OpenCL.Errors.OCLW_Pack_Format_Error;
+         return;
+      end if;
 
       SIO.Create (File => File, Mode => SIO.Out_File, Name => Path);
 
@@ -714,6 +809,30 @@ package body OpenCL.RT.Packs is
          return;
       end if;
 
+      Write_Field ("signature_required", Boolean_01_Image (Meta.Signature_Required));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("signature_alg", To_String (Meta.Signature_Alg));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("signature_value", To_String (Meta.Signature_Value));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
+      Write_Field ("signer_id", To_String (Meta.Signer_Id));
+      if Status /= OpenCL.Errors.Success then
+         SIO.Close (File);
+         return;
+      end if;
+
       SIO.Close (File);
    exception
       when SIO.Name_Error
@@ -731,6 +850,115 @@ package body OpenCL.RT.Packs is
          end if;
          Status := OpenCL.Errors.OCLW_IO_Error;
    end Write_Manifest;
+
+   function Canonical_Signing_Text (Meta : Pack_Metadata) return String is
+      Buffer : String (1 .. Max_Canonical_Signing_Text_Length);
+      Cursor : Natural := 0;
+
+      function Append_Char (C : Character) return Boolean is
+      begin
+         if Cursor = Buffer'Length then
+            return False;
+         end if;
+
+         Cursor := Cursor + 1;
+         Buffer (Cursor) := C;
+         return True;
+      end Append_Char;
+
+      function Append_Text (Text : String) return Boolean is
+      begin
+         for C of Text loop
+            if not Append_Char (C) then
+               return False;
+            end if;
+         end loop;
+
+         return True;
+      end Append_Text;
+
+      function Append_Field_Line (Key : String; Value : String) return Boolean is
+         Encoded_Buffer : String (1 .. Max_Encoded_Field_Length);
+         Encoded_Last : Natural := 0;
+      begin
+         if not Encode_Field (Value => Value, Encoded => Encoded_Buffer, Last => Encoded_Last) then
+            return False;
+         end if;
+
+         if not Append_Text (Key) then
+            return False;
+         end if;
+         if not Append_Char ('=') then
+            return False;
+         end if;
+
+         if Encoded_Last > 0 then
+            if not Append_Text (Encoded_Buffer (1 .. Encoded_Last)) then
+               return False;
+            end if;
+         end if;
+
+         return Append_Char (Ada.Characters.Latin_1.LF);
+      end Append_Field_Line;
+   begin
+      if not Append_Field_Line ("kpack_version", Natural_Image (Meta.Kpack_Version)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("pack_id", To_String (Meta.Pack_Id)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("created_utc", To_String (Meta.Created_Utc)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("platform_name", To_String (Meta.Platform_Name)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("platform_vendor", To_String (Meta.Platform_Vendor)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("platform_version", To_String (Meta.Platform_Version)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("device_name", To_String (Meta.Device_Name)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("device_vendor", To_String (Meta.Device_Vendor)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("device_version", To_String (Meta.Device_Version)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("driver_version", To_String (Meta.Driver_Version)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("opencl_c_version", To_String (Meta.OpenCL_C_Version)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("build_options", To_String (Meta.Build_Options)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("binary_size", Size_T_Image (Meta.Binary_Size)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("binary_fnv1a32", U32_Image (Meta.Binary_FNV1a32)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("kernel_name", To_String (Meta.Kernel_Name)) then
+         return "";
+      end if;
+      if not Append_Field_Line ("signer_id", To_String (Meta.Signer_Id)) then
+         return "";
+      end if;
+
+      if Cursor = 0 then
+         return "";
+      else
+         return Buffer (1 .. Cursor);
+      end if;
+   exception
+      when others =>
+         return "";
+   end Canonical_Signing_Text;
 
    procedure Read_Binary
      (Path : String;

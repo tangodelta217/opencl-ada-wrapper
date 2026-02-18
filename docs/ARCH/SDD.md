@@ -332,18 +332,54 @@ del Kernel Pack.
   resultado esperado de rechazo controlado (fail-closed).
 - El rechazo debe ser explicito y trazable por estado de error interno.
 
-## 21. Crypto Provider Integration Point (future)
-**Objetivo:** Definir punto de integracion para autenticidad/firma sin acoplar
-dependencia criptografica en esta fase.
+## 21. Kernel Pack Signature (Authenticity)
+**Objetivo:** Definir politica de autenticidad para Kernel Pack en perfil RT.
 
-**21.1 Alcance del punto de integracion**
-- Interfaz de verificacion de artefacto (`manifest canonical + program.bin +
-  metadata`) separada de la logica de loader RT.
-- Contrato orientado a proveedor intercambiable (plugin/adapter) aprobado por
-  politica del programa.
+**21.1 Campos de firma en manifest**
+- `signature_required` (`0`/`1`)
+- `signature_alg` (ejemplos: `CMS/PKCS7`, `ED25519`, `RSA-PSS-SHA256`,
+  `TEST-FNV1A32`)
+- `signature` (codificacion base64)
+- `signer_id` (opcional)
+- `cert_fingerprint` (opcional)
 
-**21.2 Politica transitoria**
-- En G5, `FNV1a32` cubre solo integridad basica, no autenticidad.
-- En G6/G7 se integrara firma/verificacion criptografica aprobada.
-- La politica RT mantiene fail-closed cuando la verificacion requerida no pueda
-  completarse de forma valida.
+**21.2 Canonical signing input**
+- Se firma/verifica el manifest canonical sin campos `signature_*` y sin
+  comentarios/lineas vacias.
+- Se concatena con bytes de `program.bin` y `Used` en formato estable:
+  1. `OCLW-KPACK-SIG-V1\n`
+  2. `used=<decimal Used>\n`
+  3. bytes UTF-8 del manifest canonical sin `signature_*`
+  4. `\n--BIN--\n`
+  5. bytes `program.bin[0 .. Used-1]`
+- Si `binary_size` no coincide con `Used`, la validacion falla.
+
+**21.3 Politica RT**
+- Si `signature_required=1`, verificar firma es obligatorio.
+- Si no puede verificarse (firma invalida, metadata incompleta, proveedor no
+  disponible o algoritmo no soportado), comportamiento **fail-closed**.
+- No fallback a source/JIT en RT.
+
+**21.4 Politica DEV**
+- DEV/integracion puede generar packs sin firma (`signature_required=0`) o con
+  firma de test, segun politica local.
+- Para mision RT, pipeline release/CM debe entregar packs firmados segun
+  politica aprobada.
+
+## 22. Crypto Provider Integration Point
+**Objetivo:** Definir contrato de integracion con proveedor criptografico
+aprobado, desacoplado de implementacion especifica.
+
+**22.1 Alcance del punto de integracion**
+- Interfaz de verificacion separada de loader RT para evaluar autenticidad de:
+  - manifest canonical (sin `signature_*`)
+  - bytes de `program.bin` (`Used`)
+  - metadatos de firma (`signature_alg`, `signature`, `signer_id`,
+    `cert_fingerprint`)
+- Resultado de verificacion orientado a politica:
+  - `Pass` -> carga puede continuar.
+  - `Fail` o `Not_Implemented` cuando `signature_required=1` -> rechazo.
+
+**22.2 Politica de roadmap**
+- G8 integrara verificacion real con proveedor criptografico aprobado.
+- Hasta esa integracion, hash de integridad no sustituye autenticidad.

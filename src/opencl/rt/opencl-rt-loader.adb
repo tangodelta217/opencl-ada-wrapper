@@ -5,6 +5,7 @@ with OpenCL.Core.Contexts;
 with OpenCL.Core.Programs;
 with OpenCL.Errors;
 with OpenCL.RT.Packs;
+with OpenCL.RT.Security;
 
 package body OpenCL.RT.Loader is
 
@@ -182,6 +183,7 @@ package body OpenCL.RT.Loader is
    is
       package Errors renames OpenCL.Errors;
       package Programs renames OpenCL.Core.Programs;
+      package Security renames OpenCL.RT.Security;
 
       Binary_Status : Errors.Status_Code := Errors.Success;
       Build_Status : Errors.Status_Code := Errors.Success;
@@ -194,6 +196,37 @@ package body OpenCL.RT.Loader is
       if Used = 0 or else Used > Bin'Length then
          Status := Errors.Invalid_Value;
          return;
+      end if;
+
+      if Meta.Signature_Required then
+         if Trimmed (OpenCL.RT.Packs.To_String (Meta.Signature_Alg))'Length = 0
+           or else Trimmed (OpenCL.RT.Packs.To_String (Meta.Signature_Value))'Length = 0
+         then
+            Status := Errors.OCLW_Signature_Missing;
+            return;
+         end if;
+
+         declare
+            Signing_Text : constant String :=
+              OpenCL.RT.Packs.Canonical_Signing_Text (Meta);
+            Verify_Status : Errors.Status_Code := Errors.Success;
+         begin
+            if Signing_Text'Length = 0 then
+               Status := Errors.OCLW_Pack_Format_Error;
+               return;
+            end if;
+
+            Verify_Status :=
+              Security.Verify
+                (Meta => Meta,
+                 Signing_Text => Signing_Text,
+                 Bin => Bin,
+                 Used => Used);
+            if Verify_Status /= Errors.Success then
+               Status := Verify_Status;
+               return;
+            end if;
+         end;
       end if;
 
       declare

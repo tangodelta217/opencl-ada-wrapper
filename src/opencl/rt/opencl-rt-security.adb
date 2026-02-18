@@ -1,19 +1,30 @@
+with OpenCL.Errors;
+
 package body OpenCL.RT.Security is
 
-   procedure Verify_Signature
-     (Meta : OpenCL.RT.Packs.Pack_Metadata;
-      Manifest_Text : String;
-      Bin : OpenCL.Core.Programs.Byte_Array;
-      Used : Natural;
-      Status : out Signature_Status)
-   is
-      pragma Unreferenced (Meta);
-      pragma Unreferenced (Manifest_Text);
-      pragma Unreferenced (Bin);
-      pragma Unreferenced (Used);
+   Installed_Verifier : Verify_Fn := null;
+
+   procedure Install_Verifier (V : Verify_Fn) is
    begin
-      --  Hook only: cryptographic provider integration is deferred to G6/G7.
-      Status := Not_Implemented;
-   end Verify_Signature;
+      Installed_Verifier := V;
+   end Install_Verifier;
+
+   function Verify
+     (Meta : OpenCL.RT.Packs.Pack_Metadata;
+      Signing_Text : String;
+      Bin : OpenCL.Core.Programs.Byte_Array;
+      Used : Natural) return OpenCL.Errors.Status_Code
+   is
+   begin
+      if Installed_Verifier = null then
+         return OpenCL.Errors.OCLW_Signature_Not_Implemented;
+      else
+         return Installed_Verifier
+           (Meta => Meta,
+            Signing_Text => Signing_Text,
+            Bin => Bin,
+            Used => Used);
+      end if;
+   end Verify;
 
 end OpenCL.RT.Security;

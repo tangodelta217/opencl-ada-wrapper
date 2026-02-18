@@ -37,6 +37,11 @@ package OpenCL.RT.Packs is
       Binary_Size : Interfaces.C.size_t := 0;
       Binary_FNV1a32 : Interfaces.Unsigned_32 := 0;
       Kernel_Name : Bounded_String := Fields.To_Bounded_String ("");
+
+      Signature_Required : Boolean := False;
+      Signature_Alg : Bounded_String := Fields.To_Bounded_String ("");
+      Signature_Value : Bounded_String := Fields.To_Bounded_String ("");
+      Signer_Id : Bounded_String := Fields.To_Bounded_String ("");
    end record;
 
    procedure Read_Manifest
@@ -53,6 +58,12 @@ package OpenCL.RT.Packs is
      (Path : String;
       Meta : Pack_Metadata;
       Status : out Status_Code);
+
+   Max_Canonical_Signing_Text_Length : constant Positive := 20_480;
+   --  Returns canonical signing text without signature_* fields and without
+   --  comments. Returns the empty string on format/bounds error; callers
+   --  should map this to OCLW_PACK_FORMAT_ERROR.
+   function Canonical_Signing_Text (Meta : Pack_Metadata) return String;
 
    procedure Read_Binary
      (Path : String;

@@ -54,6 +54,9 @@ package OpenCL.Errors is
    OCLW_Pack_Format_Error : constant Status_Code := Status_Code (-32_002);
    OCLW_Hash_Mismatch : constant Status_Code := Status_Code (-32_003);
    OCLW_IO_Error : constant Status_Code := Status_Code (-32_004);
+   OCLW_Signature_Not_Implemented : constant Status_Code := Status_Code (-32_010);
+   OCLW_Signature_Invalid : constant Status_Code := Status_Code (-32_011);
+   OCLW_Signature_Missing : constant Status_Code := Status_Code (-32_012);
 
    function Is_Success (Code : Status_Code) return Boolean;
    function Image (Code : Status_Code) return String;

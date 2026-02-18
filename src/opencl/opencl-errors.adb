@@ -112,6 +112,12 @@ package body OpenCL.Errors is
             return "OCLW_HASH_MISMATCH";
          when OCLW_IO_Error =>
             return "OCLW_IO_ERROR";
+         when OCLW_Signature_Not_Implemented =>
+            return "OCLW_SIGNATURE_NOT_IMPLEMENTED";
+         when OCLW_Signature_Invalid =>
+            return "OCLW_SIGNATURE_INVALID";
+         when OCLW_Signature_Missing =>
+            return "OCLW_SIGNATURE_MISSING";
          when others =>
             return
               "CL_UNKNOWN_ERROR("

@@ -1,4 +1,4 @@
-# Requirements Traceability (G0/G1/G2/G3/G4)
+# Requirements Traceability (G0/G1/G2/G3/G4/G5/G6/G7)
 
 ## Scope
 
@@ -133,3 +133,22 @@ Capabilities under G6 scope:
 | OCLW-REQ-0005 | Fail-closed tamper detection via explicit error statuses (hash/fingerprint/format) | Test | OCLW-TST-0002 | `src/opencl/opencl-errors.ads`, `src/opencl/opencl-errors.adb`, `src/opencl/rt/opencl-rt-packs.adb`, `src/opencl/rt/opencl-rt-loader.adb`, `tests/smoke/smoke_rt_negative_cases.adb` | `docs/VV/Execution_Logs/GATES/G6/rerun_01/G6_Report.md` (`case1/2/3 tamper PASS`) | PASS |
 | OCLW-REQ-0008 | RT execution path remains no-JIT with pack-based runtime validation | Test | OCLW-TST-0002 | `tests/smoke/smoke_rt_load_pack_add1.adb`, `tests/smoke/smoke_rt_negative_cases.adb`, `tools/run_smoke.sh` | `docs/VV/Execution_Logs/GATES/G6/rerun_01/G6_Report.md` (`smoke_rt_load_pack_add1 RESULT=PASS`) | PASS |
 | OCLW-REQ-0010 | Gate-level traceability closure for canonical/tamper verification evidence | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G6/Closure.md`, `docs/VV/Execution_Logs/GATES/G6/rerun_01/G6_Report.md` | PASS |
+
+## G7 Addendum (RT Signature Enforcement with Injectable Verifier)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G7/rerun_01/G7_Report.md`
+- `docs/VV/Execution_Logs/GATES/G7/Closure.md`
+
+Capabilities under G7 scope:
+- `signature_required` enforcement with fail-closed behavior in RT.
+- Canonical signing text path (`manifest` canonical text without `signature_*` fields + `program.bin` bytes).
+- Injectable verifier interface for integration with approved crypto provider in later gate.
+- Validation test: `tests/smoke/smoke_rt_signature_enforcement.adb`.
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0002 | Signature metadata, canonical signing text, and verifier interface support in RT path | Inspection + test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-packs.ads`, `src/opencl/rt/opencl-rt-packs.adb`, `src/opencl/rt/opencl-rt-security.ads`, `src/opencl/rt/opencl-rt-security.adb` | `docs/VV/Execution_Logs/GATES/G7/rerun_01/G7_Report.md` (`smoke_rt_signature_enforcement` executed) | PASS |
+| OCLW-REQ-0005 | Fail-closed signature enforcement when `signature_required=1` and verifier is absent/invalid | Test | OCLW-TST-0002 | `src/opencl/rt/opencl-rt-loader.adb`, `src/opencl/opencl-errors.ads`, `src/opencl/opencl-errors.adb`, `tests/smoke/smoke_rt_signature_enforcement.adb` | `docs/VV/Execution_Logs/GATES/G7/rerun_01/G7_Report.md` (`caseA=PASS` expected `OCLW_SIGNATURE_NOT_IMPLEMENTED`) | PASS |
+| OCLW-REQ-0008 | Controlled RT execution with signature-verified binary-load workflow (no source fallback in test path) | Test | OCLW-TST-0002 | `tests/smoke/smoke_rt_signature_enforcement.adb`, `tools/run_smoke.sh` | `docs/VV/Execution_Logs/GATES/G7/rerun_01/G7_Report.md` (`caseB=PASS`, `RESULT=PASS`) | PASS |
+| OCLW-REQ-0010 | Gate-level traceability closure for G7 signature enforcement evidence | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G7/Closure.md`, `docs/VV/Execution_Logs/GATES/G7/rerun_01/G7_Report.md` | PASS |

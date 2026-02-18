@@ -9,9 +9,10 @@ project Tests is
    for Main use
      ("smoke_platforms.adb",
       "smoke_core.adb",
-      "gen_pack_add1.adb",
-      "smoke_rt_load_pack_add1.adb",
-      "smoke_rt_negative_cases.adb",
+     "gen_pack_add1.adb",
+     "smoke_rt_load_pack_add1.adb",
+     "smoke_rt_negative_cases.adb",
+      "smoke_rt_signature_enforcement.adb",
       "smoke_buffer_roundtrip.adb",
       "smoke_kernel_add1.adb",
       "smoke_program_binary_roundtrip.adb");
