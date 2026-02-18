@@ -172,3 +172,39 @@ sin introducir complejidad no necesaria para G0.
 - Camino principal: `Status_Code` + informacion de diagnostico (sin excepciones).
 - Fallos en create/set/enqueue/finish deben propagarse sin ambiguedad y con
   contexto minimo para IV&V.
+
+## 16. Program binaries (RT path preliminar)
+**Objetivo:** Definir estrategia no-JIT para perfil RT/EW usando programas
+OpenCL precompilados/validados.
+
+**16.1 Extraccion de binarios**
+- En entorno dev/integracion se compila programa y se extraen binarios mediante
+  APIs de `program_info` (tamano + contenido por dispositivo).
+- El artefacto binario debe almacenarse junto con metadatos de fingerprint
+  (plataforma, dispositivo, driver, version OpenCL C, opciones de build).
+- La extraccion debe dejar evidencia reproducible para V&V.
+
+**16.2 Creacion desde binario**
+- La capa Core debe soportar creacion de programa desde binario
+  (`Create_From_Binary`) como ruta principal para RT/EW.
+- Tras crear desde binario se ejecuta validacion de build/estado por dispositivo
+  y se reporta `Status_Code` explicito.
+- No se asume compilador OpenCL disponible en runtime de mision.
+
+**16.3 Build log + diagnostico**
+- Aun en ruta de binario, el wrapper mantiene diagnostico acotado:
+  estado de build, opciones efectivas y logs cuando el driver los provea.
+- La politica de clamp de logs se mantiene para evitar reservas no acotadas.
+- Los mensajes de error deben permanecer estables para regresion textual.
+
+**16.4 Limitaciones y portabilidad**
+- Los binarios OpenCL no se consideran portables por defecto entre
+  vendor/driver/device.
+- Un binario es valido solo para el fingerprint verificado del entorno objetivo.
+- Si hay mismatch de fingerprint, la ruta RT debe fallar de forma controlada.
+
+**16.5 Relacion con EW/RT**
+- En mision EW/RT: politica no-JIT (sin build from source en runtime).
+- Build from source queda restringido a flujo offline controlado de laboratorio.
+- El pipeline de baseline debe incluir generacion, validacion y trazabilidad de
+  binarios por configuracion de HW/SW aprobada.

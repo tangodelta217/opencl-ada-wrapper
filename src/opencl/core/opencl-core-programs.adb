@@ -8,9 +8,11 @@ package body OpenCL.Core.Programs is
    use type API.cl_context;
    use type API.cl_device_id;
    use type API.cl_int;
+   use type API.cl_uint;
    use type API.cl_program;
    use type API.size_t;
    use type Interfaces.C.Strings.chars_ptr;
+   use type OpenCL.Errors.Status_Code;
 
    Truncated_Suffix : constant String := "[TRUNCATED]";
    Build_Log_Unavailable_Prefix : constant String := "BUILD_LOG_UNAVAILABLE: ";
@@ -35,6 +37,37 @@ package body OpenCL.Core.Programs is
          return Needed;
       end if;
    end Clamp_Size;
+
+   function Has_Single_Device
+     (Prg : Program;
+      Status : out Status_Code) return Boolean
+   is
+      Num_Devices : aliased API.cl_uint := 0;
+      Raw_Status : API.cl_int := API.CL_SUCCESS;
+      UInt_Bytes : constant API.size_t :=
+        API.size_t (API.cl_uint'Size / System.Storage_Unit);
+   begin
+      Status := OpenCL.Errors.Success;
+
+      Raw_Status := API.clGetProgramInfo
+        (program => Prg.Handle,
+         param_name => API.CL_PROGRAM_NUM_DEVICES,
+         param_value_size => UInt_Bytes,
+         param_value => Num_Devices'Address,
+         param_value_size_ret => null);
+
+      if Raw_Status /= API.CL_SUCCESS then
+         Status := To_Status (Raw_Status);
+         return False;
+      end if;
+
+      if Num_Devices /= 1 then
+         Status := OpenCL.Errors.Invalid_Value;
+         return False;
+      end if;
+
+      return True;
+   end Has_Single_Device;
 
    procedure Create_From_Source
      (Ctx : OpenCL.Core.Contexts.Context;
@@ -272,6 +305,176 @@ package body OpenCL.Core.Programs is
          end;
       end;
    end Source;
+
+   procedure Binary_Size
+     (Prg : Program;
+      Bytes : out Interfaces.C.size_t;
+      Status : out Status_Code)
+   is
+      Raw_Status : API.cl_int := API.CL_SUCCESS;
+      Binary_Bytes : aliased API.size_t := 0;
+      Size_T_Bytes : constant API.size_t :=
+        API.size_t (API.size_t'Size / System.Storage_Unit);
+   begin
+      Bytes := 0;
+      Status := OpenCL.Errors.Success;
+
+      if Prg.Handle = null then
+         Status := OpenCL.Errors.Invalid_Program;
+         return;
+      end if;
+
+      if not Has_Single_Device (Prg, Status) then
+         return;
+      end if;
+
+      Raw_Status := API.clGetProgramInfo
+        (program => Prg.Handle,
+         param_name => API.CL_PROGRAM_BINARY_SIZES,
+         param_value_size => Size_T_Bytes,
+         param_value => Binary_Bytes'Address,
+         param_value_size_ret => null);
+
+      if Raw_Status /= API.CL_SUCCESS then
+         Status := To_Status (Raw_Status);
+         return;
+      end if;
+
+      Bytes := Binary_Bytes;
+   end Binary_Size;
+
+   procedure Get_Binary
+     (Prg : Program;
+      Data : out Byte_Array;
+      Used : out Natural;
+      Status : out Status_Code)
+   is
+      Expected_Size : API.size_t := 0;
+      Raw_Status : API.cl_int := API.CL_SUCCESS;
+      Address_Bytes : constant API.size_t :=
+        API.size_t (System.Address'Size / System.Storage_Unit);
+
+      type Address_Array is array (Natural range <>) of aliased System.Address;
+      Binary_Pointers : aliased Address_Array (0 .. 0) :=
+        (others => System.Null_Address);
+   begin
+      Used := 0;
+      Status := OpenCL.Errors.Success;
+
+      if Prg.Handle = null then
+         Status := OpenCL.Errors.Invalid_Program;
+         return;
+      end if;
+
+      Binary_Size
+        (Prg => Prg,
+         Bytes => Expected_Size,
+         Status => Status);
+      if Status /= OpenCL.Errors.Success then
+         return;
+      end if;
+
+      if Expected_Size = 0 then
+         return;
+      end if;
+
+      if Expected_Size > API.size_t (Data'Length) then
+         Status := OpenCL.Errors.Invalid_Value;
+         return;
+      end if;
+
+      Binary_Pointers (Binary_Pointers'First) := Data (Data'First)'Address;
+
+      Raw_Status := API.clGetProgramInfo
+        (program => Prg.Handle,
+         param_name => API.CL_PROGRAM_BINARIES,
+         param_value_size => Address_Bytes,
+         param_value => Binary_Pointers (Binary_Pointers'First)'Address,
+         param_value_size_ret => null);
+
+      if Raw_Status /= API.CL_SUCCESS then
+         Status := To_Status (Raw_Status);
+         return;
+      end if;
+
+      Used := Natural (Expected_Size);
+   end Get_Binary;
+
+   procedure Create_From_Binary
+     (Ctx : OpenCL.Core.Contexts.Context;
+      Dev : OpenCL.Core.Device;
+      Data : Byte_Array;
+      Prg : out Program;
+      Binary_Status : out OpenCL.Errors.Status_Code;
+      Status : out OpenCL.Errors.Status_Code)
+   is
+      Raw_Ctx : constant API.cl_context := OpenCL.Core.Contexts.Raw_Handle (Ctx);
+      Error_Code : aliased API.cl_int := API.CL_SUCCESS;
+
+      type Device_Array is array (Natural range <>) of aliased API.cl_device_id;
+      type Size_Array is array (Natural range <>) of aliased API.size_t;
+      type Address_Array is array (Natural range <>) of aliased System.Address;
+      type Int_Array is array (Natural range <>) of aliased API.cl_int;
+
+      Device_List : aliased Device_Array (0 .. 0) := (others => null);
+      Binary_Lengths : aliased Size_Array (0 .. 0) := (others => 0);
+      Binary_Pointers : aliased Address_Array (0 .. 0) :=
+        (others => System.Null_Address);
+      Binary_Status_List : aliased Int_Array (0 .. 0) :=
+        (others => API.CL_SUCCESS);
+   begin
+      Prg.Handle := null;
+      Binary_Status := OpenCL.Errors.Success;
+      Status := OpenCL.Errors.Success;
+
+      if Raw_Ctx = null then
+         Status := OpenCL.Errors.Invalid_Context;
+         Binary_Status := Status;
+         return;
+      end if;
+
+      if Dev.Handle = null then
+         Status := OpenCL.Errors.Invalid_Device;
+         Binary_Status := Status;
+         return;
+      end if;
+
+      if Data'Length = 0 then
+         Status := OpenCL.Errors.Invalid_Value;
+         Binary_Status := Status;
+         return;
+      end if;
+
+      Device_List (Device_List'First) := Dev.Handle;
+      Binary_Lengths (Binary_Lengths'First) := API.size_t (Data'Length);
+      Binary_Pointers (Binary_Pointers'First) := Data (Data'First)'Address;
+
+      Prg.Handle := API.clCreateProgramWithBinary
+        (context => Raw_Ctx,
+         num_devices => 1,
+         device_list => Device_List (Device_List'First)'Access,
+         lengths => Binary_Lengths (Binary_Lengths'First)'Address,
+         binaries => Binary_Pointers (Binary_Pointers'First)'Address,
+         binary_status => Binary_Status_List (Binary_Status_List'First)'Access,
+         errcode_ret => Error_Code'Access);
+
+      Binary_Status := To_Status (Binary_Status_List (Binary_Status_List'First));
+
+      if Error_Code /= API.CL_SUCCESS then
+         Status := To_Status (Error_Code);
+         return;
+      end if;
+
+      if Binary_Status /= OpenCL.Errors.Success then
+         Status := Binary_Status;
+         return;
+      end if;
+
+      if Prg.Handle = null then
+         Status := OpenCL.Errors.Out_Of_Resources;
+         return;
+      end if;
+   end Create_From_Binary;
 
    procedure Release
      (Prg : in out Program;

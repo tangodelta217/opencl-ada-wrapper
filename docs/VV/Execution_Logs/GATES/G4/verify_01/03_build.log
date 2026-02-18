@@ -1,0 +1,6 @@
+gprbuild: "smoke_platforms" up to date
+gprbuild: "smoke_core" up to date
+gprbuild: "smoke_buffer_roundtrip" up to date
+gprbuild: "smoke_kernel_add1" up to date
+gprbuild: "smoke_program_binary_roundtrip" up to date
+gprbuild_exit_code=0

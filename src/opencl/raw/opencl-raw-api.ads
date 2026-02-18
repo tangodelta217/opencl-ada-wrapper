@@ -128,6 +128,8 @@ package OpenCL.Raw.API is
    CL_OUT_OF_RESOURCES : constant cl_int := cl_int (-5);
    CL_OUT_OF_HOST_MEMORY : constant cl_int := cl_int (-6);
    CL_BUILD_PROGRAM_FAILURE : constant cl_int := cl_int (-11);
+   CL_INVALID_BINARY : constant cl_int := cl_int (-42);
+   CL_INVALID_PROGRAM : constant cl_int := cl_int (-44);
    CL_PLATFORM_NOT_FOUND_KHR : constant cl_int := cl_int (-1001);
 
    CL_FALSE : constant cl_bool := cl_bool (0);
@@ -157,7 +159,10 @@ package OpenCL.Raw.API is
    CL_PROGRAM_BUILD_STATUS : constant cl_program_build_info := 16#1181#;
    CL_PROGRAM_BUILD_OPTIONS : constant cl_program_build_info := 16#1182#;
    CL_PROGRAM_BUILD_LOG : constant cl_program_build_info := 16#1183#;
+   CL_PROGRAM_NUM_DEVICES : constant cl_program_info := 16#1162#;
    CL_PROGRAM_SOURCE : constant cl_program_info := 16#1164#;
+   CL_PROGRAM_BINARY_SIZES : constant cl_program_info := 16#1165#;
+   CL_PROGRAM_BINARIES : constant cl_program_info := 16#1166#;
 
    CL_BUILD_SUCCESS : constant cl_build_status := cl_build_status (0);
    CL_BUILD_NONE : constant cl_build_status := cl_build_status (-1);
@@ -313,6 +318,19 @@ package OpenCL.Raw.API is
      Import,
      Convention => C,
      External_Name => "clCreateProgramWithSource";
+
+   function clCreateProgramWithBinary
+     (context : cl_context;
+      num_devices : cl_uint;
+      device_list : access cl_device_id;
+      lengths : System.Address;
+      binaries : System.Address;
+      binary_status : access cl_int;
+      errcode_ret : access cl_int) return cl_program
+   with
+     Import,
+     Convention => C,
+     External_Name => "clCreateProgramWithBinary";
 
    function clBuildProgram
      (program : cl_program;

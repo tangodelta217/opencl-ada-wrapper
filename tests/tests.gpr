@@ -10,7 +10,8 @@ project Tests is
      ("smoke_platforms.adb",
       "smoke_core.adb",
       "smoke_buffer_roundtrip.adb",
-      "smoke_kernel_add1.adb");
+      "smoke_kernel_add1.adb",
+      "smoke_program_binary_roundtrip.adb");
 
    package Linker is
       for Default_Switches ("Ada") use (OpenCL_Link_Flag);

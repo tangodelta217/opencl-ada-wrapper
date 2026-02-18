@@ -1,0 +1,7 @@
+lookup_binary=./tests/bin/smoke_program_binary_roundtrip
+binary_found=1
+$ ./tests/bin/smoke_program_binary_roundtrip
+INFO binary_size=48593
+INFO binary_fnv1a32=59974699
+RESULT=PASS
+binary_exit_code=0
