@@ -1,3 +1,4 @@
+with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with OpenCL.Core;
@@ -23,6 +24,20 @@ package body OpenCL.RT.Loader is
    begin
       return Trimmed (OpenCL.RT.Packs.To_String (Expected)) = Trimmed (Actual);
    end Matches;
+
+   function Starts_With_Test_Alg
+     (Meta : OpenCL.RT.Packs.Pack_Metadata) return Boolean
+   is
+      Alg_Upper : constant String :=
+        Ada.Characters.Handling.To_Upper
+          (Trimmed (OpenCL.RT.Packs.To_String (Meta.Signature_Alg)));
+   begin
+      if Alg_Upper'Length < 5 then
+         return False;
+      end if;
+
+      return Alg_Upper (Alg_Upper'First .. Alg_Upper'First + 4) = "TEST-";
+   end Starts_With_Test_Alg;
 
    procedure Select_Device
      (Meta : OpenCL.RT.Packs.Pack_Metadata;
@@ -172,13 +187,14 @@ package body OpenCL.RT.Loader is
       Status := Errors.OCLW_Fingerprint_Mismatch;
    end Select_Device;
 
-   procedure Create_Program_From_Pack
+   procedure Create_Program_From_Pack_Internal
      (Ctx : OpenCL.Core.Contexts.Context;
       Dev : OpenCL.Core.Device;
       Meta : OpenCL.RT.Packs.Pack_Metadata;
       Bin : OpenCL.Core.Programs.Byte_Array;
       Used : Natural;
       Prg : out OpenCL.Core.Programs.Program;
+      Strict_RT : Boolean;
       Status : out Status_Code)
    is
       package Errors renames OpenCL.Errors;
@@ -198,11 +214,21 @@ package body OpenCL.RT.Loader is
          return;
       end if;
 
+      if Strict_RT and then not Meta.Signature_Required then
+         Status := Errors.OCLW_Signature_Missing;
+         return;
+      end if;
+
       if Meta.Signature_Required then
          if Trimmed (OpenCL.RT.Packs.To_String (Meta.Signature_Alg))'Length = 0
            or else Trimmed (OpenCL.RT.Packs.To_String (Meta.Signature_Value))'Length = 0
          then
             Status := Errors.OCLW_Signature_Missing;
+            return;
+         end if;
+
+         if Strict_RT and then Starts_With_Test_Alg (Meta) then
+            Status := Errors.OCLW_Signature_Disallowed;
             return;
          end if;
 
@@ -221,7 +247,8 @@ package body OpenCL.RT.Loader is
                 (Meta => Meta,
                  Signing_Text => Signing_Text,
                  Bin => Bin,
-                 Used => Used);
+                 Used => Used,
+                 Strict => Strict_RT);
             if Verify_Status /= Errors.Success then
                Status := Verify_Status;
                return;
@@ -264,6 +291,48 @@ package body OpenCL.RT.Loader is
          Status := Build_Status;
          return;
       end if;
+   end Create_Program_From_Pack_Internal;
+
+   procedure Create_Program_From_Pack
+     (Ctx : OpenCL.Core.Contexts.Context;
+      Dev : OpenCL.Core.Device;
+      Meta : OpenCL.RT.Packs.Pack_Metadata;
+      Bin : OpenCL.Core.Programs.Byte_Array;
+      Used : Natural;
+      Prg : out OpenCL.Core.Programs.Program;
+      Status : out Status_Code)
+   is
+   begin
+      Create_Program_From_Pack_Internal
+        (Ctx => Ctx,
+         Dev => Dev,
+         Meta => Meta,
+         Bin => Bin,
+         Used => Used,
+         Prg => Prg,
+         Strict_RT => False,
+         Status => Status);
    end Create_Program_From_Pack;
+
+   procedure Create_Program_From_Pack_Strict_RT
+     (Ctx : OpenCL.Core.Contexts.Context;
+      Dev : OpenCL.Core.Device;
+      Meta : OpenCL.RT.Packs.Pack_Metadata;
+      Bin : OpenCL.Core.Programs.Byte_Array;
+      Used : Natural;
+      Prg : out OpenCL.Core.Programs.Program;
+      Status : out Status_Code)
+   is
+   begin
+      Create_Program_From_Pack_Internal
+        (Ctx => Ctx,
+         Dev => Dev,
+         Meta => Meta,
+         Bin => Bin,
+         Used => Used,
+         Prg => Prg,
+         Strict_RT => True,
+         Status => Status);
+   end Create_Program_From_Pack_Strict_RT;
 
 end OpenCL.RT.Loader;

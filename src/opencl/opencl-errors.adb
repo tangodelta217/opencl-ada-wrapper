@@ -118,6 +118,8 @@ package body OpenCL.Errors is
             return "OCLW_SIGNATURE_INVALID";
          when OCLW_Signature_Missing =>
             return "OCLW_SIGNATURE_MISSING";
+         when OCLW_Signature_Disallowed =>
+            return "OCLW_SIGNATURE_DISALLOWED";
          when others =>
             return
               "CL_UNKNOWN_ERROR("

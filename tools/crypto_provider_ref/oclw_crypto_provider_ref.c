@@ -59,7 +59,12 @@ int oclw_kpack_verify_v1(
 
   (void)signer_id;
 
-  if (signature_alg == NULL || strcmp(signature_alg, "TEST-FNV1A32") != 0) {
+  if (signature_alg == NULL) {
+    return 2;
+  }
+
+  if (strcmp(signature_alg, "TEST-FNV1A32") != 0 &&
+      strcmp(signature_alg, "CMS-PKCS7-SHA256") != 0) {
     return 2;
   }
 

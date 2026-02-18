@@ -21,4 +21,13 @@ package OpenCL.RT.Loader is
       Used : Natural;
       Prg : out OpenCL.Core.Programs.Program;
       Status : out Status_Code);
+
+   procedure Create_Program_From_Pack_Strict_RT
+     (Ctx : OpenCL.Core.Contexts.Context;
+      Dev : OpenCL.Core.Device;
+      Meta : OpenCL.RT.Packs.Pack_Metadata;
+      Bin : OpenCL.Core.Programs.Byte_Array;
+      Used : Natural;
+      Prg : out OpenCL.Core.Programs.Program;
+      Status : out Status_Code);
 end OpenCL.RT.Loader;

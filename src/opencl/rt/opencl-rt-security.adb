@@ -34,7 +34,6 @@ package body OpenCL.RT.Security is
    pragma Import (C, dlerror, "dlerror");
 
    RTLD_NOW : constant Interfaces.C.int := 2;
-
    Default_Crypto_Symbol : constant String := "oclw_kpack_verify_v1";
 
    type Plugin_Verify_Fn is access function
@@ -73,6 +72,31 @@ package body OpenCL.RT.Security is
       end if;
    end Free_If_Needed;
 
+   procedure Reset_Cached_Plugin is
+   begin
+      if Plugin_Handle /= System.Null_Address then
+         declare
+            Close_Result : constant Interfaces.C.int :=
+              dlclose (Handle => Plugin_Handle);
+         begin
+            if Close_Result /= 0 then
+               null;
+            end if;
+         end;
+      end if;
+
+      Plugin_Handle := System.Null_Address;
+      Plugin_Verifier := null;
+      Plugin_State := Not_Attempted;
+   end Reset_Cached_Plugin;
+
+   procedure Mark_Unavailable is
+   begin
+      Plugin_Handle := System.Null_Address;
+      Plugin_Verifier := null;
+      Plugin_State := Unavailable;
+   end Mark_Unavailable;
+
    function Optional_Env
      (Name : String;
       Default : String := "") return String
@@ -92,32 +116,27 @@ package body OpenCL.RT.Security is
       return Default;
    end Optional_Env;
 
-   function Ensure_Plugin_Available return OpenCL.Errors.Status_Code is
-      Plugin_Path : constant String := Optional_Env ("OCLW_CRYPTO_PLUGIN");
-      Symbol_Name : constant String :=
-        Optional_Env
-          (Name => "OCLW_CRYPTO_SYMBOL",
-           Default => Default_Crypto_Symbol);
+   function Load_Plugin
+     (Path : String;
+      Symbol : String) return OpenCL.Errors.Status_Code
+   is
       Path_Ptr : Interfaces.C.Strings.chars_ptr :=
         Interfaces.C.Strings.Null_Ptr;
       Symbol_Ptr : Interfaces.C.Strings.chars_ptr :=
         Interfaces.C.Strings.Null_Ptr;
+      Handle : System.Address := System.Null_Address;
+      Symbol_Address : System.Address := System.Null_Address;
+      Verifier : Plugin_Verify_Fn := null;
+      Effective_Path : constant String := Trimmed (Path);
+      Effective_Symbol : constant String := Trimmed (Symbol);
    begin
-      if Plugin_State = Loaded then
-         return OpenCL.Errors.Success;
-      end if;
-
-      if Plugin_State = Unavailable then
+      if Effective_Path'Length = 0 or else Effective_Symbol'Length = 0 then
+         Mark_Unavailable;
          return OpenCL.Errors.OCLW_Signature_Not_Implemented;
       end if;
 
-      if Plugin_Path'Length = 0 then
-         Plugin_State := Unavailable;
-         return OpenCL.Errors.OCLW_Signature_Not_Implemented;
-      end if;
-
-      Path_Ptr := Interfaces.C.Strings.New_String (Plugin_Path);
-      Symbol_Ptr := Interfaces.C.Strings.New_String (Symbol_Name);
+      Path_Ptr := Interfaces.C.Strings.New_String (Effective_Path);
+      Symbol_Ptr := Interfaces.C.Strings.New_String (Effective_Symbol);
 
       declare
          Ignored_DLError : Interfaces.C.Strings.chars_ptr := dlerror;
@@ -127,9 +146,9 @@ package body OpenCL.RT.Security is
          end if;
       end;
 
-      Plugin_Handle := dlopen (Filename => Path_Ptr, Flags => RTLD_NOW);
-      if Plugin_Handle = System.Null_Address then
-         Plugin_State := Unavailable;
+      Handle := dlopen (Filename => Path_Ptr, Flags => RTLD_NOW);
+      if Handle = System.Null_Address then
+         Mark_Unavailable;
          Free_If_Needed (Path_Ptr);
          Free_If_Needed (Symbol_Ptr);
          return OpenCL.Errors.OCLW_Signature_Not_Implemented;
@@ -137,36 +156,44 @@ package body OpenCL.RT.Security is
 
       declare
          Ignored_DLError : Interfaces.C.Strings.chars_ptr := dlerror;
-         Symbol_Address : System.Address := System.Null_Address;
       begin
          if Ignored_DLError /= Interfaces.C.Strings.Null_Ptr then
             null;
          end if;
-
-         Symbol_Address := dlsym (Handle => Plugin_Handle, Symbol => Symbol_Ptr);
-         if Symbol_Address = System.Null_Address then
-            declare
-               Close_Result : constant Interfaces.C.int :=
-                 dlclose (Handle => Plugin_Handle);
-            begin
-               if Close_Result /= 0 then
-                  null;
-               end if;
-            end;
-
-            Plugin_Handle := System.Null_Address;
-            Plugin_Verifier := null;
-            Plugin_State := Unavailable;
-
-            Free_If_Needed (Path_Ptr);
-            Free_If_Needed (Symbol_Ptr);
-            return OpenCL.Errors.OCLW_Signature_Not_Implemented;
-         end if;
-
-         Plugin_Verifier := To_Plugin_Verify_Fn (Symbol_Address);
       end;
 
-      if Plugin_Verifier = null then
+      Symbol_Address := dlsym (Handle => Handle, Symbol => Symbol_Ptr);
+      if Symbol_Address = System.Null_Address then
+         declare
+            Close_Result : constant Interfaces.C.int := dlclose (Handle => Handle);
+         begin
+            if Close_Result /= 0 then
+               null;
+            end if;
+         end;
+         Mark_Unavailable;
+         Free_If_Needed (Path_Ptr);
+         Free_If_Needed (Symbol_Ptr);
+         return OpenCL.Errors.OCLW_Signature_Not_Implemented;
+      end if;
+
+      Verifier := To_Plugin_Verify_Fn (Symbol_Address);
+      if Verifier = null then
+         declare
+            Close_Result : constant Interfaces.C.int := dlclose (Handle => Handle);
+         begin
+            if Close_Result /= 0 then
+               null;
+            end if;
+         end;
+         Mark_Unavailable;
+         Free_If_Needed (Path_Ptr);
+         Free_If_Needed (Symbol_Ptr);
+         return OpenCL.Errors.OCLW_Signature_Not_Implemented;
+      end if;
+
+      --  Replace previously cached plugin after successful resolution.
+      if Plugin_Handle /= System.Null_Address then
          declare
             Close_Result : constant Interfaces.C.int :=
               dlclose (Handle => Plugin_Handle);
@@ -175,18 +202,58 @@ package body OpenCL.RT.Security is
                null;
             end if;
          end;
-
-         Plugin_Handle := System.Null_Address;
-         Plugin_State := Unavailable;
-         Free_If_Needed (Path_Ptr);
-         Free_If_Needed (Symbol_Ptr);
-         return OpenCL.Errors.OCLW_Signature_Not_Implemented;
       end if;
 
+      Plugin_Handle := Handle;
+      Plugin_Verifier := Verifier;
       Plugin_State := Loaded;
+
       Free_If_Needed (Path_Ptr);
       Free_If_Needed (Symbol_Ptr);
       return OpenCL.Errors.Success;
+   end Load_Plugin;
+
+   procedure Configure_Plugin
+     (Path : String;
+      Symbol : String := "oclw_kpack_verify_v1";
+      Status : out OpenCL.Errors.Status_Code)
+   is
+      Effective_Symbol : constant String :=
+        (if Trimmed (Symbol)'Length = 0
+         then Default_Crypto_Symbol
+         else Trimmed (Symbol));
+   begin
+      Reset_Cached_Plugin;
+      Status := Load_Plugin (Path => Path, Symbol => Effective_Symbol);
+   end Configure_Plugin;
+
+   function Ensure_Plugin_Available
+     (Strict : Boolean) return OpenCL.Errors.Status_Code
+   is
+   begin
+      if Plugin_State = Loaded and then Plugin_Verifier /= null then
+         return OpenCL.Errors.Success;
+      end if;
+
+      --  Strict mode disables env-var plugin discovery; only explicit
+      --  configuration (Configure_Plugin) is allowed.
+      if Strict then
+         return OpenCL.Errors.OCLW_Signature_Not_Implemented;
+      end if;
+
+      if Plugin_State = Unavailable then
+         return OpenCL.Errors.OCLW_Signature_Not_Implemented;
+      end if;
+
+      declare
+         Plugin_Path : constant String := Optional_Env ("OCLW_CRYPTO_PLUGIN");
+         Symbol_Name : constant String :=
+           Optional_Env
+             (Name => "OCLW_CRYPTO_SYMBOL",
+              Default => Default_Crypto_Symbol);
+      begin
+         return Load_Plugin (Path => Plugin_Path, Symbol => Symbol_Name);
+      end;
    end Ensure_Plugin_Available;
 
    function Verify_With_Plugin
@@ -265,7 +332,8 @@ package body OpenCL.RT.Security is
      (Meta : OpenCL.RT.Packs.Pack_Metadata;
       Signing_Text : String;
       Bin : OpenCL.Core.Programs.Byte_Array;
-      Used : Natural) return OpenCL.Errors.Status_Code
+      Used : Natural;
+      Strict : Boolean := False) return OpenCL.Errors.Status_Code
    is
       Plugin_Status : OpenCL.Errors.Status_Code := OpenCL.Errors.Success;
    begin
@@ -278,7 +346,7 @@ package body OpenCL.RT.Security is
             Used => Used);
       end if;
 
-      Plugin_Status := Ensure_Plugin_Available;
+      Plugin_Status := Ensure_Plugin_Available (Strict => Strict);
       if Plugin_Status /= OpenCL.Errors.Success then
          return OpenCL.Errors.OCLW_Signature_Not_Implemented;
       end if;

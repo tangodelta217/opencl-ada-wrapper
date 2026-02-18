@@ -416,3 +416,48 @@ int oclw_kpack_verify_v1(
   contrato C ABI.
 - El verificador de test queda restringido a DEV/CI y no sustituye control
   criptografico operativo.
+
+## 23. RT Strict Policy (Post-G8)
+**Objetivo:** Endurecer la politica RT/EW para eliminar ambiguedad operativa en
+autenticidad de Kernel Packs.
+
+**23.1 Firma obligatoria en RT**
+- En RT/EW, `signature_required=1` es obligatorio.
+- Packs con `signature_required=0` no son admisibles en despliegue RT.
+- Si la politica no se cumple: fail-closed.
+
+**23.2 Algoritmos de test prohibidos en RT**
+- En RT/EW, `signature_alg` con prefijo `TEST-` esta prohibido.
+- Esta prohibicion aplica aunque un backend tecnico pueda verificarlo.
+- Si se detecta `TEST-*` en RT: fail-closed.
+
+**23.3 Rationale defense/EW**
+- RT de mision requiere autenticidad obligatoria, no opcional.
+- Separar algoritmos de test de operacion reduce riesgo de configuracion
+  indebida en despliegue.
+- El perfil estricto reduce superficie de fallo silencioso y facilita auditoria
+  IV&V/CM.
+
+**23.4 Evidencia de gate**
+- Gate G9 debe incluir evidencia positiva de politica estricta:
+  `smoke_rt_strict_policy` con `RESULT=PASS`.
+
+## 24. Secure configuration of crypto provider
+**Objetivo:** Definir control de configuracion seguro del proveedor cripto en
+perfil RT.
+
+**24.1 Modelo preferido en RT**
+- Preferir configuracion explicita por API/config gestionada por CM.
+- Variables de entorno se consideran mecanismo de DEV/integracion; no control
+  primario para despliegue RT operativo.
+
+**24.2 Trusted path y control CM**
+- El plugin/proveedor debe resolverse desde ruta confiable y de solo lectura.
+- Ruta/version/hash del proveedor deben estar baselinados en artefactos CM.
+- Debe validarse ownership/permisos del binario de proveedor antes de habilitar
+  uso operacional.
+- Se recomienda firma/verificacion del propio plugin dentro del pipeline.
+
+**24.3 Politica de rechazo**
+- Si no hay proveedor configurado de forma valida para RT, o la configuracion
+  no cumple baseline CM, comportamiento fail-closed.
