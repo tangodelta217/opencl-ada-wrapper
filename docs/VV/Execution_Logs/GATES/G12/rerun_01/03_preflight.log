@@ -1,0 +1,6 @@
+## Preflight binaries
+PASS exists_executable: tests/bin/gen_pack_add1
+PASS exists_executable: tests/bin/smoke_rt_load_pack_add1
+PASS exists_executable: tests/bin/smoke_rt_signature_plugin
+PASS exists_executable: tests/bin/smoke_rt_strict_policy
+PASS exists_executable: tests/bin/smoke_rt_untrusted_plugin

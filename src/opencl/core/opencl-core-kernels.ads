@@ -1,5 +1,6 @@
 with Interfaces.C;
 with OpenCL.Core.Buffers;
+with OpenCL.Core.Events;
 with OpenCL.Core.Programs;
 with OpenCL.Core.Queues;
 with OpenCL.Errors;
@@ -26,6 +27,13 @@ package OpenCL.Core.Kernels is
      (Q : OpenCL.Core.Queues.Queue;
       K : Kernel;
       Global_Size : Interfaces.C.size_t;
+      Status : out Status_Code);
+
+   procedure Enqueue_1D
+     (Q : OpenCL.Core.Queues.Queue;
+      K : Kernel;
+      Global_Size : Interfaces.C.size_t;
+      Ev : out OpenCL.Core.Events.Event;
       Status : out Status_Code);
 
    procedure Release

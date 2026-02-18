@@ -3,7 +3,7 @@ with "../opencl_wrapper.gpr";
 project Tests is
    OpenCL_Link_Flag := external ("OPENCL_LINK_FLAG", "-lOpenCL");
 
-   for Source_Dirs use (".", "smoke");
+   for Source_Dirs use (".", "smoke", "bench");
    for Object_Dir use "obj";
    for Exec_Dir use "bin";
    for Main use
@@ -16,6 +16,7 @@ project Tests is
       "smoke_rt_signature_plugin.adb",
       "smoke_rt_strict_policy.adb",
       "smoke_rt_untrusted_plugin.adb",
+      "bench_add1.adb",
       "smoke_buffer_roundtrip.adb",
       "smoke_kernel_add1.adb",
       "smoke_program_binary_roundtrip.adb");

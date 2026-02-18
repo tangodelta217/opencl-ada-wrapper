@@ -1,4 +1,4 @@
-# Requirements Traceability (G0/G1/G2/G3/G4/G5/G6/G7/G8)
+# Requirements Traceability (G0/G1/G2/G3/G4/G5/G6/G7/G8/G9/G10/G11/G13)
 
 ## Scope
 
@@ -235,3 +235,21 @@ Capabilities under G11 scope:
 | OCLW-REQ-0002 | Documentacion operativa RT y contrato de integracion para handover (`RT_Deployment_Guide`, `Crypto_Plugin_C_ABI_Contract`) | Inspection + execution | OCLW-TST-0002 | `docs/OPS/RT_Deployment_Guide.md`, `tools/crypto_provider_ref/README.md`, `tools/package_rt_bundle.sh` | `docs/VV/Execution_Logs/GATES/G11/rerun_01/G11_Report.md` (bundle incluye `docs/OPS/...` y `docs/ARCH/Crypto_Plugin_C_ABI_Contract.md`) | PASS |
 | OCLW-REQ-0008 | Delivery packaging reproducible con artefactos de handover (`Delivery_Content`, `SBOM_Minimal`, bundle tar + checksums) | Test | OCLW-TST-0002 | `docs/CM/Delivery_Content.md`, `docs/CM/SBOM_Minimal.md`, `tools/package_rt_bundle.sh` | `docs/VV/Execution_Logs/GATES/G11/rerun_01/G11_Report.md` (`package_rt_bundle` exit 0 + `tar -tzf` evidencia + `CHECKSUMS`) | PASS |
 | OCLW-REQ-0010 | Gate-level traceability closure para release/handover readiness G11 | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G11/Closure.md`, `docs/VV/Execution_Logs/GATES/G11/rerun_01/G11_Report.md` | PASS |
+
+## G13 Addendum (Performance Harness / Profiling Bench)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G13/rerun_01/G13_Report.md`
+- `docs/VV/Execution_Logs/GATES/G13/Closure.md`
+
+Capabilities under G13 scope:
+- Benchmark executable: `tests/bench/bench_add1.adb`.
+- Event profiling support path (queue profiling properties + event duration
+  telemetry), when available in runtime/driver.
+- Gate-level report with extracted latency metrics (`host/device p50/p99`).
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0006 | Reproducible performance harness with latency summaries for host/device execution path | Inspection + test | OCLW-TST-0002 | `tests/bench/bench_add1.adb`, `tests/tests.gpr`, `tools/run_smoke.sh` | `docs/VV/Execution_Logs/GATES/G13/rerun_01/G13_Report.md` (`RESULT=PASS`, extracted `host/device p50/p99`) | PASS |
+| OCLW-REQ-0002 | Profiling-by-events support in raw/core stack for device timing telemetry | Inspection + test | OCLW-TST-0002 | `src/opencl/raw/opencl-raw-api.ads`, `src/opencl/core/opencl-core-events.ads`, `src/opencl/core/opencl-core-events.adb`, `src/opencl/core/opencl-core-profiling.ads`, `src/opencl/core/opencl-core-profiling.adb`, `src/opencl/core/opencl-core-kernels.ads`, `src/opencl/core/opencl-core-kernels.adb`, `src/opencl/core/opencl-core-queues.ads`, `src/opencl/core/opencl-core-queues.adb` | `docs/VV/Execution_Logs/GATES/G13/rerun_01/G13_Report.md` (device profiling metrics reported when available) | PASS |
+| OCLW-REQ-0010 | Gate-level traceability closure for G13 performance evidence | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G13/Closure.md`, `docs/VV/Execution_Logs/GATES/G13/rerun_01/G13_Report.md` | PASS |

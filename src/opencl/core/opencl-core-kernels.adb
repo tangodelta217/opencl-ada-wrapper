@@ -1,6 +1,7 @@
 with Interfaces.C;
 with Interfaces.C.Strings;
 with OpenCL.Core.Buffers;
+with OpenCL.Core.Events;
 with OpenCL.Core.Programs;
 with OpenCL.Core.Queues;
 with System;
@@ -8,12 +9,14 @@ with System;
 package body OpenCL.Core.Kernels is
 
    use type API.cl_command_queue;
+   use type API.cl_event;
    use type API.cl_int;
    use type API.cl_kernel;
    use type API.cl_mem;
    use type API.cl_program;
    use type API.size_t;
    use type Interfaces.C.unsigned_long_long;
+   use type OpenCL.Errors.Status_Code;
 
    function To_Status (Code : API.cl_int) return OpenCL.Errors.Status_Code is
    begin
@@ -109,12 +112,51 @@ package body OpenCL.Core.Kernels is
       Global_Size : Interfaces.C.size_t;
       Status : out Status_Code)
    is
+      Ev : OpenCL.Core.Events.Event;
+      Release_Status : Status_Code := OpenCL.Errors.Success;
+      Raw_Queue : constant API.cl_command_queue := OpenCL.Core.Queues.Raw_Handle (Q);
+      Raw_Status : API.cl_int := API.CL_SUCCESS;
+   begin
+      Status := OpenCL.Errors.Success;
+
+      Enqueue_1D
+        (Q => Q,
+         K => K,
+         Global_Size => Global_Size,
+         Ev => Ev,
+         Status => Status);
+      if Status /= OpenCL.Errors.Success then
+         return;
+      end if;
+
+      Raw_Status := API.clFinish (Raw_Queue);
+      if Raw_Status /= API.CL_SUCCESS then
+         Status := To_Status (Raw_Status);
+      end if;
+
+      OpenCL.Core.Events.Release
+        (Ev => Ev,
+         Status => Release_Status);
+      if Status = OpenCL.Errors.Success and then Release_Status /= OpenCL.Errors.Success then
+         Status := Release_Status;
+      end if;
+   end Enqueue_1D;
+
+   procedure Enqueue_1D
+     (Q : OpenCL.Core.Queues.Queue;
+      K : Kernel;
+      Global_Size : Interfaces.C.size_t;
+      Ev : out OpenCL.Core.Events.Event;
+      Status : out Status_Code)
+   is
       type Size_Vector is array (0 .. 0) of aliased API.size_t;
 
       Raw_Status : API.cl_int := API.CL_SUCCESS;
       Raw_Queue : constant API.cl_command_queue := OpenCL.Core.Queues.Raw_Handle (Q);
       Global_Work_Size : aliased Size_Vector := (0 => API.size_t (Global_Size));
+      Raw_Event : aliased API.cl_event := null;
    begin
+      OpenCL.Core.Events.Adopt (Raw => null, Ev => Ev);
       Status := OpenCL.Errors.Success;
 
       if Raw_Queue = null then
@@ -141,17 +183,19 @@ package body OpenCL.Core.Kernels is
          local_work_size => System.Null_Address,
          num_events_in_wait_list => 0,
          event_wait_list => null,
-         event => null);
+         event => Raw_Event'Access);
 
       if Raw_Status /= API.CL_SUCCESS then
          Status := To_Status (Raw_Status);
          return;
       end if;
 
-      Raw_Status := API.clFinish (Raw_Queue);
-      if Raw_Status /= API.CL_SUCCESS then
-         Status := To_Status (Raw_Status);
+      if Raw_Event = null then
+         Status := OpenCL.Errors.Out_Of_Resources;
+         return;
       end if;
+
+      OpenCL.Core.Events.Adopt (Raw => Raw_Event, Ev => Ev);
    end Enqueue_1D;
 
    procedure Release

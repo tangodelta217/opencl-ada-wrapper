@@ -1,0 +1,26 @@
+extract_timestamp_utc=2026-02-18T22:47:27Z
+extract_head=1d7acd3ad94d580249f0a9444940ddb706c2d858
+build_exit_code=0
+run_smoke_exit_code=0
+
+[fingerprint_from_smoke_core]
+platform_count_used= 1
+  name    : Portable Computing Language
+  vendor  : The pocl project
+  version : OpenCL 3.0 PoCL 5.0+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 16.0.6, SLEEF, DISTRO, POCL_DEBUG
+  Device[ 0]
+    name    : cpu-haswell-Intel(R) Core(TM) i5-14600K
+    vendor  : GenuineIntel
+    version : OpenCL 3.0 PoCL HSTR: cpu-x86_64-pc-linux-gnu-haswell
+    driver  : 5.0+debian
+smoke_core_exit_code=0
+
+[bench_add1_extract]
+INFO csv_path=docs/VV/Execution_Logs/local/bench_add1.csv
+INFO profiling=AVAILABLE
+INFO host_ns_p50=329550
+INFO host_ns_p99=757788
+INFO device_ns_p50=83949
+INFO device_ns_p99=408960
+RESULT=PASS
+bench_add1_exit_code=0

@@ -1,0 +1,34 @@
+target=/tmp/oclw_g12_target_20260218T214717Z
+/tmp/oclw_g12_target_20260218T214717Z
+/tmp/oclw_g12_target_20260218T214717Z/lib
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/BUNDLE_INFO.txt
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/CHECKSUMS.sha256
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/docs
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/docs/ARCH
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/docs/ARCH/Crypto_Plugin_C_ABI_Contract.md
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/docs/CM
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/docs/CM/Delivery_Content.md
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/docs/CM/SBOM_Minimal.md
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/docs/OPS
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/docs/OPS/RT_Deployment_Guide.md
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/example_pack
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/example_pack/manifest.kpack
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/example_pack/program.bin
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/logs
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/logs/build_opencl_wrapper.log
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/logs/build_tests.log
+/tmp/oclw_g12_target_20260218T214717Z/oclw_rt_bundle_20260218T214717Z/logs/gen_pack_add1.log
+/tmp/oclw_g12_target_20260218T214717Z/pack_signed
+/tmp/oclw_g12_target_20260218T214717Z/pack_strict
+/tmp/oclw_g12_target_20260218T214717Z/pack_unsigned
+
+## ls -la target
+total 96
+drwxrwxr-x  7 tangodelta tangodelta  4096 Feb 18 22:47 .
+drwxrwxrwt 23 root       root       69632 Feb 18 22:47 ..
+drwxrwxr-x  2 tangodelta tangodelta  4096 Feb 18 22:47 lib
+drwxrwxr-x  5 tangodelta tangodelta  4096 Feb 18 22:47 oclw_rt_bundle_20260218T214717Z
+drwxrwxr-x  2 tangodelta tangodelta  4096 Feb 18 22:47 pack_signed
+drwxrwxr-x  2 tangodelta tangodelta  4096 Feb 18 22:47 pack_strict
+drwxrwxr-x  2 tangodelta tangodelta  4096 Feb 18 22:47 pack_unsigned

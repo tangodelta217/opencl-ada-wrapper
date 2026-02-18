@@ -11,7 +11,8 @@ package OpenCL.Core.Queues is
      (Ctx : OpenCL.Core.Contexts.Context;
       Dev : OpenCL.Core.Device;
       Q : out Queue;
-      Status : out Status_Code);
+      Status : out Status_Code;
+      Properties : OpenCL.Raw.API.cl_command_queue_properties := 0);
 
    procedure Release
      (Q : in out Queue;
@@ -23,11 +24,14 @@ package OpenCL.Core.Queues is
 
    --  Helper required by sibling child package Buffers.
    function Raw_Handle (Q : Queue) return OpenCL.Raw.API.cl_command_queue;
+   function Raw_Properties
+     (Q : Queue) return OpenCL.Raw.API.cl_command_queue_properties;
 
 private
    package API renames OpenCL.Raw.API;
 
    type Queue is record
       Handle : API.cl_command_queue := null;
+      Properties : API.cl_command_queue_properties := 0;
    end record;
 end OpenCL.Core.Queues;

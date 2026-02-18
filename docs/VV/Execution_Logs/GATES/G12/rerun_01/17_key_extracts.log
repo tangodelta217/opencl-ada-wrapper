@@ -1,0 +1,38 @@
+## 10_gen_pack_unsigned
+6:RESULT=PASS
+
+## 11_rt_load_unsigned
+4:INFO negative_fingerprint_check=PASS
+5:RESULT=PASS
+
+## 12_rt_signature_plugin
+4:INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+9:INFO positive_case=PASS
+10:INFO negative_case=PASS expected=OCLW_SIGNATURE_INVALID
+11:RESULT=PASS
+
+## 13_rt_strict_policy_normal
+4:INFO strict_policy_mode=ENABLED
+5:INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+8:INFO case1=PASS expected=OCLW_SIGNATURE_MISSING
+9:INFO case2=PASS expected=OCLW_SIGNATURE_DISALLOWED|OCLW_SIGNATURE_INVALID
+10:INFO case3=PASS
+11:RESULT=PASS
+
+## 14_rt_strict_policy_poison_env
+4:INFO strict_policy_mode=ENABLED
+5:INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+8:INFO case1=PASS expected=OCLW_SIGNATURE_MISSING
+9:INFO case2=PASS expected=OCLW_SIGNATURE_DISALLOWED|OCLW_SIGNATURE_INVALID
+10:INFO case3=PASS
+11:RESULT=PASS
+
+## 15_rt_untrusted_plugin
+2:INFO strict_policy_mode=ENABLED
+3:INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+7:INFO configure_plugin_status=OCLW_PLUGIN_UNTRUSTED status_int=-32020
+8:RESULT=PASS
+
+## 16_rt_load_ro_sim
+4:INFO negative_fingerprint_check=PASS
+5:RESULT=PASS

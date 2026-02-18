@@ -1,0 +1,11 @@
+mkdir -p docs/VV/Execution_Logs/GATES/G12/rerun_01
+gprbuild -P tests/tests.gpr -p
+tools/package_rt_bundle.sh
+env -i PATH="$PATH" HOME="$HOME" OCLW_PACK_DIR="$TARGET/pack_unsigned" POCL_CACHE_DIR="$POCL_CACHE_DIR" POCL_KERNEL_CACHE=0 ./tests/bin/gen_pack_add1
+env -i PATH="$PATH" HOME="$HOME" OCLW_PACK_DIR="$TARGET/pack_unsigned" POCL_CACHE_DIR="$POCL_CACHE_DIR" POCL_KERNEL_CACHE=0 ./tests/bin/smoke_rt_load_pack_add1
+env -i PATH="$PATH" HOME="$HOME" OCLW_PACK_DIR="$TARGET/pack_signed" OCLW_CRYPTO_PLUGIN="$PLUGIN_PATH" OCLW_CRYPTO_SYMBOL="oclw_kpack_verify_v1" POCL_CACHE_DIR="$POCL_CACHE_DIR" POCL_KERNEL_CACHE=0 ./tests/bin/smoke_rt_signature_plugin
+env -i PATH="$PATH" HOME="$HOME" OCLW_PACK_DIR="$TARGET/pack_strict" OCLW_CRYPTO_PLUGIN="$PLUGIN_PATH" OCLW_CRYPTO_SYMBOL="oclw_kpack_verify_v1" POCL_CACHE_DIR="$POCL_CACHE_DIR" POCL_KERNEL_CACHE=0 ./tests/bin/smoke_rt_strict_policy
+env -i PATH="$PATH" HOME="$HOME" OCLW_PACK_DIR="$TARGET/pack_strict" OCLW_CRYPTO_PLUGIN="/nonexistent/invalid.so" OCLW_CRYPTO_SYMBOL="oclw_kpack_verify_v1" POCL_CACHE_DIR="$POCL_CACHE_DIR" POCL_KERNEL_CACHE=0 ./tests/bin/smoke_rt_strict_policy
+env -i PATH="$PATH" HOME="$HOME" POCL_CACHE_DIR="$POCL_CACHE_DIR" POCL_KERNEL_CACHE=0 ./tests/bin/smoke_rt_untrusted_plugin
+chmod -R a-w "$TARGET"
+env -i PATH="$PATH" HOME="$HOME" OCLW_PACK_DIR="$TARGET/pack_unsigned" POCL_CACHE_DIR="$POCL_CACHE_DIR" POCL_KERNEL_CACHE=0 ./tests/bin/smoke_rt_load_pack_add1

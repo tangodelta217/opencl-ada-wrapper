@@ -1,0 +1,15 @@
+## ldconfig -p | grep -i opencl
+	libnvidia-opencl.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libnvidia-opencl.so.1
+	libOpenCL.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libOpenCL.so.1
+	libOpenCL.so (libc6,x86-64) => /lib/x86_64-linux-gnu/libOpenCL.so
+
+## ls -la /etc/OpenCL/vendors
+total 16
+drwxr-xr-x 2 root root 4096 Feb  9 19:26 .
+drwxr-xr-x 3 root root 4096 Feb 22  2025 ..
+-rw-r--r-- 1 root root   22 Sep 13  2024 nvidia.icd
+-rw-r--r-- 1 root root   17 Apr 15  2024 pocl.icd
+
+## cat /etc/OpenCL/vendors/*.icd
+libnvidia-opencl.so.1
+libpocl.so.2.12.0

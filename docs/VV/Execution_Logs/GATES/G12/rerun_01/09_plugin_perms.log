@@ -1,0 +1,7 @@
+plugin_build_rc=0
+plugin_src_so=tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+plugin_staging_path=/tmp/oclw_g12_target_20260218T214717Z/lib/liboclw_crypto_provider_ref.so
+-rwxrwxr-x 1 tangodelta tangodelta 15904 Feb 18 22:47 tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+775 tangodelta:tangodelta tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+-rwxr-xr-x 1 tangodelta tangodelta 15904 Feb 18 22:47 /tmp/oclw_g12_target_20260218T214717Z/lib/liboclw_crypto_provider_ref.so
+755 tangodelta:tangodelta /tmp/oclw_g12_target_20260218T214717Z/lib/liboclw_crypto_provider_ref.so

@@ -1,0 +1,8 @@
+INFO pack_dir=docs/VV/Execution_Logs/local/pack_rt_untrusted_plugin
+INFO strict_policy_mode=ENABLED
+INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+INFO plugin_build_return_code=0 log=docs/VV/Execution_Logs/local/pack_rt_untrusted_plugin/crypto_plugin_build.log
+INFO plugin_path=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+INFO chmod_return_code=0 log=docs/VV/Execution_Logs/local/pack_rt_untrusted_plugin/chmod_plugin.log
+INFO configure_plugin_status=OCLW_PLUGIN_UNTRUSTED status_int=-32020
+RESULT=PASS

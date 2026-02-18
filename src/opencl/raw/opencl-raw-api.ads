@@ -21,6 +21,7 @@ package OpenCL.Raw.API is
    subtype cl_device_info is cl_uint;
    subtype cl_program_info is cl_uint;
    subtype cl_program_build_info is cl_uint;
+   subtype cl_profiling_info is cl_uint;
    subtype cl_bitfield is cl_ulong;
    subtype cl_bool is cl_uint;
    subtype cl_mem_flags is cl_bitfield;
@@ -127,6 +128,7 @@ package OpenCL.Raw.API is
    CL_COMPILER_NOT_AVAILABLE : constant cl_int := cl_int (-3);
    CL_OUT_OF_RESOURCES : constant cl_int := cl_int (-5);
    CL_OUT_OF_HOST_MEMORY : constant cl_int := cl_int (-6);
+   CL_PROFILING_INFO_NOT_AVAILABLE : constant cl_int := cl_int (-7);
    CL_BUILD_PROGRAM_FAILURE : constant cl_int := cl_int (-11);
    CL_INVALID_BINARY : constant cl_int := cl_int (-42);
    CL_INVALID_PROGRAM : constant cl_int := cl_int (-44);
@@ -155,6 +157,8 @@ package OpenCL.Raw.API is
    CL_DEVICE_TYPE_ALL : constant cl_device_type_mask := 16#FFFF_FFFF#;
 
    CL_MEM_READ_WRITE : constant cl_mem_flags := 16#0000_0001#;
+   CL_QUEUE_PROFILING_ENABLE : constant cl_command_queue_properties :=
+     16#0000_0002#;
 
    CL_PROGRAM_BUILD_STATUS : constant cl_program_build_info := 16#1181#;
    CL_PROGRAM_BUILD_OPTIONS : constant cl_program_build_info := 16#1182#;
@@ -163,6 +167,8 @@ package OpenCL.Raw.API is
    CL_PROGRAM_SOURCE : constant cl_program_info := 16#1164#;
    CL_PROGRAM_BINARY_SIZES : constant cl_program_info := 16#1165#;
    CL_PROGRAM_BINARIES : constant cl_program_info := 16#1166#;
+   CL_PROFILING_COMMAND_START : constant cl_profiling_info := 16#1282#;
+   CL_PROFILING_COMMAND_END : constant cl_profiling_info := 16#1283#;
 
    CL_BUILD_SUCCESS : constant cl_build_status := cl_build_status (0);
    CL_BUILD_NONE : constant cl_build_status := cl_build_status (-1);
@@ -301,6 +307,24 @@ package OpenCL.Raw.API is
      Import,
      Convention => C,
      External_Name => "clFinish";
+
+   function clReleaseEvent
+     (event : cl_event) return cl_int
+   with
+     Import,
+     Convention => C,
+     External_Name => "clReleaseEvent";
+
+   function clGetEventProfilingInfo
+     (event : cl_event;
+      param_name : cl_profiling_info;
+      param_value_size : size_t;
+      param_value : System.Address;
+      param_value_size_ret : access size_t) return cl_int
+   with
+     Import,
+     Convention => C,
+     External_Name => "clGetEventProfilingInfo";
 
    --  ABI note:
    --  For pointer-to-pointer / pointer-array C parameters (`const char**`,

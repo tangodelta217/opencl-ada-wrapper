@@ -1,0 +1,11 @@
+INFO pack_dir=/tmp/oclw_g12_target_20260218T214717Z/pack_signed
+INFO manifest_path=/tmp/oclw_g12_target_20260218T214717Z/pack_signed/manifest.kpack
+INFO binary_path=/tmp/oclw_g12_target_20260218T214717Z/pack_signed/program.bin
+INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+INFO plugin_build_return_code=0 log=/tmp/oclw_g12_target_20260218T214717Z/pack_signed/crypto_plugin_build.log
+INFO gen_pack_add1_return_code=0 log=/tmp/oclw_g12_target_20260218T214717Z/pack_signed/gen_pack_add1.log
+INFO oclw_crypto_plugin=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+INFO oclw_crypto_symbol=oclw_kpack_verify_v1
+INFO positive_case=PASS
+INFO negative_case=PASS expected=OCLW_SIGNATURE_INVALID
+RESULT=PASS

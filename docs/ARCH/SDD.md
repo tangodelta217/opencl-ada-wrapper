@@ -501,3 +501,35 @@ cripto.
 - Fallo de carga/resolucion/verificacion del proveedor tratado como
   fail-closed.
 - Evidencia de verificacion y configuracion registrada en logs de gate/V&V.
+
+## 27. Profiling & Bench Harness
+**Objetivo:** Definir infraestructura reproducible de medicion de performance
+para soporte de budgets RT/EW y deteccion de regresiones.
+
+**27.1 Metricas base**
+- Tiempo host end-to-end por iteracion (incluye path host/device completo).
+- Tiempo de ejecucion de kernel en dispositivo mediante event profiling cuando
+  el driver/cola lo soporta.
+- Export de datos crudos por iteracion en CSV para analisis posterior.
+
+**27.2 Reglas de ejecucion**
+- Warm-up obligatorio antes de medir.
+- Repeticiones N fijas por benchmark para reducir varianza.
+- Salida textual estable orientada a evidencia V&V (`RESULT`, percentiles,
+  estado de profiling).
+
+**27.3 Estadisticos requeridos**
+- `min`, `avg`, `p50`, `p95`, `p99`.
+- Los percentiles altos (`p95/p99`) son indicadores primarios para control de
+  cola de latencia en contexto RT.
+
+**27.4 Politica ante profiling no disponible**
+- Si profiling por eventos no esta disponible, benchmark continua con metrica
+  host y reporta `profiling=UNAVAILABLE`.
+- El estado se reporta via `Status_Code` explicito; no se usan excepciones como
+  camino principal.
+
+**27.5 Alcance de representatividad**
+- Resultados en homelab/CI/DEV no se consideran validacion final de budget en
+  target operacional.
+- Su uso principal es regression tracking y salud del stack entre gates.

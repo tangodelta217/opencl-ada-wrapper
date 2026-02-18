@@ -1,0 +1,6 @@
+INFO pack_dir=/tmp/oclw_g12_target_20260218T214717Z/pack_unsigned
+INFO manifest_path=/tmp/oclw_g12_target_20260218T214717Z/pack_unsigned/manifest.kpack
+INFO binary_path=/tmp/oclw_g12_target_20260218T214717Z/pack_unsigned/program.bin
+INFO binary_size=48593
+INFO binary_fnv1a32=1976952927
+RESULT=PASS

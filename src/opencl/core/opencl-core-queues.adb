@@ -16,12 +16,14 @@ package body OpenCL.Core.Queues is
      (Ctx : OpenCL.Core.Contexts.Context;
       Dev : OpenCL.Core.Device;
       Q : out Queue;
-      Status : out Status_Code)
+      Status : out Status_Code;
+      Properties : OpenCL.Raw.API.cl_command_queue_properties := 0)
    is
       Error_Code : aliased API.cl_int := API.CL_SUCCESS;
       Raw_Ctx : constant API.cl_context := OpenCL.Core.Contexts.Raw_Handle (Ctx);
    begin
       Q.Handle := null;
+      Q.Properties := 0;
       Status := OpenCL.Errors.Success;
 
       if Raw_Ctx = null then
@@ -37,7 +39,7 @@ package body OpenCL.Core.Queues is
       Q.Handle := API.clCreateCommandQueue
         (context => Raw_Ctx,
          device => Dev.Handle,
-         properties => 0,
+         properties => API.cl_command_queue_properties (Properties),
          errcode_ret => Error_Code'Access);
 
       if Error_Code /= API.CL_SUCCESS then
@@ -49,6 +51,8 @@ package body OpenCL.Core.Queues is
          Status := OpenCL.Errors.Out_Of_Resources;
          return;
       end if;
+
+      Q.Properties := API.cl_command_queue_properties (Properties);
    end Create;
 
    procedure Release
@@ -66,6 +70,7 @@ package body OpenCL.Core.Queues is
       Raw_Status := API.clReleaseCommandQueue (Q.Handle);
       if Raw_Status = API.CL_SUCCESS then
          Q.Handle := null;
+         Q.Properties := 0;
       else
          Status := To_Status (Raw_Status);
       end if;
@@ -94,5 +99,12 @@ package body OpenCL.Core.Queues is
    begin
       return Q.Handle;
    end Raw_Handle;
+
+   function Raw_Properties
+     (Q : Queue) return OpenCL.Raw.API.cl_command_queue_properties
+   is
+   begin
+      return Q.Properties;
+   end Raw_Properties;
 
 end OpenCL.Core.Queues;

@@ -1,0 +1,5 @@
+INFO pack_dir=/tmp/oclw_g12_target_20260218T214717Z/pack_unsigned
+INFO manifest_path=/tmp/oclw_g12_target_20260218T214717Z/pack_unsigned/manifest.kpack
+INFO binary_path=/tmp/oclw_g12_target_20260218T214717Z/pack_unsigned/program.bin
+INFO negative_fingerprint_check=PASS
+RESULT=PASS
