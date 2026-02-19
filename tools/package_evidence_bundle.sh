@@ -49,7 +49,7 @@ for req in tar gzip sha256sum; do
   fi
 done
 
-for f in README.md AGENTS.md opencl_wrapper.gpr; do
+for f in README.md opencl_wrapper.gpr; do
   if [ ! -f "${REPO_ROOT}/${f}" ]; then
     echo "ERROR missing_required_file=${f}"
     exit 1
@@ -68,7 +68,6 @@ mkdir -p "${BUNDLE_DIR}"
 
 cp -a "${REPO_ROOT}/docs" "${BUNDLE_DIR}/docs"
 cp "${REPO_ROOT}/README.md" "${BUNDLE_DIR}/README.md"
-cp "${REPO_ROOT}/AGENTS.md" "${BUNDLE_DIR}/AGENTS.md"
 cp "${REPO_ROOT}/opencl_wrapper.gpr" "${BUNDLE_DIR}/opencl_wrapper.gpr"
 
 # Safety prune for temporary/cache content if present under selected trees.
