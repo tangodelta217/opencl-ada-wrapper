@@ -1,0 +1,14 @@
+timestamp_utc=2026-02-19T10:38:44Z
+head=bdac2e785fc1934bfad826572b8b397ac9e4cb37
+gate=G22
+$ ./tests/bin/smoke_rt_build_options_policy 
+INFO pack_dir=docs/VV/Execution_Logs/local/pack_rt_build_options_policy
+INFO manifest_path=docs/VV/Execution_Logs/local/pack_rt_build_options_policy/manifest.kpack
+INFO binary_path=docs/VV/Execution_Logs/local/pack_rt_build_options_policy/program.bin
+INFO gen_pack_add1_return_code=0 log=docs/VV/Execution_Logs/local/pack_rt_build_options_policy/gen_pack_add1.log
+INFO case_allow=PASS
+INFO case_deny=PASS expected=OCLW_BUILD_OPTIONS_DISALLOWED
+RESULT=PASS
+smoke_rt_build_options_policy_exit_code=0
+missing_executables=0
+run_exit_code=0

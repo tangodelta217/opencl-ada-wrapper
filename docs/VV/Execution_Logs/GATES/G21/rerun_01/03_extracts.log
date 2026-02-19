@@ -1,0 +1,4 @@
+$ ./tests/bin/smoke_image_roundtrip 
+RESULT=PASS
+smoke_image_roundtrip_exit_code=0
+run_exit_code=0

@@ -1,0 +1,541 @@
+=== Build Start ===
+timestamp_utc=20260219T184227Z
+repo_root=/home/tangodelta/opencl-ada-wrapper
+uname=Linux tangodelta 6.14.0-37-generic #37~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Nov 20 10:25:38 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+$ gprbuild --version
+GPRBUILD Pro 18.0w (19940713) (x86_64-linux-gnu)
+Copyright (C) 2004-2016, AdaCore
+This is free software; see the source for copying conditions.
+See your AdaCore support agreement for details of warranty and support.
+If you do not have a current support agreement, then there is absolutely
+no warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.
+
+$ gnatls -v
+
+GNATLS 13.3.0
+Copyright (C) 1997-2023, Free Software Foundation, Inc.
+
+Source Search Path:
+   <Current_Directory>
+   /usr/lib/gcc/x86_64-linux-gnu/13/adainclude
+
+
+Object Search Path:
+   <Current_Directory>
+   /usr/lib/gcc/x86_64-linux-gnu/13/adalib
+
+
+Project Search Path:
+   <Current_Directory>
+   /usr/x86_64-linux-gnu/lib/gnat
+   /usr/x86_64-linux-gnu/share/gpr
+   /usr/share/gpr
+   /usr/lib/gnat
+
+$ gcc -v
+Using built-in specs.
+COLLECT_GCC=gcc
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-linux-gnu/13/lto-wrapper
+OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
+OFFLOAD_TARGET_DEFAULT=1
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu 13.3.0-6ubuntu2~24.04' --with-bugurl=file:///usr/share/doc/gcc-13/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,m2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-13 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/libexec --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-bootstrap --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-libstdcxx-backtrace --enable-gnu-unique-object --disable-vtable-verify --enable-plugin --enable-default-pie --with-system-zlib --enable-libphobos-checking=release --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --disable-werror --enable-cet --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none=/build/gcc-13-fG75Ri/gcc-13-13.3.0/debian/tmp-nvptx/usr,amdgcn-amdhsa=/build/gcc-13-fG75Ri/gcc-13-13.3.0/debian/tmp-gcn/usr --enable-offload-defaulted --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --with-build-config=bootstrap-lto-lean --enable-link-serialization=2
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) 
+$ gprbuild -P opencl_wrapper.gpr -p
+$ gprbuild -P tests/tests.gpr -p
+gprbuild: "smoke_platforms" up to date
+gprbuild: "smoke_core" up to date
+gprbuild: "gen_pack_add1" up to date
+gprbuild: "smoke_rt_load_pack_add1" up to date
+gprbuild: "smoke_rt_negative_cases" up to date
+gprbuild: "smoke_rt_fs_attack_cases" up to date
+gprbuild: "smoke_rt_pack_symlink_escape" up to date
+gprbuild: "smoke_rt_toctou_manifest_swap" up to date
+gprbuild: "smoke_rt_toctou_binary_swap" up to date
+gprbuild: "smoke_rt_signature_enforcement" up to date
+gprbuild: "smoke_rt_signature_plugin" up to date
+gprbuild: "smoke_crypto_provider_conformance" up to date
+gprbuild: "smoke_rt_strict_policy" up to date
+gprbuild: "smoke_rt_build_options_policy" up to date
+gprbuild: "smoke_rt_no_heap_after_init" up to date
+gprbuild: "smoke_rt_anti_rollback" up to date
+gprbuild: "smoke_rt_untrusted_plugin" up to date
+gprbuild: "smoke_rt_plugin_allowlist_policy" up to date
+gprbuild: "smoke_constant_time_compare" up to date
+gprbuild: "smoke_fuzz_kpack_parser" up to date
+gprbuild: "bench_add1" up to date
+gprbuild: "bench_pipeline_h2d_kernel_d2h" up to date
+gprbuild: "bench_rt_pack_add1" up to date
+gprbuild: "bench_transfers_h2d_d2h" up to date
+gprbuild: "bench_batching_add1" up to date
+gprbuild: "smoke_buffer_roundtrip" up to date
+gprbuild: "smoke_image_roundtrip" up to date
+gprbuild: "smoke_kernel_add1" up to date
+gprbuild: "smoke_program_il_path" up to date
+gprbuild: "smoke_pack_catalog_selection" up to date
+gprbuild: "smoke_program_binaries_multi_device" up to date
+gprbuild: "smoke_program_binaries_subdevices" up to date
+gprbuild: "smoke_program_binary_roundtrip" up to date
+smoke_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_platforms
+build_log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_build.log
+=== Build End ===
+=== Smoke Run Start ===
+timestamp_utc=20260219T184227Z
+repo_root=/home/tangodelta/opencl-ada-wrapper
+pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+oclw_pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+pocl_cache_dir=/home/tangodelta/opencl-ada-wrapper/.pocl_kcache
+pocl_kernel_cache=0
+pocl_cache_configured_by_harness=1
+$ /home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/build.sh
+crypto_plugin_build_exit_code=0
+oclw_crypto_plugin=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+oclw_crypto_symbol=oclw_kpack_verify_v1
+oclw_rt_plugin_allowlist=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref
+fuzz_iters_default=500
+fuzz_seed_default=1
+smoke_platforms_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_platforms
+smoke_core_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_core
+gen_pack_add1_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/gen_pack_add1
+smoke_rt_load_pack_add1_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_load_pack_add1
+smoke_rt_negative_cases_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_negative_cases
+smoke_rt_fs_attack_cases_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_fs_attack_cases
+smoke_rt_pack_symlink_escape_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_pack_symlink_escape
+smoke_rt_toctou_manifest_swap_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_toctou_manifest_swap
+smoke_rt_toctou_binary_swap_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_toctou_binary_swap
+smoke_rt_signature_enforcement_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_signature_enforcement
+smoke_rt_signature_plugin_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_signature_plugin
+smoke_crypto_provider_conformance_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_crypto_provider_conformance
+smoke_rt_strict_policy_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_strict_policy
+smoke_rt_build_options_policy_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_build_options_policy
+smoke_rt_no_heap_after_init_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_no_heap_after_init
+smoke_rt_anti_rollback_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_anti_rollback
+smoke_rt_untrusted_plugin_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_untrusted_plugin
+smoke_rt_plugin_allowlist_policy_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_plugin_allowlist_policy
+smoke_constant_time_compare_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_constant_time_compare
+smoke_fuzz_kpack_parser_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_fuzz_kpack_parser
+bench_add1_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/bench_add1
+bench_pipeline_h2d_kernel_d2h_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/bench_pipeline_h2d_kernel_d2h
+bench_rt_pack_add1_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/bench_rt_pack_add1
+bench_transfers_h2d_d2h_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/bench_transfers_h2d_d2h
+bench_batching_add1_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/bench_batching_add1
+smoke_buffer_roundtrip_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_buffer_roundtrip
+smoke_image_roundtrip_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_image_roundtrip
+smoke_kernel_add1_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_kernel_add1
+smoke_program_il_path_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_program_il_path
+smoke_pack_catalog_selection_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_pack_catalog_selection
+smoke_program_binaries_multi_device_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_program_binaries_multi_device
+smoke_program_binaries_subdevices_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_program_binaries_subdevices
+smoke_program_binary_roundtrip_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_program_binary_roundtrip
+traceability_check_script=/home/tangodelta/opencl-ada-wrapper/tools/traceability_check.sh
+smoke_bundle_integrity_script=/home/tangodelta/opencl-ada-wrapper/tools/smoke_bundle_integrity.sh
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_platforms
+platform_count_reported= 1
+platform_count_used= 1
+Platform[ 0]
+  name    : Portable Computing Language
+  vendor  : The pocl project
+  version : OpenCL 3.0 PoCL 5.0+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 16.0.6, SLEEF, DISTRO, POCL_DEBUG
+  device_count_reported= 1
+  device_count_used= 1
+  Device[ 0]
+    name    : cpu-haswell-Intel(R) Core(TM) i5-14600K
+    vendor  : GenuineIntel
+    driver  : 5.0+debian
+    version : OpenCL 3.0 PoCL HSTR: cpu-x86_64-pc-linux-gnu-haswell
+    type    : 2
+smoke_platforms_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_core
+platform_capacity= 16
+platform_count_used= 1
+Platform[ 0]
+  name    : Portable Computing Language
+  vendor  : The pocl project
+  version : OpenCL 3.0 PoCL 5.0+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 16.0.6, SLEEF, DISTRO, POCL_DEBUG
+  device_capacity= 64
+  device_count_used= 1
+  Device[ 0]
+    name    : cpu-haswell-Intel(R) Core(TM) i5-14600K
+    vendor  : GenuineIntel
+    version : OpenCL 3.0 PoCL HSTR: cpu-x86_64-pc-linux-gnu-haswell
+    driver  : 5.0+debian
+smoke_core_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/gen_pack_add1
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/program.bin
+INFO binary_size=48617
+INFO binary_fnv1a32=2757459205
+RESULT=PASS
+gen_pack_add1_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_load_pack_add1
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/program.bin
+INFO negative_fingerprint_check=PASS
+RESULT=PASS
+smoke_rt_load_pack_add1_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_negative_cases
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/program.bin
+INFO case1_binary_tamper=PASS expected=OCLW_HASH_MISMATCH
+INFO case2_fingerprint_tamper=PASS expected=OCLW_FINGERPRINT_MISMATCH
+INFO case3_format_tamper=PASS expected=OCLW_PACK_FORMAT_ERROR
+INFO case4_line_limit=PASS expected=OCLW_PACK_FORMAT_ERROR
+RESULT=PASS
+smoke_rt_negative_cases_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_fs_attack_cases
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/fs_attack_cases
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/fs_attack_cases/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/fs_attack_cases/program.bin
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/fs_attack_cases
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/fs_attack_cases/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/fs_attack_cases/program.bin
+INFO binary_size=48617
+INFO binary_fnv1a32=145511108
+RESULT=PASS
+INFO gen_pack_add1_return_code=0
+INFO case1_manifest_symlink=PASS expected=OCLW_FS_POLICY_VIOLATION|OCLW_PACK_FORMAT_ERROR got=OCLW_FS_POLICY_VIOLATION
+INFO case2_binary_symlink=PASS expected=OCLW_FS_POLICY_VIOLATION|OCLW_PACK_FORMAT_ERROR got=OCLW_FS_POLICY_VIOLATION
+INFO case3_path_traversal=PASS expected=OCLW_FS_POLICY_VIOLATION|OCLW_PACK_FORMAT_ERROR got=OCLW_FS_POLICY_VIOLATION
+INFO case4_toctou_hash_mismatch=PASS expected=OCLW_HASH_MISMATCH
+RESULT=PASS
+smoke_rt_fs_attack_cases_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_pack_symlink_escape
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g31_symlink_escape
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g31_symlink_escape
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g31_symlink_escape/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g31_symlink_escape/program.bin
+INFO binary_size=48617
+INFO binary_fnv1a32=383441383
+RESULT=PASS
+INFO gen_pack_add1_return_code=0
+INFO case_manifest_symlink=PASS expected=OCLW_FS_POLICY_VIOLATION got=OCLW_FS_POLICY_VIOLATION
+INFO case_binary_symlink=PASS expected=OCLW_FS_POLICY_VIOLATION got=OCLW_FS_POLICY_VIOLATION
+RESULT=PASS
+smoke_rt_pack_symlink_escape_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_toctou_manifest_swap
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g32_manifest_toctou
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g32_manifest_toctou
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g32_manifest_toctou/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g32_manifest_toctou/program.bin
+INFO binary_size=48617
+INFO binary_fnv1a32=3345805381
+RESULT=PASS
+INFO gen_pack_add1_return_code=0
+INFO case_manifest_toctou=PASS expected=OCLW_FS_TOCTOU_DETECTED got=OCLW_FS_TOCTOU_DETECTED got_int=-32023
+RESULT=PASS
+smoke_rt_toctou_manifest_swap_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_toctou_binary_swap
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g32_binary_toctou
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g32_binary_toctou
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g32_binary_toctou/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/g32_binary_toctou/program.bin
+INFO binary_size=48617
+INFO binary_fnv1a32=936547341
+RESULT=PASS
+INFO gen_pack_add1_return_code=0
+INFO case_binary_toctou=PASS expected=OCLW_FS_TOCTOU_DETECTED got=OCLW_FS_TOCTOU_DETECTED got_int=-32023
+RESULT=PASS
+smoke_rt_toctou_binary_swap_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_signature_enforcement
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/program.bin
+INFO verifier_mode=TEST-FNV1A32 (NOT CRYPTO)
+INFO gen_pack_add1_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/gen_pack_add1.log
+INFO caseA=PASS expected=OCLW_SIGNATURE_NOT_IMPLEMENTED
+INFO caseB=PASS
+RESULT=PASS
+smoke_rt_signature_enforcement_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_signature_plugin
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/program.bin
+INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+INFO plugin_build_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/crypto_plugin_build.log
+INFO gen_pack_add1_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/gen_pack_add1.log
+INFO oclw_crypto_plugin=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+INFO oclw_crypto_symbol=oclw_kpack_verify_v1
+INFO positive_case=PASS
+INFO negative_case=PASS expected=OCLW_SIGNATURE_INVALID
+RESULT=PASS
+smoke_rt_signature_plugin_exit_code=0
+$ env OCLW_CRYPTO_PLUGIN=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so OCLW_CRYPTO_SYMBOL=oclw_kpack_verify_v1 /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_crypto_provider_conformance
+INFO plugin_path=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+INFO plugin_symbol=oclw_kpack_verify_v1
+INFO case_valid_signature=PASS expected=CL_SUCCESS
+INFO case_invalid_signature=PASS expected=OCLW_SIGNATURE_INVALID
+INFO case_unknown_alg=PASS expected=OCLW_SIGNATURE_INVALID
+RESULT=PASS
+smoke_crypto_provider_conformance_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_strict_policy
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/program.bin
+INFO strict_policy_mode=ENABLED
+INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+INFO gen_pack_add1_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/gen_pack_add1.log
+INFO plugin_build_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/crypto_plugin_build.log
+INFO case1=PASS expected=OCLW_SIGNATURE_MISSING
+INFO case2=PASS expected=OCLW_SIGNATURE_DISALLOWED|OCLW_SIGNATURE_INVALID
+INFO case3=PASS
+RESULT=PASS
+smoke_rt_strict_policy_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_build_options_policy
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/program.bin
+INFO gen_pack_add1_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/gen_pack_add1.log
+INFO case_allow=PASS
+INFO case_deny=PASS expected=OCLW_BUILD_OPTIONS_DISALLOWED
+RESULT=PASS
+smoke_rt_build_options_policy_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_no_heap_after_init
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/program.bin
+INFO mem_pool_bytes= 1048576
+INFO gen_pack_add1_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/gen_pack_add1.log
+INFO freeze_applied=1 total_allocs_before_freeze= 0 total_bytes_before_freeze= 0
+INFO iterations= 8
+INFO allocs_after_freeze= 0
+RESULT=PASS
+smoke_rt_no_heap_after_init_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_anti_rollback
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/program.bin
+INFO rollback_state_file=/tmp/oclw_rollback_state_g18.txt
+INFO gen_pack_add1_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/gen_pack_add1.log
+INFO plugin_build_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/crypto_plugin_build.log
+INFO case1_counter=100 result=PASS
+INFO case2_counter=99 expected=OCLW_ROLLBACK_DETECTED result=PASS
+RESULT=PASS
+smoke_rt_anti_rollback_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/bench_add1
+INFO platform_name=Portable Computing Language
+INFO platform_vendor=The pocl project
+INFO device_name=cpu-haswell-Intel(R) Core(TM) i5-14600K
+INFO driver_version=5.0+debian
+INFO warmup_iterations=10
+INFO measure_iterations=200
+INFO csv_path=docs/VV/Execution_Logs/local/bench_add1.csv
+INFO profiling=AVAILABLE
+INFO host_ns_min=154628
+INFO host_ns_avg=343026
+INFO host_ns_p50=331205
+INFO host_ns_p95=515324
+INFO host_ns_p99=710782
+INFO device_ns_min=3406
+INFO device_ns_avg=104997
+INFO device_ns_p50=91468
+INFO device_ns_p95=234216
+INFO device_ns_p99=352928
+RESULT=PASS
+bench_add1_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/bench_pipeline_h2d_kernel_d2h
+INFO platform_name=Portable Computing Language
+INFO device_name=cpu-haswell-Intel(R) Core(TM) i5-14600K
+INFO driver_version=5.0+debian
+INFO profiling=AVAILABLE
+INFO warmup_iterations=10
+INFO measure_iterations=200
+INFO write_ns_p50=1375
+INFO write_ns_p99=9779
+INFO kernel_ns_p50=36827
+INFO kernel_ns_p99=128255
+INFO read_ns_p50=969
+INFO read_ns_p99=2141
+INFO e2e_ns_p50=39601
+INFO e2e_ns_p99=130879
+RESULT=PASS
+bench_pipeline_h2d_kernel_d2h_exit_code=0
+$ env OCLW_CRYPTO_PLUGIN=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so OCLW_CRYPTO_SYMBOL=oclw_kpack_verify_v1 /home/tangodelta/opencl-ada-wrapper/tests/bin/bench_rt_pack_add1
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO warmup=10 iterations=200
+INFO plugin_path=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+INFO gen_pack_add1_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/bench_gen_pack_add1.log
+INFO offline_pack_generated=1
+INFO init_ns=5064035
+INFO phase_verify_ns=463264
+INFO phase_create_ctx_ns=854974
+INFO phase_create_prog_ns=3740647
+INFO phase_build_ns=3740647
+INFO phase_build_ns_mode=INCLUDED_IN_CREATE_PROG
+INFO phase_kernel_setup_ns=4134
+INFO phase_exec_ns_p50=159703
+INFO phase_exec_ns_p99=515007
+INFO exec_host_ns_p50=159703
+INFO exec_host_ns_p95=244514
+INFO exec_host_ns_p99=515007
+INFO profiling=AVAILABLE
+INFO exec_dev_ns_p50=53105
+INFO exec_dev_ns_p95=106190
+INFO exec_dev_ns_p99=165893
+INFO csv_path=docs/VV/Execution_Logs/local/20260219T184234Z_bench_rt_pack_add1.csv
+RESULT=PASS
+bench_rt_pack_add1_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/bench_transfers_h2d_d2h
+INFO transfer_bytes=4194304
+INFO warmup=5 iterations=40
+INFO profiling=AVAILABLE
+INFO write_host_ns_p50=287309
+INFO write_host_ns_p99=732673
+INFO read_host_ns_p50=255087
+INFO read_host_ns_p99=649564
+INFO write_dev_ns_p50=261002
+INFO write_dev_ns_p99=688866
+INFO read_dev_ns_p50=234823
+INFO read_dev_ns_p99=632042
+RESULT=PASS
+bench_transfers_h2d_d2h_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/bench_batching_add1
+INFO transfer_bytes=4096
+INFO warmup_batches=2
+INFO batches=30
+INFO batch_iterations=16
+INFO total_iterations=480
+INFO throughput_iter_per_sec=2955
+INFO batch_host_ns_p50=5253041
+INFO batch_host_ns_p99=7173378
+INFO profiling=AVAILABLE
+INFO batch_dev_ns_p50=1480945
+INFO batch_dev_ns_p99=2417609
+RESULT=PASS
+bench_batching_add1_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_untrusted_plugin
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+INFO strict_policy_mode=ENABLED
+INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+INFO plugin_build_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/crypto_plugin_build.log
+INFO plugin_path=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+INFO chmod_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1/chmod_plugin.log
+INFO configure_plugin_status=OCLW_PLUGIN_UNSAFE_PERMS status_int=-32025
+RESULT=PASS
+smoke_rt_untrusted_plugin_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_plugin_allowlist_policy
+INFO plugin_build_return_code=0 log=/tmp/oclw_g33_plugin_allowlist_policy/plugin_build.log
+INFO strict_policy_mode=ENABLED
+INFO plugin_path=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+INFO case_not_allowed=PASS expected=OCLW_PLUGIN_PATH_NOT_ALLOWED got=OCLW_PLUGIN_PATH_NOT_ALLOWED
+INFO case_allowed=PASS
+INFO case_symlink=PASS expected=OCLW_FS_POLICY_VIOLATION got=OCLW_FS_POLICY_VIOLATION
+INFO case_world_writable=PASS expected=OCLW_PLUGIN_UNSAFE_PERMS got=OCLW_PLUGIN_UNSAFE_PERMS
+RESULT=PASS
+smoke_rt_plugin_allowlist_policy_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_constant_time_compare
+INFO bytes_equal=PASS
+INFO bytes_not_equal=PASS
+INFO bytes_len_mismatch=PASS
+INFO string_equal=PASS
+INFO string_not_equal=PASS
+INFO string_len_mismatch=PASS
+RESULT=PASS
+smoke_constant_time_compare_exit_code=0
+$ env OCLW_FUZZ_ITERS=500 OCLW_FUZZ_SEED=1 /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_fuzz_kpack_parser
+INFO iters=500
+INFO seed=1
+INFO corpus_cases=10
+INFO failures=0
+INFO crashes=0
+INFO saved_artifact=<none>
+RESULT=PASS
+smoke_fuzz_kpack_parser_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tools/traceability_check.sh
+RESULT=PASS
+INFO missing_tests=<none>
+INFO missing_reports=<none>
+INFO checked_links=25
+traceability_check_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tools/smoke_bundle_integrity.sh
+INFO reproducible=1
+INFO source_date_epoch=1771455622
+INFO bundle_archive=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_reproducible.tar.gz
+INFO extracted_bundle_dir=/tmp/oclw_bundle_integrity_20260219T184235Z/oclw_rt_bundle_reproducible
+INFO checksum_verify_log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184235Z_bundle_checksum_verify.log
+INFO missing_required_count=0
+RESULT=PASS
+smoke_bundle_integrity_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_buffer_roundtrip
+RESULT=PASS
+smoke_buffer_roundtrip_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_image_roundtrip
+RESULT=PASS
+smoke_image_roundtrip_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_kernel_add1
+INFO device_opencl_c_version=OpenCL C 1.2 PoCL
+RESULT=PASS
+smoke_kernel_add1_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_program_il_path
+INFO il_dummy_bytes= 8
+INFO create_from_il_status=CL_INVALID_VALUE status_int=-30
+RESULT=SKIP reason=il_create_controlled_failure
+smoke_program_il_path_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_pack_catalog_selection
+INFO base_dir=/tmp/oclw_g24_pack_catalog_selection
+INFO catalog_positive_dir=/tmp/oclw_g24_pack_catalog_selection/catalog_positive
+INFO catalog_negative_dir=/tmp/oclw_g24_pack_catalog_selection/catalog_negative
+INFO gen_pack_add1_return_code=0 log=/tmp/oclw_g24_pack_catalog_selection/source_pack/gen_pack_add1.log
+INFO selected_pack_dir=/tmp/oclw_g24_pack_catalog_selection/catalog_positive/001_variantA
+INFO case_positive=PASS
+INFO case_negative=PASS expected=OCLW_FINGERPRINT_MISMATCH
+RESULT=PASS
+smoke_pack_catalog_selection_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_program_binaries_multi_device
+INFO device_count= 1
+INFO single_num_devices=1
+INFO single_binary_size_0=48617
+INFO multi_device_test=SKIP_NO_MULTI_DEVICE
+RESULT=PASS
+smoke_program_binaries_multi_device_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_program_binaries_subdevices
+INFO subdevices_created=2
+INFO num_devices=1
+INFO binary_size_0=0
+INFO binary_size_1=0
+RESULT=SKIP reason=num_devices_not_2
+smoke_program_binaries_subdevices_exit_code=0
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_program_binary_roundtrip
+INFO binary_size=48617
+INFO binary_fnv1a32=889004287
+RESULT=PASS
+smoke_program_binary_roundtrip_exit_code=0
+gen_pack_add1_exit_code=0
+smoke_rt_load_pack_add1_exit_code=0
+smoke_rt_negative_cases_exit_code=0
+smoke_rt_fs_attack_cases_exit_code=0
+smoke_rt_pack_symlink_escape_exit_code=0
+smoke_rt_toctou_manifest_swap_exit_code=0
+smoke_rt_toctou_binary_swap_exit_code=0
+smoke_rt_signature_enforcement_exit_code=0
+smoke_rt_signature_plugin_exit_code=0
+smoke_crypto_provider_conformance_exit_code=0
+smoke_rt_strict_policy_exit_code=0
+smoke_rt_build_options_policy_exit_code=0
+smoke_rt_no_heap_after_init_exit_code=0
+smoke_rt_anti_rollback_exit_code=0
+smoke_rt_untrusted_plugin_exit_code=0
+smoke_rt_plugin_allowlist_policy_exit_code=0
+smoke_constant_time_compare_exit_code=0
+smoke_fuzz_kpack_parser_exit_code=0
+traceability_check_exit_code=0
+smoke_bundle_integrity_exit_code=0
+bench_add1_exit_code=0
+bench_pipeline_h2d_kernel_d2h_exit_code=0
+bench_rt_pack_add1_exit_code=0
+bench_transfers_h2d_d2h_exit_code=0
+bench_batching_add1_exit_code=0
+smoke_image_roundtrip_exit_code=0
+smoke_program_il_path_exit_code=0
+smoke_pack_catalog_selection_exit_code=0
+smoke_program_binaries_multi_device_exit_code=0
+smoke_program_binaries_subdevices_exit_code=0
+pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_kpack_add1
+smoke_exit_code=0
+smoke_log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T184227Z_smoke_run.log
+=== Smoke Run End ===

@@ -1,0 +1,6 @@
+run_smoke_exit_code=0
+--- traceability_check RESULT lines ---
+RESULT=PASS
+--- traceability_check summary line ---
+290:traceability_check_exit_code=0
+321:traceability_check_exit_code=0

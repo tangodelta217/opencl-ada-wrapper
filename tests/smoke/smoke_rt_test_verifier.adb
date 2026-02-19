@@ -2,6 +2,7 @@ with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces;
+with OpenCL.RT.Constant_Time;
 
 package body Smoke_RT_Test_Verifier is
 
@@ -87,7 +88,9 @@ package body Smoke_RT_Test_Verifier is
               Bin => Bin,
               Used => Used));
    begin
-      if Signature_Alg /= "TEST-FNV1A32" then
+      if not OpenCL.RT.Constant_Time.Ct_Equal
+          (Signature_Alg, "TEST-FNV1A32")
+      then
          return OpenCL.Errors.OCLW_Signature_Invalid;
       end if;
 
@@ -99,7 +102,7 @@ package body Smoke_RT_Test_Verifier is
          return OpenCL.Errors.OCLW_Signature_Invalid;
       end if;
 
-      if Signature_Value = Expected then
+      if OpenCL.RT.Constant_Time.Ct_Equal (Signature_Value, Expected) then
          return OpenCL.Errors.Success;
       else
          return OpenCL.Errors.OCLW_Signature_Invalid;

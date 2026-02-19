@@ -1,6 +1,0 @@
-INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_20260218T203050Z/example_pack
-INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_20260218T203050Z/example_pack/manifest.kpack
-INFO binary_path=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_20260218T203050Z/example_pack/program.bin
-INFO binary_size=62055
-INFO binary_fnv1a32=2318919515
-RESULT=PASS

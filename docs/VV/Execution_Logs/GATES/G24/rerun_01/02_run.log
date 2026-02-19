@@ -1,0 +1,15 @@
+timestamp_utc=2026-02-19T10:38:44Z
+head=bdac2e785fc1934bfad826572b8b397ac9e4cb37
+gate=G24
+$ ./tests/bin/smoke_pack_catalog_selection 
+INFO base_dir=/tmp/oclw_g24_pack_catalog_selection
+INFO catalog_positive_dir=/tmp/oclw_g24_pack_catalog_selection/catalog_positive
+INFO catalog_negative_dir=/tmp/oclw_g24_pack_catalog_selection/catalog_negative
+INFO gen_pack_add1_return_code=0 log=/tmp/oclw_g24_pack_catalog_selection/source_pack/gen_pack_add1.log
+INFO selected_pack_dir=/tmp/oclw_g24_pack_catalog_selection/catalog_positive/001_variantA
+INFO case_positive=PASS
+INFO case_negative=PASS expected=OCLW_FINGERPRINT_MISMATCH
+RESULT=PASS
+smoke_pack_catalog_selection_exit_code=0
+missing_executables=0
+run_exit_code=0

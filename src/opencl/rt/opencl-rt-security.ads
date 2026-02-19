@@ -1,8 +1,11 @@
 with OpenCL.Core.Programs;
 with OpenCL.Errors;
+with OpenCL.RT.Memtrack;
 with OpenCL.RT.Packs;
 
 package OpenCL.RT.Security is
+   pragma Default_Storage_Pool (OpenCL.RT.Memtrack.RT_Pool);
+
    type Verify_Fn is access function
      (Meta : OpenCL.RT.Packs.Pack_Metadata;
       Signing_Text : String;
@@ -12,8 +15,9 @@ package OpenCL.RT.Security is
    procedure Install_Verifier (V : Verify_Fn);
 
    --  Explicit plugin configuration path for RT integrations. Path hardening:
-   --  absolute path, regular file and not world-writable. If trust checks
-   --  fail, Status is OCLW_PLUGIN_UNTRUSTED.
+   --  absolute path, no symlink, regular file and not world-writable.
+   --  Allowlist checks use OCLW_RT_PLUGIN_ALLOWLIST (if defined) and are
+   --  mandatory in strict verification paths.
    procedure Configure_Plugin
      (Path : String;
       Symbol : String := "oclw_kpack_verify_v1";

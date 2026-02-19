@@ -1,0 +1,138 @@
+INFO repo_root=/home/tangodelta/opencl-ada-wrapper
+INFO bundle_dir=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_reproducible
+INFO timestamp_utc=20231114T221320Z
+INFO reproducible=1
+INFO source_date_epoch=1700000000
+INFO build_opencl_wrapper_start
+Compile
+   [Ada]          opencl-rt-packs.adb
+   [Ada]          opencl-rt-hash.adb
+   [Ada]          opencl-rt-loader.adb
+   [Ada]          opencl-rt-rollback.adb
+   [Ada]          opencl-rt-fs.adb
+   [Ada]          opencl-rt-memtrack.adb
+   [Ada]          opencl-rt.ads
+   [Ada]          opencl-rt-policy.adb
+   [Ada]          opencl-rt-catalog.adb
+   [Ada]          opencl-rt-security.adb
+   [Ada]          opencl-rt-constant_time.adb
+   [Ada]          opencl-core-programs.adb
+   [Ada]          opencl-core-profiling.adb
+   [Ada]          opencl-core-buffers.adb
+   [Ada]          opencl-core.adb
+   [Ada]          opencl-core-kernels.adb
+   [Ada]          opencl-core-contexts.adb
+   [Ada]          opencl-core-queues.adb
+   [Ada]          opencl-core-samplers.adb
+   [Ada]          opencl-core-device_selection.adb
+   [Ada]          opencl-core-images.adb
+   [Ada]          opencl-core-events.adb
+   [Ada]          opencl-raw-api.ads
+   [Ada]          opencl-raw.ads
+   [Ada]          opencl-errors.adb
+   [Ada]          opencl.ads
+INFO build_opencl_wrapper_done
+INFO build_tests_start
+Compile
+   [Ada]          smoke_platforms.adb
+   [Ada]          smoke_core.adb
+   [Ada]          gen_pack_add1.adb
+   [Ada]          smoke_rt_load_pack_add1.adb
+   [Ada]          smoke_rt_negative_cases.adb
+   [Ada]          smoke_rt_fs_attack_cases.adb
+   [Ada]          smoke_rt_pack_symlink_escape.adb
+   [Ada]          smoke_rt_toctou_manifest_swap.adb
+   [Ada]          smoke_rt_toctou_binary_swap.adb
+   [Ada]          smoke_rt_signature_enforcement.adb
+   [Ada]          smoke_rt_signature_plugin.adb
+   [Ada]          smoke_crypto_provider_conformance.adb
+   [Ada]          smoke_rt_strict_policy.adb
+   [Ada]          smoke_rt_build_options_policy.adb
+   [Ada]          smoke_rt_no_heap_after_init.adb
+   [Ada]          smoke_rt_anti_rollback.adb
+   [Ada]          smoke_rt_untrusted_plugin.adb
+   [Ada]          smoke_rt_plugin_allowlist_policy.adb
+   [Ada]          smoke_constant_time_compare.adb
+   [Ada]          smoke_fuzz_kpack_parser.adb
+   [Ada]          bench_add1.adb
+   [Ada]          bench_pipeline_h2d_kernel_d2h.adb
+   [Ada]          bench_rt_pack_add1.adb
+   [Ada]          bench_transfers_h2d_d2h.adb
+   [Ada]          bench_batching_add1.adb
+   [Ada]          smoke_buffer_roundtrip.adb
+   [Ada]          smoke_image_roundtrip.adb
+   [Ada]          smoke_kernel_add1.adb
+   [Ada]          smoke_program_il_path.adb
+   [Ada]          smoke_pack_catalog_selection.adb
+   [Ada]          smoke_program_binaries_multi_device.adb
+   [Ada]          smoke_program_binaries_subdevices.adb
+   [Ada]          smoke_program_binary_roundtrip.adb
+   [Ada]          opencl.ads
+   [Ada]          opencl-raw.ads
+   [Ada]          opencl-raw-api.ads
+   [Ada]          opencl-core.adb
+   [Ada]          opencl-errors.adb
+   [Ada]          opencl-core-contexts.adb
+   [Ada]          opencl-core-programs.adb
+   [Ada]          opencl-core-queues.adb
+   [Ada]          opencl-rt.ads
+   [Ada]          opencl-rt-hash.adb
+   [Ada]          opencl-rt-packs.adb
+   [Ada]          opencl-core-buffers.adb
+   [Ada]          opencl-core-kernels.adb
+   [Ada]          opencl-rt-loader.adb
+   [Ada]          opencl-rt-fs.adb
+   [Ada]          opencl-rt-fs-test_seam.adb
+   [Ada]          opencl-rt-security.adb
+   [Ada]          smoke_rt_test_verifier.adb
+   [Ada]          smoke_rt_build_options_verifier.adb
+   [Ada]          opencl-rt-memtrack.adb
+   [Ada]          opencl-rt-constant_time.adb
+   [Ada]          opencl-core-events.adb
+   [Ada]          opencl-core-profiling.adb
+   [Ada]          opencl-core-images.adb
+   [Ada]          opencl-core-samplers.adb
+   [Ada]          opencl-rt-catalog.adb
+   [Ada]          opencl-core-device_selection.adb
+   [Ada]          opencl-rt-policy.adb
+   [Ada]          opencl-rt-rollback.adb
+gprbuild: "smoke_platforms" up to date
+gprbuild: "smoke_core" up to date
+gprbuild: "gen_pack_add1" up to date
+gprbuild: "smoke_rt_load_pack_add1" up to date
+gprbuild: "smoke_rt_negative_cases" up to date
+gprbuild: "smoke_rt_fs_attack_cases" up to date
+gprbuild: "smoke_rt_pack_symlink_escape" up to date
+gprbuild: "smoke_rt_toctou_manifest_swap" up to date
+gprbuild: "smoke_rt_toctou_binary_swap" up to date
+gprbuild: "smoke_rt_signature_enforcement" up to date
+gprbuild: "smoke_rt_signature_plugin" up to date
+gprbuild: "smoke_crypto_provider_conformance" up to date
+gprbuild: "smoke_rt_strict_policy" up to date
+gprbuild: "smoke_rt_build_options_policy" up to date
+gprbuild: "smoke_rt_no_heap_after_init" up to date
+gprbuild: "smoke_rt_anti_rollback" up to date
+gprbuild: "smoke_rt_untrusted_plugin" up to date
+gprbuild: "smoke_rt_plugin_allowlist_policy" up to date
+gprbuild: "smoke_constant_time_compare" up to date
+gprbuild: "smoke_fuzz_kpack_parser" up to date
+gprbuild: "bench_add1" up to date
+gprbuild: "bench_pipeline_h2d_kernel_d2h" up to date
+gprbuild: "bench_rt_pack_add1" up to date
+gprbuild: "bench_transfers_h2d_d2h" up to date
+gprbuild: "bench_batching_add1" up to date
+gprbuild: "smoke_buffer_roundtrip" up to date
+gprbuild: "smoke_image_roundtrip" up to date
+gprbuild: "smoke_kernel_add1" up to date
+gprbuild: "smoke_program_il_path" up to date
+gprbuild: "smoke_pack_catalog_selection" up to date
+gprbuild: "smoke_program_binaries_multi_device" up to date
+gprbuild: "smoke_program_binaries_subdevices" up to date
+gprbuild: "smoke_program_binary_roundtrip" up to date
+INFO build_tests_done
+INFO generate_sbom_full_start
+INFO sbom_full_path=/home/tangodelta/opencl-ada-wrapper/docs/CM/SBOM_Full.md
+INFO generate_sbom_full_done
+bundle_archive=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_reproducible.tar.gz
+bundle_checksums=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_reproducible/CHECKSUMS.sha256
+bundle_example_pack_status=SKIP_reproducible_mode

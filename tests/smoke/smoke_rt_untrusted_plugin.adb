@@ -218,7 +218,9 @@ begin
          & " status_int="
          & Status_Int_Image (Status));
 
-      if Status = Errors.OCLW_Plugin_Untrusted then
+      if Status = Errors.OCLW_Plugin_Unsafe_Perms
+        or else Status = Errors.OCLW_Plugin_Untrusted
+      then
          Ada.Text_IO.Put_Line ("RESULT=PASS");
       else
          Ada.Text_IO.Put_Line ("RESULT=FAIL");

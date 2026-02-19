@@ -1,8 +1,10 @@
 with Interfaces.C;
 with OpenCL.Core.Buffers;
 with OpenCL.Core.Events;
+with OpenCL.Core.Images;
 with OpenCL.Core.Programs;
 with OpenCL.Core.Queues;
+with OpenCL.Core.Samplers;
 with OpenCL.Errors;
 with OpenCL.Raw.API;
 
@@ -23,6 +25,18 @@ package OpenCL.Core.Kernels is
       B : OpenCL.Core.Buffers.Buffer;
       Status : out Status_Code);
 
+   procedure Set_Arg_Image
+     (K : Kernel;
+      Index : Natural;
+      Img : OpenCL.Core.Images.Image;
+      Status : out Status_Code);
+
+   procedure Set_Arg_Sampler
+     (K : Kernel;
+      Index : Natural;
+      S : OpenCL.Core.Samplers.Sampler;
+      Status : out Status_Code);
+
    procedure Enqueue_1D
      (Q : OpenCL.Core.Queues.Queue;
       K : Kernel;
@@ -33,6 +47,14 @@ package OpenCL.Core.Kernels is
      (Q : OpenCL.Core.Queues.Queue;
       K : Kernel;
       Global_Size : Interfaces.C.size_t;
+      Ev : out OpenCL.Core.Events.Event;
+      Status : out Status_Code);
+
+   procedure Enqueue_1D
+     (Q : OpenCL.Core.Queues.Queue;
+      K : Kernel;
+      Global_Size : Interfaces.C.size_t;
+      Wait_List : OpenCL.Core.Events.Event_List;
       Ev : out OpenCL.Core.Events.Event;
       Status : out Status_Code);
 

@@ -1,0 +1,7 @@
+$ ./tools/g12_target_intel_aocl_check.sh 
+RESULT=SKIP reason=stack_not_installed_or_incomplete
+g12_target_intel_aocl_check_exit_code=0
+$ ./tools/g12_target_amd_xrt_check.sh 
+RESULT=SKIP reason=stack_not_installed_or_incomplete
+g12_target_amd_xrt_check_exit_code=0
+run_exit_code=0

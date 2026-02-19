@@ -21,11 +21,18 @@ package OpenCL.Raw.API is
    subtype cl_device_info is cl_uint;
    subtype cl_program_info is cl_uint;
    subtype cl_program_build_info is cl_uint;
+   subtype cl_event_info is cl_uint;
    subtype cl_profiling_info is cl_uint;
    subtype cl_bitfield is cl_ulong;
    subtype cl_bool is cl_uint;
    subtype cl_mem_flags is cl_bitfield;
+   subtype cl_mem_object_type is cl_uint;
+   subtype cl_channel_order is cl_uint;
+   subtype cl_channel_type is cl_uint;
+   subtype cl_addressing_mode is cl_uint;
+   subtype cl_filter_mode is cl_uint;
    subtype cl_command_queue_properties is cl_bitfield;
+   subtype cl_device_partition_property is Interfaces.C.ptrdiff_t;
    subtype cl_build_status is cl_int;
 
    --  Keep CL_DEVICE_TYPE constant name (device-info query) and avoid Ada
@@ -46,6 +53,9 @@ package OpenCL.Raw.API is
 
    type cl_mem_struct is null record;
    pragma Convention (C, cl_mem_struct);
+
+   type cl_sampler_struct is null record;
+   pragma Convention (C, cl_sampler_struct);
 
    type cl_event_struct is null record;
    pragma Convention (C, cl_event_struct);
@@ -71,6 +81,9 @@ package OpenCL.Raw.API is
    type cl_mem is access all cl_mem_struct;
    pragma Convention (C, cl_mem);
 
+   type cl_sampler is access all cl_sampler_struct;
+   pragma Convention (C, cl_sampler);
+
    type cl_event is access all cl_event_struct;
    pragma Convention (C, cl_event);
 
@@ -83,6 +96,26 @@ package OpenCL.Raw.API is
    type cl_platform_id_array is array (size_t range <>) of aliased cl_platform_id;
    type cl_device_id_array is array (size_t range <>) of aliased cl_device_id;
    type cl_event_array is array (size_t range <>) of aliased cl_event;
+
+   type cl_image_format is record
+      image_channel_order : cl_channel_order;
+      image_channel_data_type : cl_channel_type;
+   end record;
+   pragma Convention (C, cl_image_format);
+
+   type cl_image_desc is record
+      image_type : cl_mem_object_type;
+      image_width : size_t;
+      image_height : size_t;
+      image_depth : size_t;
+      image_array_size : size_t;
+      image_row_pitch : size_t;
+      image_slice_pitch : size_t;
+      num_mip_levels : cl_uint;
+      num_samples : cl_uint;
+      buffer : cl_mem;
+   end record;
+   pragma Convention (C, cl_image_desc);
 
    --  ABI checks (GNAT): stop compilation if target C mapping does not match
    --  expected OpenCL ABI widths/alignment.
@@ -114,6 +147,9 @@ package OpenCL.Raw.API is
      (cl_mem'Size /= System.Address'Size,
       "ABI check failed: cl_mem size mismatch");
    pragma Compile_Time_Error
+     (cl_sampler'Size /= System.Address'Size,
+      "ABI check failed: cl_sampler size mismatch");
+   pragma Compile_Time_Error
      (cl_event'Size /= System.Address'Size,
       "ABI check failed: cl_event size mismatch");
    pragma Compile_Time_Error
@@ -132,6 +168,7 @@ package OpenCL.Raw.API is
    CL_BUILD_PROGRAM_FAILURE : constant cl_int := cl_int (-11);
    CL_INVALID_BINARY : constant cl_int := cl_int (-42);
    CL_INVALID_PROGRAM : constant cl_int := cl_int (-44);
+   CL_INVALID_OPERATION : constant cl_int := cl_int (-59);
    CL_PLATFORM_NOT_FOUND_KHR : constant cl_int := cl_int (-1001);
 
    CL_FALSE : constant cl_bool := cl_bool (0);
@@ -142,12 +179,16 @@ package OpenCL.Raw.API is
    CL_PLATFORM_VENDOR : constant cl_platform_info := 16#0903#;
 
    CL_DEVICE_TYPE : constant cl_device_info := 16#1000#;
+   CL_DEVICE_MAX_COMPUTE_UNITS : constant cl_device_info := 16#1002#;
+   CL_DEVICE_IMAGE_SUPPORT : constant cl_device_info := 16#1016#;
    CL_DEVICE_NAME : constant cl_device_info := 16#102B#;
    CL_DEVICE_VENDOR : constant cl_device_info := 16#102C#;
    CL_DRIVER_VERSION : constant cl_device_info := 16#102D#;
    CL_DEVICE_VERSION : constant cl_device_info := 16#102F#;
    CL_DEVICE_COMPILER_AVAILABLE : constant cl_device_info := 16#1028#;
    CL_DEVICE_OPENCL_C_VERSION : constant cl_device_info := 16#103D#;
+   CL_DEVICE_PARTITION_MAX_SUB_DEVICES : constant cl_device_info := 16#1043#;
+   CL_DEVICE_PARTITION_PROPERTIES : constant cl_device_info := 16#1044#;
 
    CL_DEVICE_TYPE_DEFAULT : constant cl_device_type_mask := 16#0000_0001#;
    CL_DEVICE_TYPE_CPU : constant cl_device_type_mask := 16#0000_0002#;
@@ -155,8 +196,15 @@ package OpenCL.Raw.API is
    CL_DEVICE_TYPE_ACCELERATOR : constant cl_device_type_mask := 16#0000_0008#;
    CL_DEVICE_TYPE_CUSTOM : constant cl_device_type_mask := 16#0000_0010#;
    CL_DEVICE_TYPE_ALL : constant cl_device_type_mask := 16#FFFF_FFFF#;
+   CL_DEVICE_PARTITION_EQUALLY : constant cl_device_partition_property :=
+     16#1086#;
 
    CL_MEM_READ_WRITE : constant cl_mem_flags := 16#0000_0001#;
+   CL_MEM_OBJECT_IMAGE2D : constant cl_mem_object_type := 16#10F1#;
+   CL_RGBA : constant cl_channel_order := 16#10B5#;
+   CL_UNSIGNED_INT8 : constant cl_channel_type := 16#10D7#;
+   CL_ADDRESS_CLAMP : constant cl_addressing_mode := 16#1132#;
+   CL_FILTER_NEAREST : constant cl_filter_mode := 16#1140#;
    CL_QUEUE_PROFILING_ENABLE : constant cl_command_queue_properties :=
      16#0000_0002#;
 
@@ -167,6 +215,7 @@ package OpenCL.Raw.API is
    CL_PROGRAM_SOURCE : constant cl_program_info := 16#1164#;
    CL_PROGRAM_BINARY_SIZES : constant cl_program_info := 16#1165#;
    CL_PROGRAM_BINARIES : constant cl_program_info := 16#1166#;
+   CL_EVENT_COMMAND_EXECUTION_STATUS : constant cl_event_info := 16#11D3#;
    CL_PROFILING_COMMAND_START : constant cl_profiling_info := 16#1282#;
    CL_PROFILING_COMMAND_END : constant cl_profiling_info := 16#1283#;
 
@@ -217,6 +266,24 @@ package OpenCL.Raw.API is
      Convention => C,
      External_Name => "clGetDeviceInfo";
 
+   function clCreateSubDevices
+     (in_device : cl_device_id;
+      properties : access cl_device_partition_property;
+      num_devices : cl_uint;
+      out_devices : access cl_device_id;
+      num_devices_ret : access cl_uint) return cl_int
+   with
+     Import,
+     Convention => C,
+     External_Name => "clCreateSubDevices";
+
+   function clReleaseDevice
+     (device : cl_device_id) return cl_int
+   with
+     Import,
+     Convention => C,
+     External_Name => "clReleaseDevice";
+
    function clCreateContext
      (properties : System.Address;
       num_devices : cl_uint;
@@ -264,6 +331,36 @@ package OpenCL.Raw.API is
      Convention => C,
      External_Name => "clCreateBuffer";
 
+   function clCreateImage
+     (context : cl_context;
+      flags : cl_mem_flags;
+      image_format : access cl_image_format;
+      image_desc : access cl_image_desc;
+      host_ptr : System.Address;
+      errcode_ret : access cl_int) return cl_mem
+   with
+     Import,
+     Convention => C,
+     External_Name => "clCreateImage";
+
+   function clCreateSampler
+     (context : cl_context;
+      normalized_coords : cl_bool;
+      addressing_mode : cl_addressing_mode;
+      filter_mode : cl_filter_mode;
+      errcode_ret : access cl_int) return cl_sampler
+   with
+     Import,
+     Convention => C,
+     External_Name => "clCreateSampler";
+
+   function clReleaseSampler
+     (sampler : cl_sampler) return cl_int
+   with
+     Import,
+     Convention => C,
+     External_Name => "clReleaseSampler";
+
    function clReleaseMemObject
      (memobj : cl_mem) return cl_int
    with
@@ -301,6 +398,40 @@ package OpenCL.Raw.API is
      Convention => C,
      External_Name => "clEnqueueReadBuffer";
 
+   function clEnqueueWriteImage
+     (command_queue : cl_command_queue;
+      image : cl_mem;
+      blocking_write : cl_bool;
+      origin : System.Address;
+      region : System.Address;
+      input_row_pitch : size_t;
+      input_slice_pitch : size_t;
+      ptr : System.Address;
+      num_events_in_wait_list : cl_uint;
+      event_wait_list : access cl_event;
+      event : access cl_event) return cl_int
+   with
+     Import,
+     Convention => C,
+     External_Name => "clEnqueueWriteImage";
+
+   function clEnqueueReadImage
+     (command_queue : cl_command_queue;
+      image : cl_mem;
+      blocking_read : cl_bool;
+      origin : System.Address;
+      region : System.Address;
+      row_pitch : size_t;
+      slice_pitch : size_t;
+      ptr : System.Address;
+      num_events_in_wait_list : cl_uint;
+      event_wait_list : access cl_event;
+      event : access cl_event) return cl_int
+   with
+     Import,
+     Convention => C,
+     External_Name => "clEnqueueReadImage";
+
    function clFinish
      (command_queue : cl_command_queue) return cl_int
    with
@@ -308,12 +439,38 @@ package OpenCL.Raw.API is
      Convention => C,
      External_Name => "clFinish";
 
+   function clWaitForEvents
+     (num_events : cl_uint;
+      event_list : access cl_event) return cl_int
+   with
+     Import,
+     Convention => C,
+     External_Name => "clWaitForEvents";
+
+   function clRetainEvent
+     (event : cl_event) return cl_int
+   with
+     Import,
+     Convention => C,
+     External_Name => "clRetainEvent";
+
    function clReleaseEvent
      (event : cl_event) return cl_int
    with
      Import,
      Convention => C,
      External_Name => "clReleaseEvent";
+
+   function clGetEventInfo
+     (event : cl_event;
+      param_name : cl_event_info;
+      param_value_size : size_t;
+      param_value : System.Address;
+      param_value_size_ret : access size_t) return cl_int
+   with
+     Import,
+     Convention => C,
+     External_Name => "clGetEventInfo";
 
    function clGetEventProfilingInfo
      (event : cl_event;
@@ -355,6 +512,16 @@ package OpenCL.Raw.API is
      Import,
      Convention => C,
      External_Name => "clCreateProgramWithBinary";
+
+   function clCreateProgramWithIL
+     (context : cl_context;
+      il : System.Address;
+      length : size_t;
+      errcode_ret : access cl_int) return cl_program
+   with
+     Import,
+     Convention => C,
+     External_Name => "clCreateProgramWithIL";
 
    function clBuildProgram
      (program : cl_program;

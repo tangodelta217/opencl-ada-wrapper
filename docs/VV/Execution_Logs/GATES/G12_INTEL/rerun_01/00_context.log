@@ -1,0 +1,189 @@
+timestamp_utc=2026-02-19T10:39:07Z
+head=bdac2e785fc1934bfad826572b8b397ac9e4cb37
+repo_root=/home/tangodelta/opencl-ada-wrapper
+Linux tangodelta 6.14.0-37-generic #37~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Nov 20 10:25:38 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+git_status_short_begin
+ M docs/ARCH/SDD.md
+ M docs/VV/Execution_Logs/local/bench_add1.csv
+ M src/opencl/core/opencl-core-buffers.adb
+ M src/opencl/core/opencl-core-buffers.ads
+ M src/opencl/core/opencl-core-contexts.adb
+ M src/opencl/core/opencl-core-contexts.ads
+ M src/opencl/core/opencl-core-events.adb
+ M src/opencl/core/opencl-core-events.ads
+ M src/opencl/core/opencl-core-kernels.adb
+ M src/opencl/core/opencl-core-kernels.ads
+ M src/opencl/core/opencl-core-programs.adb
+ M src/opencl/core/opencl-core-programs.ads
+ M src/opencl/core/opencl-core.adb
+ M src/opencl/core/opencl-core.ads
+ M src/opencl/opencl-errors.adb
+ M src/opencl/opencl-errors.ads
+ M src/opencl/raw/opencl-raw-api.ads
+ M src/opencl/rt/opencl-rt-loader.adb
+ M src/opencl/rt/opencl-rt-loader.ads
+ M src/opencl/rt/opencl-rt-packs.adb
+ M src/opencl/rt/opencl-rt-packs.ads
+ M src/opencl/rt/opencl-rt-security.adb
+ M src/opencl/rt/opencl-rt-security.ads
+ M tests/smoke/smoke_rt_negative_cases.adb
+ M tests/smoke/smoke_rt_test_verifier.adb
+ M tests/tests.gpr
+ M tools/package_rt_bundle.sh
+ M tools/run_smoke.sh
+?? dist/check_bundle_repro_run1.log
+?? dist/check_bundle_repro_run2.log
+?? dist/oclw_rt_bundle_20260219T103417Z.tar.gz
+?? dist/oclw_rt_bundle_20260219T103417Z/
+?? dist/oclw_rt_bundle_reproducible.tar.gz
+?? dist/oclw_rt_bundle_reproducible/
+?? docs/ADR/OCLW-ADR-0004-rt-build-options-whitelist.md
+?? docs/ADR/OCLW-ADR-0005-program-il-path-readiness.md
+?? docs/ADR/OCLW-ADR-0006-device-selection-and-pack-catalog.md
+?? docs/ARCH/ADR-0015-rt-pack-e2e-benchmark.md
+?? docs/ARCH/ADR-0016-multi-device-program-binaries-and-rt-policy.md
+?? docs/ARCH/ADR-0017-kpack-parser-fuzzing-and-limits.md
+?? docs/ARCH/ADR-0018-no-heap-after-init-instrumentation.md
+?? docs/ARCH/ADR-0019-device-selection-and-pack-catalog.md
+?? docs/ARCH/Crypto_Provider_Conformance.md
+?? docs/CM/SBOM_Full.md
+?? docs/OPS/G12_Target_Execution.md
+?? docs/VV/Execution_Logs/GATES/G12_AMD_XRT/
+?? docs/VV/Execution_Logs/GATES/G12_INTEL/
+?? docs/VV/Execution_Logs/GATES/G13A1/
+?? docs/VV/Execution_Logs/GATES/G14/
+?? docs/VV/Execution_Logs/GATES/G15/
+?? docs/VV/Execution_Logs/GATES/G16/
+?? docs/VV/Execution_Logs/GATES/G17/
+?? docs/VV/Execution_Logs/GATES/G18/
+?? docs/VV/Execution_Logs/GATES/G19/
+?? docs/VV/Execution_Logs/GATES/G20/
+?? docs/VV/Execution_Logs/GATES/G21/
+?? docs/VV/Execution_Logs/GATES/G22/
+?? docs/VV/Execution_Logs/GATES/G23/
+?? docs/VV/Execution_Logs/GATES/G24/
+?? docs/VV/Execution_Logs/GATES/G25/
+?? docs/VV/Execution_Logs/GATES/G26/
+?? docs/VV/Execution_Logs/GATES/G27/
+?? docs/VV/Execution_Logs/GATES/G28/
+?? docs/VV/Execution_Logs/GATES/G29/
+?? docs/VV/Execution_Logs/GATES/G30/
+?? docs/VV/Execution_Logs/local/20260218T232503Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260218T232558Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260218T232614Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260218T232617Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260218T233241Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260218T233244Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260218T233313Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260218T233316Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T002524Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T002526Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T002923Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T002926Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T003827Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T003830Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T003848Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T003850Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T003923Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T003926Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T005612Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T005615Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T011504Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T011506Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T011642Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T011645Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T012537Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T012540Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T012906Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T012909Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T013506Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T013510Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T013720Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T013724Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T014036Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T014040Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T014221Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T014225Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T014856Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T014900Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T015818Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T015822Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T020453Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T020457Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T021017Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T021021Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T021055Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T021100Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T022124Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T022129Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T022715Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T022720Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T022837Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T022842Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T022925Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T022929Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T023731Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T023735Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T023809Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T023813Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T024237Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T024242Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T024318Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T024323Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T024546Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T024551Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T030532Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T030537Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T081334Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T081339Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T081919Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T081923Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T082011Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T082016Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T082222Z_kpack_add1/
+?? docs/VV/Execution_Logs/local/20260219T082226Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/20260219T103907Z_bench_rt_pack/
+?? docs/VV/Execution_Logs/local/20260219T103907Z_bench_rt_pack_add1.csv
+?? docs/VV/Execution_Logs/local/fuzz_fail_20260219T003830Z_1.bin
+?? docs/VV/Execution_Logs/local/pack_rt_build_options_policy/
+?? src/opencl/core/opencl-core-device_selection.adb
+?? src/opencl/core/opencl-core-device_selection.ads
+?? src/opencl/core/opencl-core-images.adb
+?? src/opencl/core/opencl-core-images.ads
+?? src/opencl/core/opencl-core-samplers.adb
+?? src/opencl/core/opencl-core-samplers.ads
+?? src/opencl/rt/opencl-rt-catalog.adb
+?? src/opencl/rt/opencl-rt-catalog.ads
+?? src/opencl/rt/opencl-rt-constant_time.adb
+?? src/opencl/rt/opencl-rt-constant_time.ads
+?? src/opencl/rt/opencl-rt-memtrack.adb
+?? src/opencl/rt/opencl-rt-memtrack.ads
+?? src/opencl/rt/opencl-rt-policy.adb
+?? src/opencl/rt/opencl-rt-policy.ads
+?? src/opencl/rt/opencl-rt-rollback.adb
+?? src/opencl/rt/opencl-rt-rollback.ads
+?? tests/bench/bench_batching_add1.adb
+?? tests/bench/bench_pipeline_h2d_kernel_d2h.adb
+?? tests/bench/bench_rt_pack_add1.adb
+?? tests/bench/bench_transfers_h2d_d2h.adb
+?? tests/fuzz/
+?? tests/smoke/smoke_constant_time_compare.adb
+?? tests/smoke/smoke_crypto_provider_conformance.adb
+?? tests/smoke/smoke_image_roundtrip.adb
+?? tests/smoke/smoke_pack_catalog_selection.adb
+?? tests/smoke/smoke_program_binaries_multi_device.adb
+?? tests/smoke/smoke_program_binaries_subdevices.adb
+?? tests/smoke/smoke_program_il_path.adb
+?? tests/smoke/smoke_rt_anti_rollback.adb
+?? tests/smoke/smoke_rt_build_options_policy.adb
+?? tests/smoke/smoke_rt_build_options_verifier.adb
+?? tests/smoke/smoke_rt_build_options_verifier.ads
+?? tests/smoke/smoke_rt_no_heap_after_init.adb
+?? tools/check_bundle_repro.sh
+?? tools/g12_target_amd_xrt_check.sh
+?? tools/g12_target_intel_aocl_check.sh
+?? tools/gen_sbom_full.sh
+?? tools/run_gnatprove_optional.sh
+?? tools/smoke_bundle_integrity.sh
+?? tools/traceability_check.sh
+git_status_short_end

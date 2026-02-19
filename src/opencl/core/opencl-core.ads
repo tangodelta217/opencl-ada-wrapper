@@ -38,6 +38,10 @@ package OpenCL.Core is
       Status : out OpenCL.Errors.Status_Code;
       Max_Bytes : Positive := Default_Max_Info_Bytes) return String;
 
+   function Device_Image_Support
+     (D : Device;
+      Status : out OpenCL.Errors.Status_Code) return Boolean;
+
 private
    package API renames OpenCL.Raw.API;
 

@@ -198,6 +198,7 @@ begin
       Binary_Path : constant String := Pack_Dir & "/program.bin";
       Manifest_BadFP_Path : constant String := Pack_Dir & "/manifest_badfp.kpack";
       Manifest_Corrupt_Path : constant String := Pack_Dir & "/manifest_corrupt.kpack";
+      Manifest_Longline_Path : constant String := Pack_Dir & "/manifest_longline.kpack";
       Binary_Tampered_Path : constant String := Pack_Dir & "/program_tampered.bin";
 
       Status : Errors.Status_Code := Errors.Success;
@@ -385,6 +386,49 @@ begin
          else
             Ada.Text_IO.Put_Line
               ("INFO case3_format_tamper=PASS expected="
+               & Errors.Image (Errors.OCLW_Pack_Format_Error));
+         end if;
+      end if;
+
+      --  Case 4: overlong manifest line must fail closed.
+      if not Failed then
+         declare
+            File : Ada.Text_IO.File_Type;
+            Long_Value : String (1 .. Packs.Max_Manifest_Line_Length + 32);
+         begin
+            Long_Value := (others => 'A');
+            Ada.Text_IO.Create
+              (File => File,
+               Mode => Ada.Text_IO.Out_File,
+               Name => Manifest_Longline_Path);
+            Ada.Text_IO.Put_Line (File, "kpack_version=1");
+            Ada.Text_IO.Put_Line (File, "pack_id=" & Long_Value);
+            Ada.Text_IO.Close (File);
+         exception
+            when others =>
+               if Ada.Text_IO.Is_Open (File) then
+                  Ada.Text_IO.Close (File);
+               end if;
+               Mark_Fail
+                 ("write_manifest_longline",
+                  Errors.Success,
+                  Errors.OCLW_IO_Error);
+         end;
+      end if;
+
+      if not Failed then
+         Packs.Read_Manifest
+           (Path => Manifest_Longline_Path,
+            Meta => Meta_Corrupt,
+            Status => Status);
+         if Status /= Errors.OCLW_Pack_Format_Error then
+            Mark_Fail
+              ("case4_line_limit",
+               Errors.OCLW_Pack_Format_Error,
+               Status);
+         else
+            Ada.Text_IO.Put_Line
+              ("INFO case4_line_limit=PASS expected="
                & Errors.Image (Errors.OCLW_Pack_Format_Error));
          end if;
       end if;

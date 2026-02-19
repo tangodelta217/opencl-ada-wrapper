@@ -1,0 +1,10 @@
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_plugin_allowlist_policy
+INFO plugin_build_return_code=0 log=/tmp/oclw_g33_plugin_allowlist_policy/plugin_build.log
+INFO strict_policy_mode=ENABLED
+INFO plugin_path=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+INFO case_not_allowed=PASS expected=OCLW_PLUGIN_PATH_NOT_ALLOWED got=OCLW_PLUGIN_PATH_NOT_ALLOWED
+INFO case_allowed=PASS
+INFO case_symlink=PASS expected=OCLW_FS_POLICY_VIOLATION got=OCLW_FS_POLICY_VIOLATION
+INFO case_world_writable=PASS expected=OCLW_PLUGIN_UNSAFE_PERMS got=OCLW_PLUGIN_UNSAFE_PERMS
+RESULT=PASS
+smoke_rt_plugin_allowlist_policy_exit_code=0

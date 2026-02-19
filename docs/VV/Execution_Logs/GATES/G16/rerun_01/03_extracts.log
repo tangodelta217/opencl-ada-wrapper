@@ -1,0 +1,25 @@
+build_exit_code=0
+run_exit_code=0
+
+# smoke_constant_time_compare
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_constant_time_compare
+INFO bytes_equal=PASS
+INFO bytes_not_equal=PASS
+INFO bytes_len_mismatch=PASS
+INFO string_equal=PASS
+INFO string_not_equal=PASS
+INFO string_len_mismatch=PASS
+RESULT=PASS
+smoke_constant_time_compare_exit_code=0
+
+# smoke_rt_negative_cases
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_negative_cases
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T011642Z_kpack_add1
+INFO manifest_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T011642Z_kpack_add1/manifest.kpack
+INFO binary_path=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T011642Z_kpack_add1/program.bin
+INFO case1_binary_tamper=PASS expected=OCLW_HASH_MISMATCH
+INFO case2_fingerprint_tamper=PASS expected=OCLW_FINGERPRINT_MISMATCH
+INFO case3_format_tamper=PASS expected=OCLW_PACK_FORMAT_ERROR
+INFO case4_line_limit=PASS expected=OCLW_PACK_FORMAT_ERROR
+RESULT=PASS
+smoke_rt_negative_cases_exit_code=0

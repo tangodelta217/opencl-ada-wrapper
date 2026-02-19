@@ -1,0 +1,12 @@
+# bench_rt_pack_add1 key extracts
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260218T233313Z_kpack_add1
+INFO warmup=10 iterations=200
+INFO plugin_path=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+INFO init_ns=4131159
+INFO exec_host_ns_p50=268378
+INFO exec_host_ns_p99=461690
+INFO profiling=AVAILABLE
+INFO exec_dev_ns_p50=82842
+INFO exec_dev_ns_p99=254238
+RESULT=PASS
+bench_rt_pack_add1_exit_code=0

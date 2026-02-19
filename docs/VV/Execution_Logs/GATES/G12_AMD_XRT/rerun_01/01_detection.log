@@ -1,0 +1,29 @@
+stack=AMD_XRT
+contains_xrt_icd=0
+has_xrt_runtime=0
+has_xrt_tools=0
+has_xrt_env=0
+XILINX_XRT=<unset>
+XRT_ROOT=<unset>
+XILINX_VITIS=<unset>
+XCL_EMULATION_MODE=<unset>
+icd_listing_begin
+total 16
+drwxr-xr-x 2 root root 4096 Feb  9 19:26 .
+drwxr-xr-x 3 root root 4096 Feb 22  2025 ..
+-rw-r--r-- 1 root root   22 Sep 13  2024 nvidia.icd
+-rw-r--r-- 1 root root   17 Apr 15  2024 pocl.icd
+icd_listing_end
+icd_contents_begin
+libnvidia-opencl.so.1
+libpocl.so.2.12.0icd_contents_end
+ldconfig_opencl_begin
+	libteamdctl.so.0 (libc6,x86-64) => /lib/x86_64-linux-gnu/libteamdctl.so.0
+	libsamdb.so.0 (libc6,x86-64) => /lib/x86_64-linux-gnu/libsamdb.so.0
+	libnvidia-opencl.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libnvidia-opencl.so.1
+	libdrm_amdgpu.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libdrm_amdgpu.so.1
+	libamdhip64.so.5 (libc6,x86-64) => /lib/x86_64-linux-gnu/libamdhip64.so.5
+	libamd_comgr.so.2 (libc6,x86-64) => /lib/x86_64-linux-gnu/libamd_comgr.so.2
+	libOpenCL.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libOpenCL.so.1
+	libOpenCL.so (libc6,x86-64) => /lib/x86_64-linux-gnu/libOpenCL.so
+ldconfig_opencl_end

@@ -1,4 +1,4 @@
-# Requirements Traceability (G0/G1/G2/G3/G4/G5/G6/G7/G8/G9/G10/G11/G13)
+# Requirements Traceability (G0/G1/G2/G3/G4/G5/G6/G7/G8/G9/G10/G11/G13/G30)
 
 ## Scope
 
@@ -253,3 +253,35 @@ Capabilities under G13 scope:
 | OCLW-REQ-0006 | Reproducible performance harness with latency summaries for host/device execution path | Inspection + test | OCLW-TST-0002 | `tests/bench/bench_add1.adb`, `tests/tests.gpr`, `tools/run_smoke.sh` | `docs/VV/Execution_Logs/GATES/G13/rerun_01/G13_Report.md` (`RESULT=PASS`, extracted `host/device p50/p99`) | PASS |
 | OCLW-REQ-0002 | Profiling-by-events support in raw/core stack for device timing telemetry | Inspection + test | OCLW-TST-0002 | `src/opencl/raw/opencl-raw-api.ads`, `src/opencl/core/opencl-core-events.ads`, `src/opencl/core/opencl-core-events.adb`, `src/opencl/core/opencl-core-profiling.ads`, `src/opencl/core/opencl-core-profiling.adb`, `src/opencl/core/opencl-core-kernels.ads`, `src/opencl/core/opencl-core-kernels.adb`, `src/opencl/core/opencl-core-queues.ads`, `src/opencl/core/opencl-core-queues.adb` | `docs/VV/Execution_Logs/GATES/G13/rerun_01/G13_Report.md` (device profiling metrics reported when available) | PASS |
 | OCLW-REQ-0010 | Gate-level traceability closure for G13 performance evidence | Inspection | OCLW-TST-0001, OCLW-TST-0002 | This document + closure artifact | `docs/VV/Execution_Logs/GATES/G13/Closure.md`, `docs/VV/Execution_Logs/GATES/G13/rerun_01/G13_Report.md` | PASS |
+
+## G30 Addendum (Baseline Audit)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G30/rerun_02/G30_Audit_Report.md`
+- `docs/VV/Execution_Logs/GATES/G30/Closure.md`
+
+Related reproducible-bundle evidence:
+- `docs/VV/Execution_Logs/GATES/G25/rerun_02/G25_Report.md`
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0010 | Baseline audit end-to-end (inventario de gates G0..G29 + build/smoke + conclusion) | Inspection + execution | OCLW-TST-0002 | `tools/run_smoke.sh`, `gprbuild`, gate inventory under `docs/VV/Execution_Logs/GATES/` | `docs/VV/Execution_Logs/GATES/G30/rerun_02/G30_Audit_Report.md`, `docs/VV/Execution_Logs/GATES/G30/Closure.md` | PASS |
+| OCLW-REQ-0008 | Reproducible release bundle evidence linked to baseline audit | Test | OCLW-TST-0002 | `tools/package_rt_bundle.sh`, reproducible check flow (`OCLW_REPRODUCIBLE=1`, fixed `SOURCE_DATE_EPOCH`) | `docs/VV/Execution_Logs/GATES/G25/rerun_02/G25_Report.md`, `docs/VV/Execution_Logs/GATES/G30/rerun_02/G30_Audit_Report.md` | PASS |
+
+## G31/G32/G33 Addendum (Security Threat Closure)
+
+Primary gate evidence:
+- `docs/VV/Execution_Logs/GATES/G31/rerun_01/G31_Report.md`
+- `docs/VV/Execution_Logs/GATES/G32/rerun_01/G32_Report.md`
+- `docs/VV/Execution_Logs/GATES/G33/rerun_01/G33_Report.md`
+
+Threat model and OPS references:
+- `docs/ARCH/Threat_Model_RT_Packs.md`
+- `docs/OPS/RT_Catalog_Playbook.md`
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Implementation mapping | Evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0005 | RT strict fail-closed frente a symlink/path escape en pack artifacts | Test | OCLW-TST-3001 | `tests/smoke/smoke_rt_pack_symlink_escape.adb` | `docs/VV/Execution_Logs/GATES/G31/rerun_01/G31_Report.md` (`smoke_rt_pack_symlink_escape RESULT=PASS`) | PASS |
+| OCLW-REQ-0005 | RT strict fail-closed ante TOCTOU de `manifest.kpack` | Test | OCLW-TST-3002 | `tests/smoke/smoke_rt_toctou_manifest_swap.adb` | `docs/VV/Execution_Logs/GATES/G32/rerun_01/G32_Report.md` (`smoke_rt_toctou_manifest_swap RESULT=PASS`) | PASS |
+| OCLW-REQ-0005 | RT strict fail-closed ante TOCTOU de `program.bin` | Test | OCLW-TST-3003 | `tests/smoke/smoke_rt_toctou_binary_swap.adb` | `docs/VV/Execution_Logs/GATES/G32/rerun_01/G32_Report.md` (`smoke_rt_toctou_binary_swap RESULT=PASS`) | PASS |
+| OCLW-REQ-0005 | Trusted crypto plugin policy (allowlist/perms/symlink rejection) en RT strict | Test | OCLW-TST-3004 | `tests/smoke/smoke_rt_plugin_allowlist_policy.adb` | `docs/VV/Execution_Logs/GATES/G33/rerun_01/G33_Report.md` (`smoke_rt_plugin_allowlist_policy RESULT=PASS`) | PASS |

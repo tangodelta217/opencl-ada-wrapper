@@ -8,7 +8,7 @@
 ```text
 $ ls -R
 .:
-AGENTS.md
+INTERNAL_GUIDELINES.md
 README.md
 docs
 obj

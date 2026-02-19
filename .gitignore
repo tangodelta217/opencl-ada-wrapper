@@ -27,6 +27,8 @@ b__*
 *.swp
 *~
 .pocl_kcache/
+.internal/
+dist/
 
 # Coverage/debug byproducts
 *.gcda

@@ -1,0 +1,27 @@
+stack=INTEL_AOCL
+contains_intel_icd=0
+has_intel_runtime=0
+has_aocl_tools=0
+has_aocl_env=0
+INTELFPGAOCLSDKROOT=<unset>
+AOCL_BOARD_PACKAGE_ROOT=<unset>
+icd_listing_begin
+total 16
+drwxr-xr-x 2 root root 4096 Feb  9 19:26 .
+drwxr-xr-x 3 root root 4096 Feb 22  2025 ..
+-rw-r--r-- 1 root root   22 Sep 13  2024 nvidia.icd
+-rw-r--r-- 1 root root   17 Apr 15  2024 pocl.icd
+icd_listing_end
+icd_contents_begin
+libnvidia-opencl.so.1
+libpocl.so.2.12.0icd_contents_end
+ldconfig_opencl_begin
+	libvulkan_intel_hasvk.so (libc6,x86-64) => /lib/x86_64-linux-gnu/libvulkan_intel_hasvk.so
+	libvulkan_intel.so (libc6,x86-64) => /lib/x86_64-linux-gnu/libvulkan_intel.so
+	libnvidia-opencl.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libnvidia-opencl.so.1
+	libdrm_intel.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libdrm_intel.so.1
+	libVkLayer_INTEL_nullhw.so (libc6,x86-64) => /lib/x86_64-linux-gnu/libVkLayer_INTEL_nullhw.so
+	libOpenCL.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libOpenCL.so.1
+	libOpenCL.so (libc6,x86-64) => /lib/x86_64-linux-gnu/libOpenCL.so
+	libIntelXvMC.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libIntelXvMC.so.1
+ldconfig_opencl_end

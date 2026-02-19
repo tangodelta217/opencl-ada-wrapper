@@ -1,0 +1,6 @@
+$ ./tests/bin/smoke_program_il_path 
+INFO il_dummy_bytes= 8
+INFO create_from_il_status=CL_INVALID_VALUE status_int=-30
+RESULT=SKIP reason=il_create_controlled_failure
+smoke_program_il_path_exit_code=0
+run_exit_code=0

@@ -1,5 +1,6 @@
 with Interfaces.C;
 with OpenCL.Core.Contexts;
+with OpenCL.Core.Events;
 with OpenCL.Core.Queues;
 with OpenCL.Errors;
 with OpenCL.Raw.API;
@@ -28,11 +29,29 @@ package OpenCL.Core.Buffers is
       Bytes : size_t;
       Status : out Status_Code);
 
+   procedure Write
+     (Q : OpenCL.Core.Queues.Queue;
+      B : Buffer;
+      Host : System.Address;
+      Bytes : size_t;
+      Wait_List : OpenCL.Core.Events.Event_List;
+      Ev : out OpenCL.Core.Events.Event;
+      Status : out Status_Code);
+
    procedure Read
      (Q : OpenCL.Core.Queues.Queue;
       B : Buffer;
       Host : System.Address;
       Bytes : size_t;
+      Status : out Status_Code);
+
+   procedure Read
+     (Q : OpenCL.Core.Queues.Queue;
+      B : Buffer;
+      Host : System.Address;
+      Bytes : size_t;
+      Wait_List : OpenCL.Core.Events.Event_List;
+      Ev : out OpenCL.Core.Events.Event;
       Status : out Status_Code);
 
    --  Helper required by sibling child package Kernels.

@@ -2,9 +2,12 @@ with OpenCL.Core;
 with OpenCL.Core.Contexts;
 with OpenCL.Core.Programs;
 with OpenCL.Errors;
+with OpenCL.RT.Memtrack;
 with OpenCL.RT.Packs;
 
 package OpenCL.RT.Loader is
+   pragma Default_Storage_Pool (OpenCL.RT.Memtrack.RT_Pool);
+
    subtype Status_Code is OpenCL.Errors.Status_Code;
 
    procedure Select_Device

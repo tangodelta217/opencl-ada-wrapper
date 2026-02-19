@@ -1,0 +1,95 @@
+timestamp_utc=2026-02-19T08:12:28Z
+head=bdac2e785fc1934bfad826572b8b397ac9e4cb37
+== gates_root_listing ==
+total 104
+drwxrwxr-x 26 tangodelta tangodelta 4096 Feb 19 09:12 .
+drwxrwxr-x  4 tangodelta tangodelta 4096 Feb  9 04:52 ..
+drwxrwxr-x  6 tangodelta tangodelta 4096 Feb  9 18:28 G0
+drwxrwxr-x  4 tangodelta tangodelta 4096 Feb  9 19:25 G1
+drwxrwxr-x  4 tangodelta tangodelta 4096 Feb 18 20:17 G10
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 18 21:45 G11
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 18 22:47 G12
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 19 04:04 G12_AMD_XRT
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 19 04:04 G12_INTEL
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 18 23:58 G13
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 19 00:32 G13A1
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 19 01:29 G14
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 19 01:56 G15
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 19 02:16 G16
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 19 02:29 G17
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 19 02:37 G18
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 19 02:42 G19
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb  9 20:04 G2
+drwxrwxr-x  8 tangodelta tangodelta 4096 Feb 10 00:55 G3
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 19 09:12 G30
+drwxrwxr-x  7 tangodelta tangodelta 4096 Feb 18 03:22 G4
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 18 11:14 G5
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 18 18:06 G6
+drwxrwxr-x  3 tangodelta tangodelta 4096 Feb 18 18:41 G7
+drwxrwxr-x  4 tangodelta tangodelta 4096 Feb 18 19:20 G8
+drwxrwxr-x  4 tangodelta tangodelta 4096 Feb 18 19:44 G9
+== detected_gate_dirs ==
+G0
+G1
+G10
+G11
+G12
+G12_AMD_XRT
+G12_INTEL
+G13
+G13A1
+G14
+G15
+G16
+G17
+G18
+G19
+G2
+G3
+G30
+G4
+G5
+G6
+G7
+G8
+G9
+== inventory_expected_gates_G0_to_G29_plus_G13A1 ==
+G0|dir=YES|report=docs/VV/Execution_Logs/GATES/G0/rerun_01/G0_Report.md|closure=docs/VV/Execution_Logs/GATES/G0/Closure.md|status=REPORT_OK
+G1|dir=YES|report=docs/VV/Execution_Logs/GATES/G1/rerun_01/G1_Report.md|closure=docs/VV/Execution_Logs/GATES/G1/Closure.md|status=REPORT_OK
+G2|dir=YES|report=docs/VV/Execution_Logs/GATES/G2/rerun_01/G2_Report.md|closure=docs/VV/Execution_Logs/GATES/G2/Closure.md|status=REPORT_OK
+G3|dir=YES|report=docs/VV/Execution_Logs/GATES/G3/rerun_01/G3_Report.md|closure=docs/VV/Execution_Logs/GATES/G3/Closure.md|status=REPORT_OK
+G4|dir=YES|report=docs/VV/Execution_Logs/GATES/G4/rerun_01/G4_Report.md|closure=docs/VV/Execution_Logs/GATES/G4/Closure.md|status=REPORT_OK
+G5|dir=YES|report=docs/VV/Execution_Logs/GATES/G5/rerun_01/G5_Report.md|closure=docs/VV/Execution_Logs/GATES/G5/Closure.md|status=REPORT_OK
+G6|dir=YES|report=docs/VV/Execution_Logs/GATES/G6/rerun_01/G6_Report.md|closure=docs/VV/Execution_Logs/GATES/G6/Closure.md|status=REPORT_OK
+G7|dir=YES|report=docs/VV/Execution_Logs/GATES/G7/rerun_01/G7_Report.md|closure=docs/VV/Execution_Logs/GATES/G7/Closure.md|status=REPORT_OK
+G8|dir=YES|report=docs/VV/Execution_Logs/GATES/G8/rerun_01/G8_Report.md|closure=docs/VV/Execution_Logs/GATES/G8/Closure.md|status=REPORT_OK
+G9|dir=YES|report=docs/VV/Execution_Logs/GATES/G9/rerun_01/G9_Report.md|closure=docs/VV/Execution_Logs/GATES/G9/Closure.md|status=REPORT_OK
+G10|dir=YES|report=docs/VV/Execution_Logs/GATES/G10/rerun_01/G10_Report.md|closure=docs/VV/Execution_Logs/GATES/G10/Closure.md|status=REPORT_OK
+G11|dir=YES|report=docs/VV/Execution_Logs/GATES/G11/rerun_01/G11_Report.md|closure=docs/VV/Execution_Logs/GATES/G11/Closure.md|status=REPORT_OK
+G12|dir=YES|report=docs/VV/Execution_Logs/GATES/G12/rerun_01/Acceptance_Report.md|closure=MISSING|status=REPORT_OK
+G13|dir=YES|report=docs/VV/Execution_Logs/GATES/G13/rerun_01/G13_Report.md|closure=docs/VV/Execution_Logs/GATES/G13/Closure.md|status=REPORT_OK
+G14|dir=YES|report=docs/VV/Execution_Logs/GATES/G14/rerun_01/G14_Report.md|closure=MISSING|status=REPORT_OK
+G15|dir=YES|report=docs/VV/Execution_Logs/GATES/G15/rerun_01/G15_Report.md|closure=MISSING|status=REPORT_OK
+G16|dir=YES|report=docs/VV/Execution_Logs/GATES/G16/rerun_01/G16_Report.md|closure=MISSING|status=REPORT_OK
+G17|dir=YES|report=docs/VV/Execution_Logs/GATES/G17/rerun_01/G17_Report.md|closure=MISSING|status=REPORT_OK
+G18|dir=YES|report=docs/VV/Execution_Logs/GATES/G18/rerun_01/G18_Report.md|closure=MISSING|status=REPORT_OK
+G19|dir=YES|report=docs/VV/Execution_Logs/GATES/G19/rerun_01/G19_Report.md|closure=MISSING|status=REPORT_OK
+G20|dir=NO|report=MISSING|closure=MISSING|status=REPORT_MISSING
+G21|dir=NO|report=MISSING|closure=MISSING|status=REPORT_MISSING
+G22|dir=NO|report=MISSING|closure=MISSING|status=REPORT_MISSING
+G23|dir=NO|report=MISSING|closure=MISSING|status=REPORT_MISSING
+G24|dir=NO|report=MISSING|closure=MISSING|status=REPORT_MISSING
+G25|dir=NO|report=MISSING|closure=MISSING|status=REPORT_MISSING
+G26|dir=NO|report=MISSING|closure=MISSING|status=REPORT_MISSING
+G27|dir=NO|report=MISSING|closure=MISSING|status=REPORT_MISSING
+G28|dir=NO|report=MISSING|closure=MISSING|status=REPORT_MISSING
+G29|dir=NO|report=MISSING|closure=MISSING|status=REPORT_MISSING
+G13A1|dir=YES|report=docs/VV/Execution_Logs/GATES/G13A1/rerun_01/G13A1_Report.md|closure=MISSING|status=REPORT_OK
+== optional_target_gates ==
+G12_INTEL|dir=YES|report=docs/VV/Execution_Logs/GATES/G12_INTEL/rerun_01/Acceptance_Report.md|closure=MISSING|status=REPORT_OK
+G12_AMD|dir=NO|status=NOT_PRESENT_OPTIONAL
+G12_AMD_XRT|dir=YES|report=docs/VV/Execution_Logs/GATES/G12_AMD_XRT/rerun_01/Acceptance_Report.md|closure=MISSING|status=REPORT_OK
+== summary ==
+critical_total=31
+critical_missing=10
+critical_report_found=21

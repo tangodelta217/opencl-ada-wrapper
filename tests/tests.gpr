@@ -3,22 +3,42 @@ with "../opencl_wrapper.gpr";
 project Tests is
    OpenCL_Link_Flag := external ("OPENCL_LINK_FLAG", "-lOpenCL");
 
-   for Source_Dirs use (".", "smoke", "bench");
+   for Source_Dirs use (".", "smoke", "bench", "fuzz");
    for Object_Dir use "obj";
    for Exec_Dir use "bin";
    for Main use
      ("smoke_platforms.adb",
       "smoke_core.adb",
-     "gen_pack_add1.adb",
-     "smoke_rt_load_pack_add1.adb",
-     "smoke_rt_negative_cases.adb",
+      "gen_pack_add1.adb",
+      "smoke_rt_load_pack_add1.adb",
+      "smoke_rt_negative_cases.adb",
+      "smoke_rt_fs_attack_cases.adb",
+      "smoke_rt_pack_symlink_escape.adb",
+      "smoke_rt_toctou_manifest_swap.adb",
+      "smoke_rt_toctou_binary_swap.adb",
       "smoke_rt_signature_enforcement.adb",
       "smoke_rt_signature_plugin.adb",
+      "smoke_crypto_provider_conformance.adb",
       "smoke_rt_strict_policy.adb",
+      "smoke_rt_build_options_policy.adb",
+      "smoke_rt_no_heap_after_init.adb",
+      "smoke_rt_anti_rollback.adb",
       "smoke_rt_untrusted_plugin.adb",
+      "smoke_rt_plugin_allowlist_policy.adb",
+      "smoke_constant_time_compare.adb",
+      "smoke_fuzz_kpack_parser.adb",
       "bench_add1.adb",
+      "bench_pipeline_h2d_kernel_d2h.adb",
+      "bench_rt_pack_add1.adb",
+      "bench_transfers_h2d_d2h.adb",
+      "bench_batching_add1.adb",
       "smoke_buffer_roundtrip.adb",
+      "smoke_image_roundtrip.adb",
       "smoke_kernel_add1.adb",
+      "smoke_program_il_path.adb",
+      "smoke_pack_catalog_selection.adb",
+      "smoke_program_binaries_multi_device.adb",
+      "smoke_program_binaries_subdevices.adb",
       "smoke_program_binary_roundtrip.adb");
 
    package Linker is

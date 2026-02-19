@@ -1,0 +1,7 @@
+== smoke_program_binaries_subdevices ==
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_program_binaries_subdevices
+INFO num_devices=1
+INFO binary_size_0=0
+INFO binary_size_1=0
+RESULT=SKIP reason=num_devices_not_2
+smoke_program_binaries_subdevices_exit_code=0

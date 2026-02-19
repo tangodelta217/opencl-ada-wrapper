@@ -1,0 +1,42 @@
+# G25 Report (Backfill rerun_01)
+
+- UTC timestamp: 2026-02-19T10:38:44Z
+- HEAD: bdac2e785fc1934bfad826572b8b397ac9e4cb37
+
+## Build
+- Command: `gprbuild -P tests/tests.gpr`
+- Exit code: 0
+- Log: `docs/VV/Execution_Logs/GATES/G25/rerun_01/01_build.log`
+
+## Run
+- Exit code: 0
+- Missing executables: 0
+- Log: `docs/VV/Execution_Logs/GATES/G25/rerun_01/02_run.log`
+
+## Extracts
+- Source: `docs/VV/Execution_Logs/GATES/G25/rerun_01/03_extracts.log`
+
+```text
+$ ./tools/smoke_bundle_integrity.sh 
+INFO reproducible=1
+INFO source_date_epoch=1771455622
+INFO bundle_archive=/home/tangodelta/opencl-ada-wrapper/dist/oclw_rt_bundle_reproducible.tar.gz
+INFO extracted_bundle_dir=/tmp/oclw_bundle_integrity_20260219T103850Z/oclw_rt_bundle_reproducible
+INFO checksum_verify_log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260219T103850Z_bundle_checksum_verify.log
+INFO missing_required_count=0
+RESULT=PASS
+smoke_bundle_integrity_exit_code=0
+$ ./tools/check_bundle_repro.sh 
+INFO source_date_epoch=1700000000
+INFO run1_log=/home/tangodelta/opencl-ada-wrapper/dist/check_bundle_repro_run1.log
+INFO run2_log=/home/tangodelta/opencl-ada-wrapper/dist/check_bundle_repro_run2.log
+INFO sha1=f6a2d90e10c33861ce906b61b55c51fda1267691b54c72c71c0a2d6befc16b15
+INFO sha2=f6a2d90e10c33861ce906b61b55c51fda1267691b54c72c71c0a2d6befc16b15
+RESULT=PASS
+check_bundle_repro_exit_code=0
+run_exit_code=0
+```
+
+## Final
+- RESULT=PASS
+- Reason=result_pass

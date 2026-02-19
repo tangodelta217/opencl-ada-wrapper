@@ -5,6 +5,7 @@ package OpenCL.Core.Events is
    subtype Status_Code is OpenCL.Errors.Status_Code;
 
    type Event is private;
+   type Event_List is array (Natural range <>) of Event;
 
    --  Helper for sibling child packages that receive raw OpenCL events.
    procedure Adopt
@@ -13,6 +14,14 @@ package OpenCL.Core.Events is
 
    procedure Release
      (Ev : in out Event;
+      Status : out Status_Code);
+
+   procedure Wait_For
+     (Ev : Event;
+      Status : out Status_Code);
+
+   procedure Wait_For
+     (List : Event_List;
       Status : out Status_Code);
 
    function Raw_Handle (Ev : Event) return OpenCL.Raw.API.cl_event;

@@ -1,0 +1,7 @@
+INFO iters=20000
+INFO seed=1
+INFO corpus_cases=10
+INFO failures=0
+INFO crashes=0
+INFO saved_artifact=<none>
+RESULT=PASS

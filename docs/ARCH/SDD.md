@@ -209,6 +209,17 @@ OpenCL precompilados/validados.
 - El pipeline de baseline debe incluir generacion, validacion y trazabilidad de
   binarios por configuracion de HW/SW aprobada.
 
+**16.6 IL path preparatorio (SPIR-V / `clCreateProgramWithIL`)**
+- La capa thin declara `clCreateProgramWithIL` para habilitar preparacion
+  progresiva de una futura ruta IL cuando el runtime la soporte.
+- La capa core expone `Programs.Create_From_IL`, devolviendo `Status_Code`
+  explicito del runtime (`CL_INVALID_OPERATION` esperado en runtimes sin soporte
+  IL, sin excepciones).
+- La validacion baseline usa smoke dedicado (`smoke_program_il_path`) con input
+  dummy y resultado controlado:
+  - `RESULT=SKIP` cuando IL no esta soportado o falla de forma esperada.
+  - `RESULT=PASS` si el runtime acepta el path IL en el entorno bajo prueba.
+
 ## 17. RT Profile (EW/Defense): No-JIT mandatory
 **Objetivo:** Fijar reglas operativas obligatorias para mision RT/EW.
 
@@ -533,3 +544,436 @@ para soporte de budgets RT/EW y deteccion de regresiones.
 - Resultados en homelab/CI/DEV no se consideran validacion final de budget en
   target operacional.
 - Su uso principal es regression tracking y salud del stack entre gates.
+
+## 28. G13a.1 RT Pack E2E Benchmark
+**Objetivo:** Medir la ruta RT real basada en Kernel Packs (no-JIT) en dos
+fases: inicializacion cold y ejecucion steady-state.
+
+**28.1 Diseno de `bench_rt_pack_add1`**
+- Fase A: RT init cold (single-shot)
+  - Carga de `manifest.kpack` + `program.bin` desde `OCLW_PACK_DIR`.
+  - Verificacion RT obligatoria del pack (formato, fingerprint, hash y firma
+    segun politica vigente).
+  - Creacion de programa desde binario (`Create_From_Binary`), build y setup de
+    kernel/args.
+  - Medicion de latencia host de inicializacion.
+- Fase B: RT steady-state (W+N iteraciones)
+  - Iteraciones de write/enqueue/read sobre programa ya cargado.
+  - Warm-up `W` para estabilizar mediciones.
+  - Medicion `N` para estadisticos finales.
+  - Si profiling por eventos disponible: incluir metricas device por iteracion.
+- Salida estable:
+  - `INFO cold_init_ns=...`
+  - `INFO host_ns_p50=...`, `INFO host_ns_p95=...`, `INFO host_ns_p99=...`
+  - `INFO device_ns_p50=...`, `INFO device_ns_p95=...`, `INFO device_ns_p99=...`
+    cuando aplique.
+  - `RESULT=PASS|FAIL|SKIP`.
+
+**28.2 Variables de entorno esperadas**
+- `OCLW_PACK_DIR`: directorio del pack RT a cargar.
+- `OCLW_BENCH_WARMUP`: cantidad de iteraciones warm-up (default del bench).
+- `OCLW_BENCH_ITERS`: cantidad de iteraciones de medicion (default del bench).
+- `OCLW_CRYPTO_PLUGIN`: ruta del plugin de verificacion (DEV/integracion).
+- `OCLW_CRYPTO_SYMBOL`: simbolo C ABI del plugin (default de integracion).
+- En RT strict mode, el uso de env vars para plugin puede estar deshabilitado
+  por politica; el benchmark debe reflejar la politica activa.
+
+**28.3 Ejecucion y evidencia**
+- Ejecucion directa:
+  - `./tests/bin/bench_rt_pack_add1`
+- Ejecucion via harness:
+  - `tools/run_smoke.sh` (cuando el gate lo incluya en el run list).
+- Evidencia local de apoyo:
+  - `docs/VV/Execution_Logs/local/` (CSV y logs de bench).
+- Evidencia oficial de gate:
+  - `docs/VV/Execution_Logs/GATES/G13A1/rerun_01/` con reporte consolidado y
+    extractos de metricas.
+
+**28.4 Criterio de interpretacion**
+- Los numeros de G13a.1 fuera de target se usan para regression tracking.
+- La aceptacion de budgets operacionales requiere ejecucion en HW/driver target
+  (FPGA/GPU y baseline software congelado por CM).
+
+## 29. Multi-device program binaries
+**Objetivo:** Definir uso correcto de binarios de programa cuando un
+`cl_program` esta asociado a N dispositivos (OpenCL 1.2).
+
+**29.1 Modelo OpenCL aplicable**
+- `CL_PROGRAM_NUM_DEVICES` define cuantos dispositivos estan asociados al
+  programa.
+- `CL_PROGRAM_BINARY_SIZES` devuelve arreglo de `size_t` por dispositivo.
+- `CL_PROGRAM_BINARIES` devuelve arreglo de punteros a buffers por dispositivo.
+- El indice de cada entrada corresponde al orden de dispositivos asociado al
+  `cl_program`.
+
+**29.2 API esperada en `Core.Programs`**
+- Consulta de cantidad de dispositivos (`num_devices`) del programa.
+- Consulta de `binary_size` por indice de dispositivo.
+- Obtencion de binario por indice de dispositivo.
+- Opcion para recuperar arreglos completos (`sizes[]` + `binaries[]`) cuando el
+  caller aporta buffers y capacidades.
+
+**29.3 Reglas de contrato**
+- Indice fuera de rango -> `Status_Code` explicito.
+- Capacidad insuficiente de buffer -> `Status_Code` explicito.
+- Sin excepciones como camino principal.
+- En camino RT: sin asignaciones ocultas; el caller controla memoria.
+
+**29.4 Trazabilidad y evidencia**
+- Los logs/smokes que extraigan binarios multi-device deben registrar:
+  - `num_devices`,
+  - indice probado,
+  - `binary_size` por indice,
+  - fingerprint del dispositivo efectivo.
+- La evidencia de gate debe permitir reconstruir que binario corresponde a cada
+  device index.
+
+## 30. RT policy: single vs multi-device
+**Objetivo:** Fijar politica determinista para RT cuando el entorno puede
+exponer varios dispositivos.
+
+**30.1 Politica RT strict por defecto**
+- RT strict ejecuta sobre exactamente un dispositivo validado.
+- Si el entorno expone N>1 dispositivos, se permite:
+  - exigir exactamente 1 dispositivo elegible tras filtro/fingerprint, o
+  - seleccionar exactamente 1 dispositivo de forma determinista (regla estable
+    y auditable) y validar fingerprint completo.
+- Si existe ambiguedad o mismatch: fail-closed.
+
+**30.2 Politica DEV/integracion**
+- DEV puede operar con N dispositivos y consumir arreglos completos de binarios
+  para diagnostico, comparacion y preparacion offline.
+- El soporte multi-device en DEV no relaja restricciones RT strict de despliegue.
+
+**30.3 Criterio de evidencia G14**
+- Escenario base obligatorio: gate en entorno de 1 dispositivo con `RESULT=PASS`.
+- Si hay >=2 dispositivos disponibles en el sistema:
+  - ejecutar smoke multi-device y validar indices/sizes/binaries por device.
+- Si no hay >=2 dispositivos:
+  - marcar parte multi-device como `SKIP` controlado con razon explicita.
+
+## 31. Parser robustness & fuzzing
+**Objetivo:** Asegurar robustez del parser `manifest.kpack` con enfoque
+fail-closed y comportamiento acotado.
+
+**31.1 Propiedades obligatorias**
+- No crash ante entradas validas o malformadas.
+- Fail-closed ante cualquier desviacion de formato, limite o consistencia.
+- Sin truncado silencioso en parser de manifest.
+
+**31.2 Limites estrictos del parser**
+- El parser debe operar con limites explicitos:
+  - `max_manifest_bytes`,
+  - `max_lines`,
+  - `max_keys`,
+  - `max_key_len`,
+  - `max_value_len`.
+- Si se excede cualquier limite:
+  - devolver `Status_Code` explicito de error interno,
+  - rechazar el pack,
+  - continuar sin excepciones como camino principal.
+
+**31.3 Estrategia de fuzzing**
+- Corpus versionado de manifest malformados base.
+- Mutacion pseudoaleatoria determinista con seed reproducible.
+- Presupuesto de corrida de smoke orientativo:
+  - 2 segundos o 2000 casos por ejecucion.
+- Si se corta por tiempo, reportar contadores reales y razon.
+
+**31.4 Reproducibilidad de incidentes**
+- Ante fallo inesperado, guardar input exacto y metadatos:
+  - seed,
+  - iteracion,
+  - timestamp/entorno basico.
+- El artefacto debe permitir replay determinista del caso.
+
+**31.5 Evidencia de gate**
+- G15 debe incluir `smoke_fuzz_kpack_parser` con:
+  - `RESULT=PASS` (no crash),
+  - contadores de ejecucion (casos totales, rechazos esperados, errores
+    inesperados, tiempo total, seed).
+
+## 32. Memory discipline (No heap after init)
+**Objetivo:** Garantizar que el steady-state RT/EW no realiza asignaciones de
+heap y que la politica se puede verificar en runtime.
+
+**32.1 Requisito operacional**
+- En modo RT strict, una vez completada la fase de init, no se permiten nuevas
+  asignaciones dinamicas.
+- La fase de init define explicitamente la unica ventana permitida de heap.
+
+**32.2 Mecanismo de instrumentacion**
+- Instrumentar asignaciones mediante:
+  - storage pool fijo/acotado para rutas RT,
+  - contador de asignaciones (`alloc_count`) para trazabilidad,
+  - operacion `Freeze_Allocations` que cierra la ventana de heap.
+- Tras `Freeze_Allocations`, cualquier alloc se registra como violacion de
+  politica.
+
+**32.3 Politica DEV vs RT strict**
+- DEV/Integracion:
+  - puede usar heap para tooling/diagnostico,
+  - debe reportar `alloc_count` y eventos post-freeze en logs.
+- RT strict:
+  - requiere `Freeze_Allocations` antes de steady-state,
+  - alloc post-freeze => fail-closed con `Status_Code` interno explicito.
+
+**32.4 Criterio de evidencia**
+- Gate G17 debe incluir smoke dedicado `smoke_rt_no_heap_after_init` con:
+  - `RESULT=PASS`,
+  - evidencia de init permitida,
+  - evidencia de freeze aplicado,
+  - evidencia de rechazo controlado ante alloc post-freeze en RT strict.
+
+## 33. RT build options policy (strict allowlist)
+**Objetivo:** Reducir variabilidad y riesgo operativo en RT strict limitando
+las opciones de compilacion admitidas al cargar Kernel Packs.
+
+**33.1 Politica minima**
+- En `Create_Program_From_Pack_Strict_RT`, `build_options` debe pasar una
+  allowlist estricta:
+  - `""` (vacio)
+  - `"-cl-std=CL1.2"`
+- Cualquier otra combinacion se rechaza con fail-closed.
+
+**33.2 Denylist explicita (defense-oriented)**
+- Se consideran no admisibles en RT strict (entre otras):
+  - flags con prefijo `-I`
+  - flags con prefijo `-D`
+  - `-cl-opt-disable`
+- La denylist se evalua antes de construir el programa en RT strict.
+
+**33.3 DEV vs RT**
+- DEV/integracion:
+  - no se aplica esta restriccion en `Create_Program_From_Pack` (no strict).
+  - puede explorar opciones de build para diagnostico/controlado.
+- RT strict:
+  - aplica allowlist obligatoria.
+  - mismatch -> `OCLW_BUILD_OPTIONS_DISALLOWED`.
+
+**33.4 Evidencia de gate**
+- Gate G22 debe incluir smoke `smoke_rt_build_options_policy` con:
+  - caso allow (`-cl-std=CL1.2`) -> PASS,
+  - caso deny (ej. `-cl-opt-disable`) -> rechazo esperado
+    `OCLW_BUILD_OPTIONS_DISALLOWED`,
+  - `RESULT=PASS` global del smoke.
+
+## 34. Deterministic Device Selection and Pack Catalog
+**Objetivo:** Soportar multiples fingerprints aprobados (fat pack) sin
+recompilar en mision, manteniendo determinismo RT y fail-closed.
+
+**34.1 Seleccion determinista de device**
+- Construir lista de candidatos con fingerprint completo:
+  - `platform_vendor`, `platform_name`, `platform_version`
+  - `device_vendor`, `device_name`, `device_version`, `driver_version`
+- Aplicar orden determinista:
+  1. `device_vendor` (asc)
+  2. `device_name` (asc)
+  3. `driver_version` (asc)
+  4. `platform_vendor` (asc)
+  5. `platform_name` (asc)
+  6. desempate por indices de enumeracion (`platform_index`, `device_index`).
+- Reglas de preferencia:
+  - Si existe politica de preferencia explicitamente configurada y aprobada por
+    CM (vendor/device), se aplica antes del orden lexicografico.
+  - Sin politica explicita, se usa solo el orden determinista.
+
+**34.2 Estructura de Pack Catalog (fat pack)**
+- Un catalogo es un directorio con N subpacks:
+  - `<catalog_root>/<subpack_001>/manifest.kpack`
+  - `<catalog_root>/<subpack_001>/program.bin`
+  - ...
+- Cada subpack es autocontenido para un fingerprint objetivo.
+- Orden de evaluacion:
+  - indice de catalogo aprobado por CM (si existe), o
+  - orden lexicografico por subdirectorio.
+
+**34.3 Seleccion de subpack**
+- Con el dispositivo ya seleccionado, el loader recorre subpacks en orden
+  determinista.
+- Regla de aceptacion:
+  - primer subpack con fingerprint exacto -> candidato valido.
+- Verificaciones del candidato:
+  - parse canonical estricto del manifest,
+  - hash/integridad de `program.bin`,
+  - firma de subpack.
+- Si no hay match exacto o falla cualquier verificacion: fail-closed.
+
+**34.4 Firma por-subpack**
+- La firma se define por subpack (no firma global unica del catalogo):
+  - `signature_required`
+  - `signature_alg`
+  - `signature_value`
+  - `signer_id` (opcional)
+- El signing input se calcula por subpack:
+  - manifest canonical sin campos `signature_*`,
+  - concatenado con `program.bin` del mismo subpack.
+- Consecuencia:
+  - cada subpack puede estar firmado por pipeline/clave aprobada sin mezclar
+    validez entre fingerprints distintos.
+
+**34.5 Politica RT**
+- RT strict:
+  - no fallback a source/JIT,
+  - no match de fingerprint en catalogo -> fail-closed,
+  - subpack candidato con firma/hash/format invalido -> fail-closed.
+- DEV/integracion:
+  - permite diagnostico de catalogo multi-subpack,
+  - no relaja politica strict de produccion.
+
+**34.6 Evidencia de gate**
+- Gate G24 requiere smoke `smoke_pack_catalog_selection` con:
+  - `RESULT=PASS`,
+  - evidencia de orden determinista de seleccion,
+  - subpack seleccionado (o no-match controlado segun caso de prueba).
+
+**34.7 Mapeo de API**
+- Seleccion determinista de dispositivo:
+  - `OpenCL.Core.Device_Selection.Select_Device`.
+- Seleccion de subpack desde catalogo:
+  - `OpenCL.RT.Catalog.Load_From_Catalog`.
+- Integracion RT:
+  - `OpenCL.RT.Loader.Select_Device` reutiliza seleccion determinista para
+    match exacto de fingerprint.
+
+## 35. RT Loader FS Policy
+**Objetivo:** Endurecer la carga de `manifest.kpack` y `program.bin` frente a
+ataques de filesystem (symlink/path traversal) en RT strict.
+
+**35.1 Boundary y amenazas**
+- Boundary operativo: `pack_dir` configurado para runtime RT.
+- Amenazas cubiertas:
+  - symlink redirection de `manifest.kpack`/`program.bin`,
+  - path traversal/escape del directorio aprobado.
+- Referencia de threat model:
+  - `TM-T3` y gap `TM-G1` en `docs/ARCH/Threat_Model_RT_Packs.md`.
+
+**35.2 Politica de symlink**
+- En RT strict, `manifest.kpack` y `program.bin` deben ser archivos regulares.
+- Si alguno es symlink: rechazo inmediato fail-closed.
+- No se admite excepcion por symlink "interno" al mismo arbol.
+
+**35.3 Politica de path canonical**
+- `pack_dir` se canonicaliza al inicio del flujo de carga.
+- Los paths efectivos de `manifest.kpack` y `program.bin` deben resolver dentro
+  del prefijo canonical de `pack_dir`.
+- Se rechaza cualquier intento de escape por `..`, resolucion indirecta o
+  errores de canonicalizacion.
+- En RT strict, el loader no acepta rutas arbitrarias para artefactos del pack:
+  solo nombres canonicos esperados bajo `pack_dir`.
+
+**35.4 Dominio de errores**
+- Violaciones de politica FS se reportan con estado interno dedicado:
+  `OCLW_FS_POLICY_VIOLATION`.
+- Objetivo: separacion clara entre error de policy de filesystem y error de
+  formato de manifest (`OCLW_PACK_FORMAT_ERROR`).
+- En todos los casos el comportamiento es fail-closed.
+
+**35.5 Evidencia de gate**
+- Gate G31 debe incluir smoke negativo dedicado:
+  - `smoke_rt_pack_symlink_escape`
+  - `RESULT=PASS`
+- Cobertura minima:
+  - symlink en `manifest.kpack` rechazado,
+  - symlink en `program.bin` rechazado,
+  - escape de path rechazado con status de policy FS (o mapping fail-closed
+    documentado).
+
+## 36. TOCTOU Mitigation
+**Objetivo:** Mitigar condiciones de carrera de tipo verify-then-replace
+(TOCTOU) durante la carga RT de `manifest.kpack` y `program.bin`.
+
+**36.1 Threat mapping y alcance**
+- Amenaza principal: `TM-T7` (TOCTOU).
+- Gap asociado: `TM-G2`.
+- Referencia: `docs/ARCH/Threat_Model_RT_Packs.md`.
+- Relacion con G31:
+  - G31 cubre path safety (symlink/traversal),
+  - esta seccion cubre seguridad temporal del archivo durante lectura.
+
+**36.2 Flujo por descriptor (lectura consistente)**
+- En RT strict, la lectura de cada archivo se diseña por FD:
+  - `open()` del archivo esperado,
+  - `fstat()` pre,
+  - `read()` desde el mismo FD,
+  - `fstat()` post.
+- No se permite reabrir por path durante la secuencia de validacion y carga.
+
+**36.3 Invariantes de seguridad**
+- Entre `fstat` pre y post deben mantenerse:
+  - tipo regular (`S_IFREG`),
+  - `inode` estable,
+  - `size` estable.
+- Si cualquier invariante falla:
+  - status `OCLW_FS_TOCTOU_DETECTED`,
+  - fail-closed (sin fallback a source/JIT).
+
+**36.4 Test seam para pruebas deterministas**
+- Se permite seam de test para forzar swap controlado entre `fstat` pre/post.
+- Requisito:
+  - seam solo habilitado en builds/tests de verificacion,
+  - no disponible en release de produccion.
+- Implementacion:
+  - controles de seam mantenidos como hooks privados en `OpenCL.RT.FS`,
+  - uso permitido solo desde child units de test
+    (`tests/smoke/opencl-rt-fs-test_seam.*`),
+  - no API publica de seam en artefacto release.
+
+**36.5 Evidencia de gate**
+- Gate G32 debe incluir:
+  - `smoke_rt_toctou_manifest_swap`,
+  - `smoke_rt_toctou_binary_swap`.
+- Criterio minimo:
+  - deteccion de swap y rechazo fail-closed,
+  - `RESULT=PASS`,
+  - trazas con `OCLW_FS_TOCTOU_DETECTED`.
+
+## 37. RT plugin policy (allowlist/perms)
+**Objetivo:** Endurecer la carga del provider cripto en RT strict con politica
+explicita de rutas permitidas y permisos minimos de filesystem.
+
+**37.1 Threat mapping**
+- Amenaza principal: `TM-T4` (plugin substitution).
+- Gap asociado: `TM-G3`.
+- Referencia: `docs/ARCH/Threat_Model_RT_Packs.md`.
+
+**37.2 Allowlist de directorios canonical**
+- En RT strict, el plugin solo puede cargarse desde una allowlist de
+  directorios canonical.
+- Interfaz operativa:
+  - `OCLW_RT_PLUGIN_ALLOWLIST="dir1:dir2:..."`
+- Reglas:
+  - cada entrada `dirN` se canonicaliza,
+  - el path canonical del plugin debe quedar contenido en algun `dirN`
+    canonical.
+- Si la allowlist falta o es invalida en RT strict: fail-closed.
+
+**37.3 Checks de tipo/permisos del plugin**
+- El plugin debe ser archivo regular.
+- Symlinks rechazados en RT strict.
+- Archivo world-writable rechazado.
+- Owner check (`uid/gid`) se recomienda como hardening adicional
+  best-effort/politica de plataforma.
+
+**37.4 Dominio de errores**
+- Path fuera de allowlist: `OCLW_PLUGIN_PATH_NOT_ALLOWED`.
+- Permisos inseguros: `OCLW_PLUGIN_UNSAFE_PERMS`.
+- Symlink/no-regular: `OCLW_FS_POLICY_VIOLATION` (o mapping equivalente
+  documentado).
+- Todos los casos anteriores se tratan como fail-closed.
+
+**37.5 Operacion RT vs DEV**
+- RT strict:
+  - configuracion explicita via `Configure_Plugin`,
+  - allowlist obligatoria y validada,
+  - sin fallback a source/JIT.
+- DEV/integracion:
+  - puede usar rutas de test/controladas fuera de politica estricta,
+  - debe dejar evidencia explicita de ruta/permisos del plugin usado.
+
+**37.6 Evidencia de gate**
+- Gate G33 debe incluir `smoke_rt_plugin_allowlist_policy` con:
+  - rechazo fuera de allowlist,
+  - rechazo por permisos inseguros,
+  - aceptacion del caso valido,
+  - `RESULT=PASS`.

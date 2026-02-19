@@ -1,0 +1,8 @@
+timestamp_utc=2026-02-19T10:38:44Z
+head=bdac2e785fc1934bfad826572b8b397ac9e4cb37
+gate=G21
+$ ./tests/bin/smoke_image_roundtrip 
+RESULT=PASS
+smoke_image_roundtrip_exit_code=0
+missing_executables=0
+run_exit_code=0

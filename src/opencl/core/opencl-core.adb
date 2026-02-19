@@ -301,4 +301,35 @@ package body OpenCL.Core is
       end;
    end Get_Device_Info;
 
+   function Device_Image_Support
+     (D : Device;
+      Status : out OpenCL.Errors.Status_Code) return Boolean
+   is
+      Value : aliased API.cl_bool := API.CL_FALSE;
+      Raw_Status : API.cl_int := API.CL_SUCCESS;
+      Bool_Bytes : constant API.size_t :=
+        API.size_t (API.cl_bool'Size / System.Storage_Unit);
+   begin
+      Status := OpenCL.Errors.Success;
+
+      if D.Handle = null then
+         Status := OpenCL.Errors.Invalid_Device;
+         return False;
+      end if;
+
+      Raw_Status := API.clGetDeviceInfo
+        (device => D.Handle,
+         param_name => API.CL_DEVICE_IMAGE_SUPPORT,
+         param_value_size => Bool_Bytes,
+         param_value => Value'Address,
+         param_value_size_ret => null);
+
+      if Raw_Status /= API.CL_SUCCESS then
+         Status := To_Status (Raw_Status);
+         return False;
+      end if;
+
+      return Value /= API.CL_FALSE;
+   end Device_Image_Support;
+
 end OpenCL.Core;

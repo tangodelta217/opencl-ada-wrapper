@@ -1,0 +1,15 @@
+kpack_version=1
+pack_id=pack-07
+created_utc=2026-02-19T00:00:00Z
+platform_name=plat
+platform_vendor=vendor
+platform_version=version
+device_name=device
+device_vendor=dvendor
+device_version=dversion
+driver_version=driver
+binary_size=16
+binary_fnv1a32=1234
+kernel_name=add1
+signature_required=1
+signature_alg=TEST-FNV1A32

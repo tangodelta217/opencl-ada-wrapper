@@ -1,0 +1,28 @@
+# G35 inventory
+timestamp_utc=2026-02-19T20:27:18Z
+git_head=bdac2e785fc1934bfad826572b8b397ac9e4cb37
+
+## Critical reports
+PASS report_exists: docs/VV/Execution_Logs/GATES/G30/rerun_02/G30_Audit_Report.md
+PASS report_exists: docs/VV/Execution_Logs/GATES/G25/rerun_02/G25_Report.md
+PASS report_exists: docs/VV/Execution_Logs/GATES/G34/rerun_01/G34_Security_Audit_Report.md
+PASS report_exists: docs/VV/Execution_Logs/GATES/G31/rerun_01/G31_Report.md
+PASS report_exists: docs/VV/Execution_Logs/GATES/G32/rerun_01/G32_Report.md
+PASS report_exists: docs/VV/Execution_Logs/GATES/G33/rerun_01/G33_Report.md
+
+## Required hardening closures
+PASS closure_exists: docs/VV/Execution_Logs/GATES/G31/Closure.md
+PASS closure_exists: docs/VV/Execution_Logs/GATES/G32/Closure.md
+PASS closure_exists: docs/VV/Execution_Logs/GATES/G33/Closure.md
+PASS closure_exists: docs/VV/Execution_Logs/GATES/G34/Closure.md
+
+## Optional target closures
+INFO optional_report_present: docs/VV/Execution_Logs/GATES/G12_INTEL/rerun_01/Acceptance_Report.md
+PASS optional_closure_exists: docs/VV/Execution_Logs/GATES/G12_INTEL/Closure.md
+INFO optional_report_present: docs/VV/Execution_Logs/GATES/G12_AMD_XRT/rerun_01/Acceptance_Report.md
+PASS optional_closure_exists: docs/VV/Execution_Logs/GATES/G12_AMD_XRT/Closure.md
+
+## Summary counts
+INFO pass_count=12
+INFO fail_count=0
+INFO warn_count=0

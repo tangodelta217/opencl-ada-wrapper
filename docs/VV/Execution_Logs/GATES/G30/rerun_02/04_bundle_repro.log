@@ -1,0 +1,21 @@
+timestamp_utc=2026-02-19T11:06:06Z
+script=tools/package_rt_bundle.sh
+source_date_epoch=1700000000
+hash_command=sha256sum
+$ OCLW_REPRODUCIBLE=1 SOURCE_DATE_EPOCH=1700000000 tools/package_rt_bundle.sh  # run1
+run1_exit_code=0
+run1_tar=dist/oclw_rt_bundle_reproducible.tar.gz
+$ OCLW_REPRODUCIBLE=1 SOURCE_DATE_EPOCH=1700000000 tools/package_rt_bundle.sh  # run2
+run2_exit_code=0
+run2_tar=dist/oclw_rt_bundle_reproducible.tar.gz
+hash_run1=f6a2d90e10c33861ce906b61b55c51fda1267691b54c72c71c0a2d6befc16b15
+hash_run2=f6a2d90e10c33861ce906b61b55c51fda1267691b54c72c71c0a2d6befc16b15
+bundle_reproducible=PASS
+bundle_result=PASS
+bundle_rc1=0
+bundle_rc2=0
+bundle_hash_cmd=sha256sum
+bundle_hash1=f6a2d90e10c33861ce906b61b55c51fda1267691b54c72c71c0a2d6befc16b15
+bundle_hash2=f6a2d90e10c33861ce906b61b55c51fda1267691b54c72c71c0a2d6befc16b15
+bundle_tar1=dist/oclw_rt_bundle_reproducible.tar.gz
+bundle_tar2=dist/oclw_rt_bundle_reproducible.tar.gz

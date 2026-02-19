@@ -1,0 +1,4 @@
+# Release obj seam scan (post-fix)
+$ grep -R "Test_Seam" obj/ || true
+
+$ find obj -name "*test*seam*" -o -name "*Test_Seam*" || true

@@ -600,6 +600,9 @@ begin
       end if;
 
       --  Case 3: non-test algorithm + explicit Configure_Plugin must pass.
+      Ada.Environment_Variables.Set
+        (Name => "OCLW_RT_PLUGIN_ALLOWLIST",
+         Value => Ada.Directories.Containing_Directory (Packs.To_String (Plugin_Path)));
       Security.Configure_Plugin
         (Path => Packs.To_String (Plugin_Path),
          Symbol => Plugin_Symbol,

@@ -1,0 +1,10 @@
+$ ./tests/bin/smoke_rt_build_options_policy 
+INFO pack_dir=docs/VV/Execution_Logs/local/pack_rt_build_options_policy
+INFO manifest_path=docs/VV/Execution_Logs/local/pack_rt_build_options_policy/manifest.kpack
+INFO binary_path=docs/VV/Execution_Logs/local/pack_rt_build_options_policy/program.bin
+INFO gen_pack_add1_return_code=0 log=docs/VV/Execution_Logs/local/pack_rt_build_options_policy/gen_pack_add1.log
+INFO case_allow=PASS
+INFO case_deny=PASS expected=OCLW_BUILD_OPTIONS_DISALLOWED
+RESULT=PASS
+smoke_rt_build_options_policy_exit_code=0
+run_exit_code=0

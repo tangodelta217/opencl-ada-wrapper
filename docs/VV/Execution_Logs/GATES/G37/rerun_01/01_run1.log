@@ -1,0 +1,6 @@
+bundle_dir=/home/tangodelta/opencl-ada-wrapper/dist/oclw_evidence_bundle_reproducible
+bundle_archive=/home/tangodelta/opencl-ada-wrapper/dist/oclw_evidence_bundle_reproducible.tar.gz
+bundle_checksums=/home/tangodelta/opencl-ada-wrapper/dist/oclw_evidence_bundle_reproducible/CHECKSUMS.sha256
+bundle_archive_sha256=55c887f6bfd9dbb0724d72e941c1bedb9fbe08d57f586fce3c6f42e25e234a5d
+reproducible=1
+source_date_epoch=1700000000

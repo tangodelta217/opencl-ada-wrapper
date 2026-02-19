@@ -11,6 +11,12 @@ package OpenCL.Core.Contexts is
       Ctx : out Context;
       Status : out OpenCL.Errors.Status_Code);
 
+   procedure Create
+     (Devices : OpenCL.Core.Device_List;
+      Used : Natural;
+      Ctx : out Context;
+      Status : out OpenCL.Errors.Status_Code);
+
    procedure Release
      (Ctx : in out Context;
       Status : out Status_Code);

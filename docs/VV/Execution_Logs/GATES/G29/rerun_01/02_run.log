@@ -1,0 +1,13 @@
+timestamp_utc=2026-02-19T10:38:44Z
+head=bdac2e785fc1934bfad826572b8b397ac9e4cb37
+gate=G29
+$ ./tools/g12_target_intel_aocl_check.sh 
+RESULT=SKIP reason=stack_not_installed_or_incomplete
+report=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/GATES/G12_INTEL/rerun_01/Acceptance_Report.md
+g12_target_intel_aocl_check_exit_code=0
+$ ./tools/g12_target_amd_xrt_check.sh 
+RESULT=SKIP reason=stack_not_installed_or_incomplete
+report=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/GATES/G12_AMD_XRT/rerun_01/Acceptance_Report.md
+g12_target_amd_xrt_check_exit_code=0
+missing_executables=0
+run_exit_code=0

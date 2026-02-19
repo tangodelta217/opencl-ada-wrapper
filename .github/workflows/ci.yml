@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnat gprbuild ocl-icd-opencl-dev pocl-opencl-icd
+
+      - name: Build tests
+        run: gprbuild -P tests/tests.gpr
+
+      - name: Run smoke
+        run: tools/run_smoke.sh
+
+      - name: Package delivery bundle (preferred)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -x tools/package_delivery_bundle.sh ]; then
+            OCLW_REPRODUCIBLE=1 SOURCE_DATE_EPOCH=1700000000 tools/package_delivery_bundle.sh
+          elif [ -x tools/package_rt_bundle.sh ] && [ -x tools/package_evidence_bundle.sh ]; then
+            OCLW_REPRODUCIBLE=1 SOURCE_DATE_EPOCH=1700000000 tools/package_rt_bundle.sh
+            OCLW_REPRODUCIBLE=1 SOURCE_DATE_EPOCH=1700000000 tools/package_evidence_bundle.sh
+          elif [ -x tools/package_rt_bundle.sh ]; then
+            OCLW_REPRODUCIBLE=1 SOURCE_DATE_EPOCH=1700000000 tools/package_rt_bundle.sh
+          fi

@@ -1,0 +1,118 @@
+# G34 extracts
+## target smokes
+55:gprbuild: "smoke_rt_pack_symlink_escape" up to date
+56:gprbuild: "smoke_rt_toctou_manifest_swap" up to date
+57:gprbuild: "smoke_rt_toctou_binary_swap" up to date
+66:gprbuild: "smoke_rt_plugin_allowlist_policy" up to date
+94:crypto_plugin_build_exit_code=0
+106:smoke_rt_pack_symlink_escape_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_pack_symlink_escape
+107:smoke_rt_toctou_manifest_swap_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_toctou_manifest_swap
+108:smoke_rt_toctou_binary_swap_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_toctou_binary_swap
+117:smoke_rt_plugin_allowlist_policy_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_plugin_allowlist_policy
+150:smoke_platforms_exit_code=0
+165:smoke_core_exit_code=0
+172:RESULT=PASS
+173:gen_pack_add1_exit_code=0
+179:RESULT=PASS
+180:smoke_rt_load_pack_add1_exit_code=0
+189:RESULT=PASS
+190:smoke_rt_negative_cases_exit_code=0
+200:RESULT=PASS
+206:RESULT=PASS
+207:smoke_rt_fs_attack_cases_exit_code=0
+208:$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_pack_symlink_escape
+215:RESULT=PASS
+219:RESULT=PASS
+220:smoke_rt_pack_symlink_escape_exit_code=0
+221:$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_toctou_manifest_swap
+228:RESULT=PASS
+231:RESULT=PASS
+232:smoke_rt_toctou_manifest_swap_exit_code=0
+233:$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_toctou_binary_swap
+240:RESULT=PASS
+243:RESULT=PASS
+244:smoke_rt_toctou_binary_swap_exit_code=0
+253:RESULT=PASS
+254:smoke_rt_signature_enforcement_exit_code=0
+266:RESULT=PASS
+267:smoke_rt_signature_plugin_exit_code=0
+274:RESULT=PASS
+275:smoke_crypto_provider_conformance_exit_code=0
+287:RESULT=PASS
+288:smoke_rt_strict_policy_exit_code=0
+296:RESULT=PASS
+297:smoke_rt_build_options_policy_exit_code=0
+307:RESULT=PASS
+308:smoke_rt_no_heap_after_init_exit_code=0
+318:RESULT=PASS
+319:smoke_rt_anti_rollback_exit_code=0
+339:RESULT=PASS
+340:bench_add1_exit_code=0
+356:RESULT=PASS
+357:bench_pipeline_h2d_kernel_d2h_exit_code=0
+381:RESULT=PASS
+382:bench_rt_pack_add1_exit_code=0
+395:RESULT=PASS
+396:bench_transfers_h2d_d2h_exit_code=0
+409:RESULT=PASS
+410:bench_batching_add1_exit_code=0
+419:RESULT=PASS
+420:smoke_rt_untrusted_plugin_exit_code=0
+421:$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_plugin_allowlist_policy
+429:RESULT=PASS
+430:smoke_rt_plugin_allowlist_policy_exit_code=0
+438:RESULT=PASS
+439:smoke_constant_time_compare_exit_code=0
+447:RESULT=PASS
+448:smoke_fuzz_kpack_parser_exit_code=0
+450:RESULT=PASS
+454:traceability_check_exit_code=0
+462:RESULT=PASS
+463:smoke_bundle_integrity_exit_code=0
+465:RESULT=PASS
+466:smoke_buffer_roundtrip_exit_code=0
+468:RESULT=PASS
+469:smoke_image_roundtrip_exit_code=0
+472:RESULT=PASS
+473:smoke_kernel_add1_exit_code=0
+477:RESULT=SKIP reason=il_create_controlled_failure
+478:smoke_program_il_path_exit_code=0
+487:RESULT=PASS
+488:smoke_pack_catalog_selection_exit_code=0
+494:RESULT=PASS
+495:smoke_program_binaries_multi_device_exit_code=0
+501:RESULT=SKIP reason=num_devices_not_2
+502:smoke_program_binaries_subdevices_exit_code=0
+506:RESULT=PASS
+507:smoke_program_binary_roundtrip_exit_code=0
+508:gen_pack_add1_exit_code=0
+509:smoke_rt_load_pack_add1_exit_code=0
+510:smoke_rt_negative_cases_exit_code=0
+511:smoke_rt_fs_attack_cases_exit_code=0
+512:smoke_rt_pack_symlink_escape_exit_code=0
+513:smoke_rt_toctou_manifest_swap_exit_code=0
+514:smoke_rt_toctou_binary_swap_exit_code=0
+515:smoke_rt_signature_enforcement_exit_code=0
+516:smoke_rt_signature_plugin_exit_code=0
+517:smoke_crypto_provider_conformance_exit_code=0
+518:smoke_rt_strict_policy_exit_code=0
+519:smoke_rt_build_options_policy_exit_code=0
+520:smoke_rt_no_heap_after_init_exit_code=0
+521:smoke_rt_anti_rollback_exit_code=0
+522:smoke_rt_untrusted_plugin_exit_code=0
+523:smoke_rt_plugin_allowlist_policy_exit_code=0
+524:smoke_constant_time_compare_exit_code=0
+525:smoke_fuzz_kpack_parser_exit_code=0
+526:traceability_check_exit_code=0
+527:smoke_bundle_integrity_exit_code=0
+528:bench_add1_exit_code=0
+529:bench_pipeline_h2d_kernel_d2h_exit_code=0
+530:bench_rt_pack_add1_exit_code=0
+531:bench_transfers_h2d_d2h_exit_code=0
+532:bench_batching_add1_exit_code=0
+533:smoke_image_roundtrip_exit_code=0
+534:smoke_program_il_path_exit_code=0
+535:smoke_pack_catalog_selection_exit_code=0
+536:smoke_program_binaries_multi_device_exit_code=0
+537:smoke_program_binaries_subdevices_exit_code=0
+539:smoke_exit_code=0

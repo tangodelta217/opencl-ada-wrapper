@@ -1,0 +1,7 @@
+build_exit_code=0
+run_smoke_exit_code=0
+--- smoke_rt_anti_rollback RESULT lines ---
+RESULT=PASS
+--- smoke_rt_anti_rollback exit line ---
+217:smoke_rt_anti_rollback_exit_code=0
+310:smoke_rt_anti_rollback_exit_code=0

@@ -1,0 +1,11 @@
+# Tests obj seam scan (post-fix)
+$ grep -R "Test_Seam" tests/obj 2>/dev/null || true
+tests/obj/smoke_rt_toctou_binary_swap.ali:3K22*Test_Seam 8e27 48|15w19 239r23 248r23 278r23
+tests/obj/opencl-rt-fs-test_seam.ali:3K22*Test_Seam 21|6k19 22|8l18 8e27 23|3b27 15l18 15t27
+tests/obj/smoke_rt_toctou_manifest_swap.ali:3K22*Test_Seam 8e27 47|11w19 188r20 196r20 221r23
+
+$ find tests/obj -name "*test*seam*" -o -name "*Test_Seam*" 2>/dev/null || true
+tests/obj/opencl-rt-fs-test_seam.adb.stdout
+tests/obj/opencl-rt-fs-test_seam.o
+tests/obj/opencl-rt-fs-test_seam.adb.stderr
+tests/obj/opencl-rt-fs-test_seam.ali

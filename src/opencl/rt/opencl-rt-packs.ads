@@ -3,11 +3,20 @@ with Interfaces;
 with Interfaces.C;
 with OpenCL.Core.Programs;
 with OpenCL.Errors;
+with OpenCL.RT.Memtrack;
 
 package OpenCL.RT.Packs is
+   pragma Default_Storage_Pool (OpenCL.RT.Memtrack.RT_Pool);
+
    subtype Status_Code is OpenCL.Errors.Status_Code;
 
    Max_Field_Length : constant Positive := 512;
+   Max_Manifest_Line_Length : constant Positive := 2_048;
+   Max_Manifest_Bytes : constant Positive := 65_536;
+   Max_Manifest_Key_Count : constant Positive := 64;
+   Max_RT_Binary_Size_Default : constant Interfaces.C.size_t :=
+     Interfaces.C.size_t (16_777_216);
+
    package Fields is new Ada.Strings.Bounded.Generic_Bounded_Length
      (Max => Max_Field_Length);
    subtype Bounded_String is Fields.Bounded_String;
@@ -19,6 +28,8 @@ package OpenCL.RT.Packs is
 
    type Pack_Metadata is record
       Kpack_Version : Natural := 0;
+      Pack_Version : Interfaces.Unsigned_32 := 0;
+      Pack_Version_Present : Boolean := False;
       Pack_Id : Bounded_String := Fields.To_Bounded_String ("");
       Created_Utc : Bounded_String := Fields.To_Bounded_String ("");
 
@@ -36,6 +47,8 @@ package OpenCL.RT.Packs is
 
       Binary_Size : Interfaces.C.size_t := 0;
       Binary_FNV1a32 : Interfaces.Unsigned_32 := 0;
+      Monotonic_Counter : Interfaces.Unsigned_64 := 0;
+      Monotonic_Counter_Present : Boolean := False;
       Kernel_Name : Bounded_String := Fields.To_Bounded_String ("");
 
       Signature_Required : Boolean := False;
@@ -76,4 +89,8 @@ package OpenCL.RT.Packs is
       Buffer : OpenCL.Core.Programs.Byte_Array;
       Used : Natural;
       Status : out Status_Code);
+
+   --  Effective RT binary size limit (bytes). Controlled by optional env var
+   --  OCLW_RT_MAX_BINARY_SIZE; invalid/empty values fall back to default.
+   function Effective_Max_RT_Binary_Size return Interfaces.C.size_t;
 end OpenCL.RT.Packs;

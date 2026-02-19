@@ -58,7 +58,15 @@ package OpenCL.Errors is
    OCLW_Signature_Invalid : constant Status_Code := Status_Code (-32_011);
    OCLW_Signature_Missing : constant Status_Code := Status_Code (-32_012);
    OCLW_Signature_Disallowed : constant Status_Code := Status_Code (-32_013);
+   OCLW_Build_Options_Disallowed : constant Status_Code := Status_Code (-32_014);
    OCLW_Plugin_Untrusted : constant Status_Code := Status_Code (-32_020);
+   OCLW_Limit_Exceeded : constant Status_Code := Status_Code (-32_021);
+   OCLW_FS_Policy_Violation : constant Status_Code := Status_Code (-32_022);
+   OCLW_FS_TOCTOU_Detected : constant Status_Code := Status_Code (-32_023);
+   OCLW_Plugin_Path_Not_Allowed : constant Status_Code := Status_Code (-32_024);
+   OCLW_Plugin_Unsafe_Perms : constant Status_Code := Status_Code (-32_025);
+   OCLW_Rollback_Detected : constant Status_Code := Status_Code (-32_030);
+   OCLW_Rollback_Not_Implemented : constant Status_Code := Status_Code (-32_031);
 
    function Is_Success (Code : Status_Code) return Boolean;
    function Image (Code : Status_Code) return String;

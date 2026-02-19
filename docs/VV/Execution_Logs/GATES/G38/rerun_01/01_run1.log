@@ -1,0 +1,6 @@
+delivery_archive=/home/tangodelta/opencl-ada-wrapper/dist/oclw_delivery_bundle_reproducible.tar.gz
+delivery_archive_sha256=5fa6fe3ab44d796c8fb8a9b4e6e056c0de5659034c591ce1bfcca730b5753676
+delivery_stage=/home/tangodelta/opencl-ada-wrapper/dist/_delivery_stage
+delivery_manifest=/home/tangodelta/opencl-ada-wrapper/dist/_delivery_stage/DELIVERY_MANIFEST.txt
+delivery_checksums=/home/tangodelta/opencl-ada-wrapper/dist/_delivery_stage/CHECKSUMS.sha256
+source_date_epoch=1700000000

@@ -1,0 +1,10 @@
+timestamp_utc=2026-02-19T10:35:20Z
+head=bdac2e785fc1934bfad826572b8b397ac9e4cb37
+source_date_epoch=1700000000
+build_exit_code=0
+package_run1_exit_code=0
+package_run2_exit_code=0
+archive_path=dist/oclw_rt_bundle_reproducible.tar.gz
+sha1=f6a2d90e10c33861ce906b61b55c51fda1267691b54c72c71c0a2d6befc16b15
+sha2=f6a2d90e10c33861ce906b61b55c51fda1267691b54c72c71c0a2d6befc16b15
+result=PASS

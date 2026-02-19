@@ -1,0 +1,4 @@
+kpack_version=1
+pack_id=pack-09
+rollback_epoch=2
+rollback_prev_pack_id=old-pack

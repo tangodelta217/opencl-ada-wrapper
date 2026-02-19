@@ -1,0 +1,22 @@
+timestamp_utc=2026-02-19T10:38:44Z
+head=bdac2e785fc1934bfad826572b8b397ac9e4cb37
+gate=G20
+$ ./tests/bin/bench_pipeline_h2d_kernel_d2h 
+INFO platform_name=Portable Computing Language
+INFO device_name=cpu-haswell-Intel(R) Core(TM) i5-14600K
+INFO driver_version=5.0+debian
+INFO profiling=AVAILABLE
+INFO warmup_iterations=10
+INFO measure_iterations=200
+INFO write_ns_p50=877
+INFO write_ns_p99=10118
+INFO kernel_ns_p50=22507
+INFO kernel_ns_p99=83532
+INFO read_ns_p50=661
+INFO read_ns_p99=1404
+INFO e2e_ns_p50=24493
+INFO e2e_ns_p99=85626
+RESULT=PASS
+bench_pipeline_h2d_kernel_d2h_exit_code=0
+missing_executables=0
+run_exit_code=0

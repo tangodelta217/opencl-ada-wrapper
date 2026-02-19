@@ -120,8 +120,24 @@ package body OpenCL.Errors is
             return "OCLW_SIGNATURE_MISSING";
          when OCLW_Signature_Disallowed =>
             return "OCLW_SIGNATURE_DISALLOWED";
+         when OCLW_Build_Options_Disallowed =>
+            return "OCLW_BUILD_OPTIONS_DISALLOWED";
          when OCLW_Plugin_Untrusted =>
             return "OCLW_PLUGIN_UNTRUSTED";
+         when OCLW_Limit_Exceeded =>
+            return "OCLW_LIMIT_EXCEEDED";
+         when OCLW_FS_Policy_Violation =>
+            return "OCLW_FS_POLICY_VIOLATION";
+         when OCLW_FS_TOCTOU_Detected =>
+            return "OCLW_FS_TOCTOU_DETECTED";
+         when OCLW_Plugin_Path_Not_Allowed =>
+            return "OCLW_PLUGIN_PATH_NOT_ALLOWED";
+         when OCLW_Plugin_Unsafe_Perms =>
+            return "OCLW_PLUGIN_UNSAFE_PERMS";
+         when OCLW_Rollback_Detected =>
+            return "OCLW_ROLLBACK_DETECTED";
+         when OCLW_Rollback_Not_Implemented =>
+            return "OCLW_ROLLBACK_NOT_IMPLEMENTED";
          when others =>
             return
               "CL_UNKNOWN_ERROR("
