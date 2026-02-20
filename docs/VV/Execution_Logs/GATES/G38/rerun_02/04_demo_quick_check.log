@@ -1,0 +1,152 @@
+=== EW MLP Demo Build ===
+Compile
+   [Ada]          gen_pack_ew_mlp.adb
+   [Ada]          smoke_rt_load_pack_ew_mlp.adb
+   [Ada]          bench_rt_pack_ew_mlp.adb
+   [Ada]          demo_ew_mlp.adb
+   [Ada]          smoke_ew_mlp_inference.adb
+   [Ada]          ew_mlp_kernel_source.ads
+   [Ada]          ew_mlp_model.adb
+Bind
+   [gprbind]      smoke_platforms.bexch
+   [Ada]          smoke_platforms.ali
+   [gprbind]      smoke_core.bexch
+   [Ada]          smoke_core.ali
+   [gprbind]      gen_pack_add1.bexch
+   [Ada]          gen_pack_add1.ali
+   [gprbind]      gen_pack_ew_mlp.bexch
+   [Ada]          gen_pack_ew_mlp.ali
+   [gprbind]      smoke_rt_load_pack_add1.bexch
+   [Ada]          smoke_rt_load_pack_add1.ali
+   [gprbind]      smoke_rt_load_pack_ew_mlp.bexch
+   [Ada]          smoke_rt_load_pack_ew_mlp.ali
+   [gprbind]      smoke_rt_negative_cases.bexch
+   [Ada]          smoke_rt_negative_cases.ali
+   [gprbind]      smoke_rt_fs_attack_cases.bexch
+   [Ada]          smoke_rt_fs_attack_cases.ali
+   [gprbind]      smoke_rt_pack_symlink_escape.bexch
+   [Ada]          smoke_rt_pack_symlink_escape.ali
+   [gprbind]      smoke_rt_toctou_manifest_swap.bexch
+   [Ada]          smoke_rt_toctou_manifest_swap.ali
+   [gprbind]      smoke_rt_toctou_binary_swap.bexch
+   [Ada]          smoke_rt_toctou_binary_swap.ali
+   [gprbind]      smoke_rt_signature_enforcement.bexch
+   [Ada]          smoke_rt_signature_enforcement.ali
+   [gprbind]      smoke_rt_signature_plugin.bexch
+   [Ada]          smoke_rt_signature_plugin.ali
+   [gprbind]      smoke_crypto_provider_conformance.bexch
+   [Ada]          smoke_crypto_provider_conformance.ali
+   [gprbind]      smoke_rt_strict_policy.bexch
+   [Ada]          smoke_rt_strict_policy.ali
+   [gprbind]      smoke_rt_build_options_policy.bexch
+   [Ada]          smoke_rt_build_options_policy.ali
+   [gprbind]      smoke_rt_no_heap_after_init.bexch
+   [Ada]          smoke_rt_no_heap_after_init.ali
+   [gprbind]      smoke_rt_anti_rollback.bexch
+   [Ada]          smoke_rt_anti_rollback.ali
+   [gprbind]      smoke_rt_untrusted_plugin.bexch
+   [Ada]          smoke_rt_untrusted_plugin.ali
+   [gprbind]      smoke_rt_plugin_allowlist_policy.bexch
+   [Ada]          smoke_rt_plugin_allowlist_policy.ali
+   [gprbind]      smoke_constant_time_compare.bexch
+   [Ada]          smoke_constant_time_compare.ali
+   [gprbind]      smoke_fuzz_kpack_parser.bexch
+   [Ada]          smoke_fuzz_kpack_parser.ali
+   [gprbind]      bench_add1.bexch
+   [Ada]          bench_add1.ali
+   [gprbind]      bench_pipeline_h2d_kernel_d2h.bexch
+   [Ada]          bench_pipeline_h2d_kernel_d2h.ali
+   [gprbind]      bench_rt_pack_add1.bexch
+   [Ada]          bench_rt_pack_add1.ali
+   [gprbind]      bench_rt_pack_ew_mlp.bexch
+   [Ada]          bench_rt_pack_ew_mlp.ali
+   [gprbind]      bench_transfers_h2d_d2h.bexch
+   [Ada]          bench_transfers_h2d_d2h.ali
+   [gprbind]      bench_batching_add1.bexch
+   [Ada]          bench_batching_add1.ali
+   [gprbind]      demo_ew_mlp.bexch
+   [Ada]          demo_ew_mlp.ali
+   [gprbind]      smoke_buffer_roundtrip.bexch
+   [Ada]          smoke_buffer_roundtrip.ali
+   [gprbind]      smoke_image_roundtrip.bexch
+   [Ada]          smoke_image_roundtrip.ali
+   [gprbind]      smoke_kernel_add1.bexch
+   [Ada]          smoke_kernel_add1.ali
+   [gprbind]      smoke_ew_mlp_inference.bexch
+   [Ada]          smoke_ew_mlp_inference.ali
+   [gprbind]      smoke_program_il_path.bexch
+   [Ada]          smoke_program_il_path.ali
+   [gprbind]      smoke_pack_catalog_selection.bexch
+   [Ada]          smoke_pack_catalog_selection.ali
+   [gprbind]      smoke_program_binaries_multi_device.bexch
+   [Ada]          smoke_program_binaries_multi_device.ali
+   [gprbind]      smoke_program_binaries_subdevices.bexch
+   [Ada]          smoke_program_binaries_subdevices.ali
+   [gprbind]      smoke_program_binary_roundtrip.bexch
+   [Ada]          smoke_program_binary_roundtrip.ali
+Link
+   [link]         smoke_platforms.adb
+   [link]         smoke_core.adb
+   [link]         gen_pack_add1.adb
+   [link]         gen_pack_ew_mlp.adb
+   [link]         smoke_rt_load_pack_add1.adb
+   [link]         smoke_rt_load_pack_ew_mlp.adb
+   [link]         smoke_rt_negative_cases.adb
+   [link]         smoke_rt_fs_attack_cases.adb
+   [link]         smoke_rt_pack_symlink_escape.adb
+   [link]         smoke_rt_toctou_manifest_swap.adb
+   [link]         smoke_rt_toctou_binary_swap.adb
+   [link]         smoke_rt_signature_enforcement.adb
+   [link]         smoke_rt_signature_plugin.adb
+   [link]         smoke_crypto_provider_conformance.adb
+   [link]         smoke_rt_strict_policy.adb
+   [link]         smoke_rt_build_options_policy.adb
+   [link]         smoke_rt_no_heap_after_init.adb
+   [link]         smoke_rt_anti_rollback.adb
+   [link]         smoke_rt_untrusted_plugin.adb
+   [link]         smoke_rt_plugin_allowlist_policy.adb
+   [link]         smoke_constant_time_compare.adb
+   [link]         smoke_fuzz_kpack_parser.adb
+   [link]         bench_add1.adb
+   [link]         bench_pipeline_h2d_kernel_d2h.adb
+   [link]         bench_rt_pack_add1.adb
+   [link]         bench_rt_pack_ew_mlp.adb
+   [link]         bench_transfers_h2d_d2h.adb
+   [link]         bench_batching_add1.adb
+   [link]         demo_ew_mlp.adb
+   [link]         smoke_buffer_roundtrip.adb
+   [link]         smoke_image_roundtrip.adb
+   [link]         smoke_kernel_add1.adb
+   [link]         smoke_ew_mlp_inference.adb
+   [link]         smoke_program_il_path.adb
+   [link]         smoke_pack_catalog_selection.adb
+   [link]         smoke_program_binaries_multi_device.adb
+   [link]         smoke_program_binaries_subdevices.adb
+   [link]         smoke_program_binary_roundtrip.adb
+=== EW MLP Demo Run ===
+INFO demo=ew_mlp
+INFO mlp_shape=in64_hidden96_out4
+INFO quant=int_only_u8_i8_i32
+INFO batch=1024
+INFO fingerprint_name=cpu-haswell-Intel(R) Core(TM) i5-14600K
+INFO fingerprint_vendor=GenuineIntel
+INFO fingerprint_driver=5.0+debian
+INFO fingerprint_version=OpenCL 3.0 PoCL HSTR: cpu-x86_64-pc-linux-gnu-haswell
+INFO rt_pack_generation=PASS
+INFO mode=RT_NOJIT
+INFO fingerprint_platform=Portable Computing Language
+INFO fingerprint_vendor=GenuineIntel
+INFO fingerprint_driver=5.0+debian
+INFO strict_signature=ATTEMPTED
+INFO latency_host_ns=1484001
+INFO throughput_vectors_per_sec=690027
+INFO accuracy=1024/1024
+INFO confusion_row_0=256,0,0,0
+INFO confusion_row_1=0,256,0,0
+INFO confusion_row_2=0,0,256,0
+INFO confusion_row_3=0,0,0,256
+INFO visual_class_0 sum_band0=3517 sum_band1=477 sum_band2=479 sum_band3=447 predicted=0 expected=0
+INFO visual_class_1 sum_band0=506 sum_band1=3512 sum_band2=489 sum_band3=460 predicted=1 expected=1
+INFO visual_class_2 sum_band0=460 sum_band1=488 sum_band2=3523 sum_band3=484 predicted=2 expected=2
+INFO visual_class_3 sum_band0=469 sum_band1=497 sum_band2=472 sum_band3=3512 predicted=3 expected=3
+RESULT=PASS

@@ -1,0 +1,8 @@
+PASS exists: docs/VV/Execution_Logs/GATES/G39/rerun_01/G39_Report.md
+PASS exists: docs/VV/Execution_Logs/GATES/G40/rerun_02/G40_Report.md
+PASS exists: docs/VV/Execution_Logs/GATES/G41/rerun_01/G41_Report.md
+PASS exists: docs/VV/Execution_Logs/GATES/G42/rerun_01/G42_Report.md
+PASS exists: docs/VV/Execution_Logs/GATES/G39/Closure.md
+PASS exists: docs/VV/Execution_Logs/GATES/G40/Closure.md
+PASS exists: docs/VV/Execution_Logs/GATES/G41/Closure.md
+PASS exists: docs/VV/Execution_Logs/GATES/G42/Closure.md

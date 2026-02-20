@@ -27,8 +27,10 @@ fi
 TIMESTAMP_UTC="$(date -u +"%Y%m%dT%H%M%SZ")"
 SMOKE_LOG="${LOG_DIR}/${TIMESTAMP_UTC}_smoke_run.log"
 PACK_DIR="${REPO_ROOT}/docs/VV/Execution_Logs/local/${TIMESTAMP_UTC}_kpack_add1"
+MLP_PACK_DIR="${REPO_ROOT}/docs/VV/Execution_Logs/local/${TIMESTAMP_UTC}_kpack_ew_mlp"
 export OCLW_PACK_DIR="${PACK_DIR}"
 mkdir -p "${PACK_DIR}"
+mkdir -p "${MLP_PACK_DIR}"
 CRYPTO_PLUGIN_BUILD_SCRIPT="${REPO_ROOT}/tools/crypto_provider_ref/build.sh"
 CRYPTO_PLUGIN_SO="${REPO_ROOT}/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so"
 TRACEABILITY_CHECK_SCRIPT="${REPO_ROOT}/tools/traceability_check.sh"
@@ -51,6 +53,7 @@ find_smoke_executable() {
   echo "timestamp_utc=${TIMESTAMP_UTC}"
   echo "repo_root=${REPO_ROOT}"
   echo "pack_dir=${PACK_DIR}"
+  echo "mlp_pack_dir=${MLP_PACK_DIR}"
   echo "oclw_pack_dir=${OCLW_PACK_DIR}"
   echo "pocl_cache_dir=${POCL_CACHE_DIR:-<unset>}"
   echo "pocl_kernel_cache=${POCL_KERNEL_CACHE:-<unset>}"
@@ -95,7 +98,9 @@ echo "fuzz_seed_default=${FUZZ_SEED_DEFAULT}" | tee -a "${SMOKE_LOG}"
 SMOKE_PLATFORMS_EXEC="$(find_smoke_executable "smoke_platforms")"
 SMOKE_CORE_EXEC="$(find_smoke_executable "smoke_core")"
 GEN_PACK_ADD1_EXEC="$(find_smoke_executable "gen_pack_add1")"
+GEN_PACK_EW_MLP_EXEC="$(find_smoke_executable "gen_pack_ew_mlp")"
 SMOKE_RT_LOAD_PACK_ADD1_EXEC="$(find_smoke_executable "smoke_rt_load_pack_add1")"
+SMOKE_RT_LOAD_PACK_EW_MLP_EXEC="$(find_smoke_executable "smoke_rt_load_pack_ew_mlp")"
 SMOKE_RT_NEGATIVE_CASES_EXEC="$(find_smoke_executable "smoke_rt_negative_cases")"
 SMOKE_RT_FS_ATTACK_CASES_EXEC="$(find_smoke_executable "smoke_rt_fs_attack_cases")"
 SMOKE_RT_PACK_SYMLINK_ESCAPE_EXEC="$(find_smoke_executable "smoke_rt_pack_symlink_escape")"
@@ -115,11 +120,13 @@ SMOKE_FUZZ_KPACK_PARSER_EXEC="$(find_smoke_executable "smoke_fuzz_kpack_parser")
 BENCH_ADD1_EXEC="$(find_smoke_executable "bench_add1")"
 BENCH_PIPELINE_H2D_KERNEL_D2H_EXEC="$(find_smoke_executable "bench_pipeline_h2d_kernel_d2h")"
 BENCH_RT_PACK_ADD1_EXEC="$(find_smoke_executable "bench_rt_pack_add1")"
+BENCH_RT_PACK_EW_MLP_EXEC="$(find_smoke_executable "bench_rt_pack_ew_mlp")"
 BENCH_TRANSFERS_H2D_D2H_EXEC="$(find_smoke_executable "bench_transfers_h2d_d2h")"
 BENCH_BATCHING_ADD1_EXEC="$(find_smoke_executable "bench_batching_add1")"
 SMOKE_BUFFER_ROUNDTRIP_EXEC="$(find_smoke_executable "smoke_buffer_roundtrip")"
 SMOKE_IMAGE_ROUNDTRIP_EXEC="$(find_smoke_executable "smoke_image_roundtrip")"
 SMOKE_KERNEL_ADD1_EXEC="$(find_smoke_executable "smoke_kernel_add1")"
+SMOKE_EW_MLP_INFERENCE_EXEC="$(find_smoke_executable "smoke_ew_mlp_inference")"
 SMOKE_PROGRAM_IL_PATH_EXEC="$(find_smoke_executable "smoke_program_il_path")"
 SMOKE_PACK_CATALOG_SELECTION_EXEC="$(find_smoke_executable "smoke_pack_catalog_selection")"
 SMOKE_PROGRAM_BINARIES_MULTI_DEVICE_EXEC="$(find_smoke_executable "smoke_program_binaries_multi_device")"
@@ -151,9 +158,25 @@ if [ -z "${GEN_PACK_ADD1_EXEC}" ]; then
   MISSING_BINARIES=1
 fi
 
+if [ -z "${GEN_PACK_EW_MLP_EXEC}" ]; then
+  {
+    echo "ERROR missing smoke executable: gen_pack_ew_mlp"
+    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
+  } | tee -a "${SMOKE_LOG}"
+  MISSING_BINARIES=1
+fi
+
 if [ -z "${SMOKE_RT_LOAD_PACK_ADD1_EXEC}" ]; then
   {
     echo "ERROR missing smoke executable: smoke_rt_load_pack_add1"
+    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
+  } | tee -a "${SMOKE_LOG}"
+  MISSING_BINARIES=1
+fi
+
+if [ -z "${SMOKE_RT_LOAD_PACK_EW_MLP_EXEC}" ]; then
+  {
+    echo "ERROR missing smoke executable: smoke_rt_load_pack_ew_mlp"
     echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
   } | tee -a "${SMOKE_LOG}"
   MISSING_BINARIES=1
@@ -311,6 +334,14 @@ if [ -z "${BENCH_RT_PACK_ADD1_EXEC}" ]; then
   MISSING_BINARIES=1
 fi
 
+if [ -z "${BENCH_RT_PACK_EW_MLP_EXEC}" ]; then
+  {
+    echo "ERROR missing smoke executable: bench_rt_pack_ew_mlp"
+    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
+  } | tee -a "${SMOKE_LOG}"
+  MISSING_BINARIES=1
+fi
+
 if [ -z "${BENCH_TRANSFERS_H2D_D2H_EXEC}" ]; then
   {
     echo "ERROR missing smoke executable: bench_transfers_h2d_d2h"
@@ -346,6 +377,14 @@ fi
 if [ -z "${SMOKE_KERNEL_ADD1_EXEC}" ]; then
   {
     echo "ERROR missing smoke executable: smoke_kernel_add1"
+    echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
+  } | tee -a "${SMOKE_LOG}"
+  MISSING_BINARIES=1
+fi
+
+if [ -z "${SMOKE_EW_MLP_INFERENCE_EXEC}" ]; then
+  {
+    echo "ERROR missing smoke executable: smoke_ew_mlp_inference"
     echo "hint: run 'gprbuild -P tests/tests.gpr' and verify output dirs"
   } | tee -a "${SMOKE_LOG}"
   MISSING_BINARIES=1
@@ -417,7 +456,9 @@ fi
   echo "smoke_platforms_executable=${SMOKE_PLATFORMS_EXEC}"
   echo "smoke_core_executable=${SMOKE_CORE_EXEC}"
   echo "gen_pack_add1_executable=${GEN_PACK_ADD1_EXEC}"
+  echo "gen_pack_ew_mlp_executable=${GEN_PACK_EW_MLP_EXEC}"
   echo "smoke_rt_load_pack_add1_executable=${SMOKE_RT_LOAD_PACK_ADD1_EXEC}"
+  echo "smoke_rt_load_pack_ew_mlp_executable=${SMOKE_RT_LOAD_PACK_EW_MLP_EXEC}"
   echo "smoke_rt_negative_cases_executable=${SMOKE_RT_NEGATIVE_CASES_EXEC}"
   echo "smoke_rt_fs_attack_cases_executable=${SMOKE_RT_FS_ATTACK_CASES_EXEC}"
   echo "smoke_rt_pack_symlink_escape_executable=${SMOKE_RT_PACK_SYMLINK_ESCAPE_EXEC}"
@@ -437,11 +478,13 @@ fi
   echo "bench_add1_executable=${BENCH_ADD1_EXEC}"
   echo "bench_pipeline_h2d_kernel_d2h_executable=${BENCH_PIPELINE_H2D_KERNEL_D2H_EXEC}"
   echo "bench_rt_pack_add1_executable=${BENCH_RT_PACK_ADD1_EXEC}"
+  echo "bench_rt_pack_ew_mlp_executable=${BENCH_RT_PACK_EW_MLP_EXEC}"
   echo "bench_transfers_h2d_d2h_executable=${BENCH_TRANSFERS_H2D_D2H_EXEC}"
   echo "bench_batching_add1_executable=${BENCH_BATCHING_ADD1_EXEC}"
   echo "smoke_buffer_roundtrip_executable=${SMOKE_BUFFER_ROUNDTRIP_EXEC}"
   echo "smoke_image_roundtrip_executable=${SMOKE_IMAGE_ROUNDTRIP_EXEC}"
   echo "smoke_kernel_add1_executable=${SMOKE_KERNEL_ADD1_EXEC}"
+  echo "smoke_ew_mlp_inference_executable=${SMOKE_EW_MLP_INFERENCE_EXEC}"
   echo "smoke_program_il_path_executable=${SMOKE_PROGRAM_IL_PATH_EXEC}"
   echo "smoke_pack_catalog_selection_executable=${SMOKE_PACK_CATALOG_SELECTION_EXEC}"
   echo "smoke_program_binaries_multi_device_executable=${SMOKE_PROGRAM_BINARIES_MULTI_DEVICE_EXEC}"
@@ -480,7 +523,9 @@ run_and_log_smoke_with_env() {
 
 OVERALL_RC=0
 GEN_PACK_ADD1_RC=0
+GEN_PACK_EW_MLP_RC=0
 SMOKE_RT_LOAD_PACK_ADD1_RC=0
+SMOKE_RT_LOAD_PACK_EW_MLP_RC=0
 SMOKE_RT_NEGATIVE_CASES_RC=0
 SMOKE_RT_FS_ATTACK_CASES_RC=0
 SMOKE_RT_PACK_SYMLINK_ESCAPE_RC=0
@@ -502,11 +547,13 @@ SMOKE_BUNDLE_INTEGRITY_RC=0
 BENCH_ADD1_RC=0
 BENCH_PIPELINE_H2D_KERNEL_D2H_RC=0
 BENCH_RT_PACK_ADD1_RC=0
+BENCH_RT_PACK_EW_MLP_RC=0
 BENCH_TRANSFERS_H2D_D2H_RC=0
 BENCH_BATCHING_ADD1_RC=0
 SMOKE_PROGRAM_BINARIES_MULTI_DEVICE_RC=0
 SMOKE_PROGRAM_BINARIES_SUBDEVICES_RC=0
 SMOKE_IMAGE_ROUNDTRIP_RC=0
+SMOKE_EW_MLP_INFERENCE_RC=0
 SMOKE_PROGRAM_IL_PATH_RC=0
 SMOKE_PACK_CATALOG_SELECTION_RC=0
 run_and_log_smoke "smoke_platforms" "${SMOKE_PLATFORMS_EXEC}" || OVERALL_RC=$?
@@ -515,9 +562,21 @@ run_and_log_smoke "gen_pack_add1" "${GEN_PACK_ADD1_EXEC}" || GEN_PACK_ADD1_RC=$?
 if [ "${GEN_PACK_ADD1_RC}" -ne 0 ]; then
   OVERALL_RC="${GEN_PACK_ADD1_RC}"
 fi
+run_and_log_smoke_with_env \
+  "gen_pack_ew_mlp" \
+  "${GEN_PACK_EW_MLP_EXEC}" \
+  OCLW_PACK_DIR="${MLP_PACK_DIR}" \
+  || GEN_PACK_EW_MLP_RC=$?
+if [ "${GEN_PACK_EW_MLP_RC}" -ne 0 ]; then
+  OVERALL_RC="${GEN_PACK_EW_MLP_RC}"
+fi
 run_and_log_smoke "smoke_rt_load_pack_add1" "${SMOKE_RT_LOAD_PACK_ADD1_EXEC}" || SMOKE_RT_LOAD_PACK_ADD1_RC=$?
 if [ "${SMOKE_RT_LOAD_PACK_ADD1_RC}" -ne 0 ]; then
   OVERALL_RC="${SMOKE_RT_LOAD_PACK_ADD1_RC}"
+fi
+run_and_log_smoke "smoke_rt_load_pack_ew_mlp" "${SMOKE_RT_LOAD_PACK_EW_MLP_EXEC}" || SMOKE_RT_LOAD_PACK_EW_MLP_RC=$?
+if [ "${SMOKE_RT_LOAD_PACK_EW_MLP_RC}" -ne 0 ]; then
+  OVERALL_RC="${SMOKE_RT_LOAD_PACK_EW_MLP_RC}"
 fi
 run_and_log_smoke "smoke_rt_negative_cases" "${SMOKE_RT_NEGATIVE_CASES_EXEC}" || SMOKE_RT_NEGATIVE_CASES_RC=$?
 if [ "${SMOKE_RT_NEGATIVE_CASES_RC}" -ne 0 ]; then
@@ -597,6 +656,14 @@ fi
 if [ "${BENCH_RT_PACK_ADD1_RC}" -ne 0 ]; then
   OVERALL_RC="${BENCH_RT_PACK_ADD1_RC}"
 fi
+if [ "${OCLW_RUN_BENCH:-0}" = "1" ]; then
+  run_and_log_smoke "bench_rt_pack_ew_mlp" "${BENCH_RT_PACK_EW_MLP_EXEC}" || BENCH_RT_PACK_EW_MLP_RC=$?
+  if [ "${BENCH_RT_PACK_EW_MLP_RC}" -ne 0 ]; then
+    OVERALL_RC="${BENCH_RT_PACK_EW_MLP_RC}"
+  fi
+else
+  echo "INFO bench_rt_pack_ew_mlp=SKIP_DISABLED (set OCLW_RUN_BENCH=1)" | tee -a "${SMOKE_LOG}"
+fi
 run_and_log_smoke "bench_transfers_h2d_d2h" "${BENCH_TRANSFERS_H2D_D2H_EXEC}" || BENCH_TRANSFERS_H2D_D2H_RC=$?
 if [ "${BENCH_TRANSFERS_H2D_D2H_RC}" -ne 0 ]; then
   OVERALL_RC="${BENCH_TRANSFERS_H2D_D2H_RC}"
@@ -640,6 +707,10 @@ if [ "${SMOKE_IMAGE_ROUNDTRIP_RC}" -ne 0 ]; then
   OVERALL_RC="${SMOKE_IMAGE_ROUNDTRIP_RC}"
 fi
 run_and_log_smoke "smoke_kernel_add1" "${SMOKE_KERNEL_ADD1_EXEC}" || OVERALL_RC=$?
+run_and_log_smoke "smoke_ew_mlp_inference" "${SMOKE_EW_MLP_INFERENCE_EXEC}" || SMOKE_EW_MLP_INFERENCE_RC=$?
+if [ "${SMOKE_EW_MLP_INFERENCE_RC}" -ne 0 ]; then
+  OVERALL_RC="${SMOKE_EW_MLP_INFERENCE_RC}"
+fi
 run_and_log_smoke "smoke_program_il_path" "${SMOKE_PROGRAM_IL_PATH_EXEC}" || SMOKE_PROGRAM_IL_PATH_RC=$?
 if [ "${SMOKE_PROGRAM_IL_PATH_RC}" -ne 0 ]; then
   OVERALL_RC="${SMOKE_PROGRAM_IL_PATH_RC}"
@@ -659,7 +730,9 @@ fi
 run_and_log_smoke "smoke_program_binary_roundtrip" "${SMOKE_PROGRAM_BINARY_ROUNDTRIP_EXEC}" || OVERALL_RC=$?
 
 echo "gen_pack_add1_exit_code=${GEN_PACK_ADD1_RC}" | tee -a "${SMOKE_LOG}"
+echo "gen_pack_ew_mlp_exit_code=${GEN_PACK_EW_MLP_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_rt_load_pack_add1_exit_code=${SMOKE_RT_LOAD_PACK_ADD1_RC}" | tee -a "${SMOKE_LOG}"
+echo "smoke_rt_load_pack_ew_mlp_exit_code=${SMOKE_RT_LOAD_PACK_EW_MLP_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_rt_negative_cases_exit_code=${SMOKE_RT_NEGATIVE_CASES_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_rt_fs_attack_cases_exit_code=${SMOKE_RT_FS_ATTACK_CASES_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_rt_pack_symlink_escape_exit_code=${SMOKE_RT_PACK_SYMLINK_ESCAPE_RC}" | tee -a "${SMOKE_LOG}"
@@ -681,14 +754,17 @@ echo "smoke_bundle_integrity_exit_code=${SMOKE_BUNDLE_INTEGRITY_RC}" | tee -a "$
 echo "bench_add1_exit_code=${BENCH_ADD1_RC}" | tee -a "${SMOKE_LOG}"
 echo "bench_pipeline_h2d_kernel_d2h_exit_code=${BENCH_PIPELINE_H2D_KERNEL_D2H_RC}" | tee -a "${SMOKE_LOG}"
 echo "bench_rt_pack_add1_exit_code=${BENCH_RT_PACK_ADD1_RC}" | tee -a "${SMOKE_LOG}"
+echo "bench_rt_pack_ew_mlp_exit_code=${BENCH_RT_PACK_EW_MLP_RC}" | tee -a "${SMOKE_LOG}"
 echo "bench_transfers_h2d_d2h_exit_code=${BENCH_TRANSFERS_H2D_D2H_RC}" | tee -a "${SMOKE_LOG}"
 echo "bench_batching_add1_exit_code=${BENCH_BATCHING_ADD1_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_image_roundtrip_exit_code=${SMOKE_IMAGE_ROUNDTRIP_RC}" | tee -a "${SMOKE_LOG}"
+echo "smoke_ew_mlp_inference_exit_code=${SMOKE_EW_MLP_INFERENCE_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_program_il_path_exit_code=${SMOKE_PROGRAM_IL_PATH_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_pack_catalog_selection_exit_code=${SMOKE_PACK_CATALOG_SELECTION_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_program_binaries_multi_device_exit_code=${SMOKE_PROGRAM_BINARIES_MULTI_DEVICE_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_program_binaries_subdevices_exit_code=${SMOKE_PROGRAM_BINARIES_SUBDEVICES_RC}" | tee -a "${SMOKE_LOG}"
 echo "pack_dir=${PACK_DIR}" | tee -a "${SMOKE_LOG}"
+echo "mlp_pack_dir=${MLP_PACK_DIR}" | tee -a "${SMOKE_LOG}"
 echo "smoke_exit_code=${OVERALL_RC}" | tee -a "${SMOKE_LOG}"
 echo "smoke_log=${SMOKE_LOG}" | tee -a "${SMOKE_LOG}"
 echo "=== Smoke Run End ===" | tee -a "${SMOKE_LOG}"

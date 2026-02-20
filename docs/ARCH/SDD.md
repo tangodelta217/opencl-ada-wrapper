@@ -977,3 +977,57 @@ explicita de rutas permitidas y permisos minimos de filesystem.
   - rechazo por permisos inseguros,
   - aceptacion del caso valido,
   - `RESULT=PASS`.
+
+## 38. EW MLP Demo (Quantized, deterministic)
+**Objetivo:** Incorporar un demostrador tecnico EW/RT de inferencia MLP
+determinista, con trazabilidad y evidencia reproducible.
+
+**38.1 Alcance funcional del demo**
+- Topologia MLP de referencia:
+  - entrada `64`,
+  - capa oculta `96`,
+  - salida `4`,
+  - activacion ReLU.
+- Aritmetica `int-only` para reducir variabilidad numerica y facilitar
+  comparacion exacta.
+- Dataset sintetico deterministico de 4 clases por banda (no sensible).
+
+**38.2 Encaje DEV vs RT**
+- DEV (build-from-source):
+  - permite generar artefactos y validar funcionalidad durante desarrollo.
+  - puede usar compilacion desde source para preparar `program.bin`.
+- RT (no-JIT):
+  - ejecuta desde Kernel Pack (`manifest.kpack` + `program.bin`).
+  - no permite fallback a source.
+  - aplica checks de hash/fingerprint/firma/politicas RT strict segun gates
+    vigentes.
+
+**38.3 Determinismo y correctitud**
+- Determinismo por diseno:
+  - datos de entrada sinteticos y reproducibles,
+  - pesos/sesgos deterministas,
+  - aritmetica entera.
+- Correctitud objetivo:
+  - salida bit-exact CPU vs OpenCL para las mismas entradas.
+- Salida operacional:
+  - `RESULT=PASS|FAIL|SKIP`,
+  - `INFO ...` acotado y parseable.
+
+**38.4 Bench y evidencia minima**
+- El demo debe reportar metricas minimas:
+  - latencia `p50`/`p99`,
+  - throughput.
+- Evidencia esperada en VV:
+  - build + smoke/demo logs,
+  - extractos de correctitud y metricas.
+
+**38.5 Trazabilidad**
+- Requisitos asociados:
+  - `OCLW-REQ-0401` correctitud bit-exact,
+  - `OCLW-REQ-0402` ruta RT no-JIT desde binario,
+  - `OCLW-REQ-0403` salida estable defense-friendly,
+  - `OCLW-REQ-0404` benchmark minimo.
+- Tests planificados:
+  - `OCLW-TST-0401` `smoke_ew_mlp_inference`,
+  - `OCLW-TST-0402` `smoke_rt_load_pack_ew_mlp`,
+  - `OCLW-TST-0403` `bench_rt_pack_ew_mlp`.

@@ -1,0 +1,66 @@
+=== EW MLP Demo Build ===
+gprbuild: "smoke_platforms" up to date
+gprbuild: "smoke_core" up to date
+gprbuild: "gen_pack_add1" up to date
+gprbuild: "gen_pack_ew_mlp" up to date
+gprbuild: "smoke_rt_load_pack_add1" up to date
+gprbuild: "smoke_rt_load_pack_ew_mlp" up to date
+gprbuild: "smoke_rt_negative_cases" up to date
+gprbuild: "smoke_rt_fs_attack_cases" up to date
+gprbuild: "smoke_rt_pack_symlink_escape" up to date
+gprbuild: "smoke_rt_toctou_manifest_swap" up to date
+gprbuild: "smoke_rt_toctou_binary_swap" up to date
+gprbuild: "smoke_rt_signature_enforcement" up to date
+gprbuild: "smoke_rt_signature_plugin" up to date
+gprbuild: "smoke_crypto_provider_conformance" up to date
+gprbuild: "smoke_rt_strict_policy" up to date
+gprbuild: "smoke_rt_build_options_policy" up to date
+gprbuild: "smoke_rt_no_heap_after_init" up to date
+gprbuild: "smoke_rt_anti_rollback" up to date
+gprbuild: "smoke_rt_untrusted_plugin" up to date
+gprbuild: "smoke_rt_plugin_allowlist_policy" up to date
+gprbuild: "smoke_constant_time_compare" up to date
+gprbuild: "smoke_fuzz_kpack_parser" up to date
+gprbuild: "bench_add1" up to date
+gprbuild: "bench_pipeline_h2d_kernel_d2h" up to date
+gprbuild: "bench_rt_pack_add1" up to date
+gprbuild: "bench_rt_pack_ew_mlp" up to date
+gprbuild: "bench_transfers_h2d_d2h" up to date
+gprbuild: "bench_batching_add1" up to date
+gprbuild: "demo_ew_mlp" up to date
+gprbuild: "smoke_buffer_roundtrip" up to date
+gprbuild: "smoke_image_roundtrip" up to date
+gprbuild: "smoke_kernel_add1" up to date
+gprbuild: "smoke_ew_mlp_inference" up to date
+gprbuild: "smoke_program_il_path" up to date
+gprbuild: "smoke_pack_catalog_selection" up to date
+gprbuild: "smoke_program_binaries_multi_device" up to date
+gprbuild: "smoke_program_binaries_subdevices" up to date
+gprbuild: "smoke_program_binary_roundtrip" up to date
+=== EW MLP Demo Run ===
+INFO demo=ew_mlp
+INFO mlp_shape=in64_hidden96_out4
+INFO quant=int_only_u8_i8_i32
+INFO batch=1024
+INFO fingerprint_name=cpu-haswell-Intel(R) Core(TM) i5-14600K
+INFO fingerprint_vendor=GenuineIntel
+INFO fingerprint_driver=5.0+debian
+INFO fingerprint_version=OpenCL 3.0 PoCL HSTR: cpu-x86_64-pc-linux-gnu-haswell
+INFO rt_pack_generation=PASS
+INFO mode=RT_NOJIT
+INFO fingerprint_platform=Portable Computing Language
+INFO fingerprint_vendor=GenuineIntel
+INFO fingerprint_driver=5.0+debian
+INFO strict_signature=ATTEMPTED
+INFO latency_host_ns=4035001
+INFO throughput_vectors_per_sec=253780
+INFO accuracy=1024/1024
+INFO confusion_row_0=256,0,0,0
+INFO confusion_row_1=0,256,0,0
+INFO confusion_row_2=0,0,256,0
+INFO confusion_row_3=0,0,0,256
+INFO visual_class_0 sum_band0=3517 sum_band1=477 sum_band2=479 sum_band3=447 predicted=0 expected=0
+INFO visual_class_1 sum_band0=506 sum_band1=3512 sum_band2=489 sum_band3=460 predicted=1 expected=1
+INFO visual_class_2 sum_band0=460 sum_band1=488 sum_band2=3523 sum_band3=484 predicted=2 expected=2
+INFO visual_class_3 sum_band0=469 sum_band1=497 sum_band2=472 sum_band3=3512 predicted=3 expected=3
+RESULT=PASS

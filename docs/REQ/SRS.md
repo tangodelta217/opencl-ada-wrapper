@@ -60,10 +60,25 @@ El sistema provee bindings y abstracciones Ada para OpenCL 1.2 con soporte de ca
 - **Texto:** Se debera mantener trazabilidad entre requisitos y pruebas en la documentacion de verificacion.
 - **Verificacion:** Inspeccion.
 
+**OCLW-REQ-0401**
+- **Texto:** La demo EW MLP debera validar correctitud bit-exact entre inferencia CPU y ruta OpenCL para el mismo conjunto de entradas deterministicas.
+- **Verificacion:** Test.
+
+**OCLW-REQ-0402**
+- **Texto:** En perfil RT, la demo EW MLP debera ejecutarse por ruta no-JIT desde programa binario (Kernel Pack) sin fallback a source.
+- **Verificacion:** Test.
+
+**OCLW-REQ-0403**
+- **Texto:** La salida de la demo EW MLP debera ser estable y defense-friendly, usando como minimo `RESULT=PASS|FAIL|SKIP` y logs acotados.
+- **Verificacion:** Test + Inspeccion.
+
+**OCLW-REQ-0404**
+- **Texto:** La demo EW MLP debera incluir benchmark minimo con metricas `p50`/`p99` y throughput para soporte de presupuestos de latencia.
+- **Verificacion:** Test.
+
 ## 6. Requisitos No Funcionales (Placeholder)
 - <TBD_NFR_PERFORMANCE>
 - <TBD_NFR_DETERMINISM>
 
 ## 7. Matriz de Trazabilidad (Placeholder)
 - <TBD_TRACEABILITY_MATRIX>
-

@@ -1,0 +1,6 @@
+# Extracts
+INFO init_ns=23257869
+INFO exec_host_ns_p50=5189156
+INFO exec_host_ns_p99=11500207
+INFO vectors_per_sec=46185
+RESULT=PASS

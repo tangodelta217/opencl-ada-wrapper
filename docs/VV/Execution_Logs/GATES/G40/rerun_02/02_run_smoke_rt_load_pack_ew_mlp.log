@@ -1,0 +1,16 @@
+INFO pack_dir=docs/VV/Execution_Logs/local/20260220T103404Z_kpack_ew_mlp
+INFO manifest_path=docs/VV/Execution_Logs/local/20260220T103404Z_kpack_ew_mlp/manifest.kpack
+INFO binary_path=docs/VV/Execution_Logs/local/20260220T103404Z_kpack_ew_mlp/program.bin
+INFO strict_policy_mode=ENABLED
+INFO verifier_mode=REFERENCE_PLUGIN (NOT CRYPTO)
+INFO gen_pack_ew_mlp_return_code=0 log=docs/VV/Execution_Logs/local/20260220T103404Z_kpack_ew_mlp/gen_pack_ew_mlp.log
+INFO plugin_build_return_code=0 log=docs/VV/Execution_Logs/local/20260220T103404Z_kpack_ew_mlp/crypto_plugin_build.log
+INFO binary_size=78916
+INFO binary_fnv1a32=28693229
+INFO plugin_path=/home/tangodelta/opencl-ada-wrapper/tools/crypto_provider_ref/liboclw_crypto_provider_ref.so
+INFO batch=128
+INFO accuracy=128/128
+INFO class_mismatches=0
+INFO cpu_expected_mismatches=0
+INFO class_out_of_range=0
+RESULT=PASS

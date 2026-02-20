@@ -1,0 +1,11 @@
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/bench_rt_pack_ew_mlp
+INFO warmup=10 iterations=200
+INFO batch=256
+INFO pack_dir=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260220T104027Z_kpack_add1
+INFO gen_pack_ew_mlp_return_code=0 log=/home/tangodelta/opencl-ada-wrapper/docs/VV/Execution_Logs/local/20260220T104027Z_kpack_add1/bench_gen_pack_ew_mlp.log
+INFO init_ns=23257869
+INFO exec_host_ns_p50=5189156
+INFO exec_host_ns_p99=11500207
+INFO vectors_per_sec=46185
+RESULT=PASS
+bench_rt_pack_ew_mlp_exit_code=0
