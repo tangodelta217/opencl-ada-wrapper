@@ -1,20 +1,19 @@
-# v0.2.0 Release Notes
+# Release v0.2.1
 
 ## Summary
 
-This release consolidates RT no-JIT kernel pack execution, runtime hardening controls, and the EW MLP demo path with validated evidence gates.
+This release delivers RT no-JIT kernel pack execution, reinforced RT hardening controls, and the EW MLP demo path with validated evidence.
 
-- Release commit: `f56406f3230c99935e3962747990d46a464cbc8f`
+The runtime path remains fail-closed and aligned with deterministic deployment workflows.
 
 ## Highlights
 
-- RT no-JIT execution path for kernel packs with strict runtime validation.
-- Security hardening coverage for filesystem policy, TOCTOU, plugin trust policy, and fail-closed behavior.
-- Deterministic EW MLP demo pipeline with CPU/OpenCL parity checks.
-- Reproducible bundle workflows for runtime, evidence, and delivery packaging.
-- Gate evidence expanded through post-MLP audits and reruns.
+- RT no-JIT loading path for OpenCL kernel packs.
+- Security hardening in RT policy and packaging workflow.
+- EW MLP demo integrated end-to-end with runtime validation.
+- Reproducible evidence and delivery bundles with tracked verification gates.
 
-## How to Run Demo
+## How to run demo
 
 `gprbuild -P tests/tests.gpr`
 
@@ -26,8 +25,14 @@ This release consolidates RT no-JIT kernel pack execution, runtime hardening con
 
 - `docs/DEMO/EW_MLP_Showcase_Report.md`
 - `docs/VV/Execution_Logs/GATES/G43/rerun_01/G43_Audit_Post_MLP.md`
+- `docs/VV/Execution_Logs/GATES/G37/rerun_03/G37_Evidence_Bundle_Report.md`
+- `docs/VV/Execution_Logs/GATES/G38/rerun_03/G38_Delivery_Bundle_Report.md`
 
-## Asset Checksums
+## Notes
+
+OpenCL program binaries are vendor/driver/device-specific artifacts; RT policy enforces fail-closed behavior on mismatch.
+
+## Assets checksums
 
 - `9e922e1f2eb0709244240d0e2b791a717a3fd02fd589e824ab5e8010deda6975`  `dist/oclw_delivery_bundle_reproducible.tar.gz`
 - `f1adfe480fa8e9506b3d58060029103d460ae59929bcccb0e84bd2f341b972b3`  `dist/oclw_evidence_bundle_reproducible.tar.gz`
