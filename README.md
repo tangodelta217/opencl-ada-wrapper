@@ -3,6 +3,21 @@
 **Objetivo**
 Repositorio para un wrapper en Ada de OpenCL y su infraestructura asociada.
 
+**Quickstart: EW MLP Demo (RT no-JIT)**
+- Compilar:
+  - `gprbuild -P tests/tests.gpr`
+- Ejecutar demo end-to-end:
+  - `tools/run_demo_ew_mlp.sh`
+- Ejecutar smoke + bench:
+  - `OCLW_RUN_BENCH=1 tools/run_smoke.sh`
+- Reporte showcase:
+  - `docs/DEMO/EW_MLP_Showcase_Report.md`
+
+**Release assets**
+- Tag recomendado: `v0.2.1`
+- Ver release y assets desde CLI:
+  - `gh release view v0.2.1`
+
 **Compilacion**
 - Herramientas requeridas:
   - `gprbuild`
