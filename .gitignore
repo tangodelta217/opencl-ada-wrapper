@@ -38,3 +38,4 @@ dist/
 # OS/editor noise
 .DS_Store
 Thumbs.db
+docs/VV/Execution_Logs/local/
