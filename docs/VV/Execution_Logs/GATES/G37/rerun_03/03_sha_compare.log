@@ -1,0 +1,7 @@
+bundle_path=dist/oclw_evidence_bundle_reproducible.tar.gz
+run1_exit_code=0
+run2_exit_code=0
+sha1=f1adfe480fa8e9506b3d58060029103d460ae59929bcccb0e84bd2f341b972b3
+sha2=f1adfe480fa8e9506b3d58060029103d460ae59929bcccb0e84bd2f341b972b3
+compare=MATCH
+result=PASS
