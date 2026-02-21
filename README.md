@@ -16,6 +16,13 @@ tools/run_demo_ew_mlp.sh
 OCLW_RUN_BENCH=1 tools/run_smoke.sh
 ```
 
+- Ubuntu deps (quick install): `sudo apt install gprbuild gnat ocl-icd-opencl-dev pocl-opencl-icd`
+
+### Demo (visual)
+
+![EW MLP demo](docs/assets/demo_ew_mlp.gif)
+
+- Recording: https://asciinema.org/a/GTsy9Aj1MMCZTRsE
 - Demo showcase report: `docs/DEMO/EW_MLP_Showcase_Report.md`
 
 ## What This Repo Provides
@@ -27,7 +34,7 @@ OCLW_RUN_BENCH=1 tools/run_smoke.sh
 
 ## Demo: EW MLP
 
-The EW MLP demo is designed as a fast credibility check of the full pipeline:
+The EW MLP demo is designed as a fast credibility check of the full pipeline using EW-style, synthetic, non-sensitive signal features:
 
 - BIT-EXACT CPU vs OpenCL inference behavior.
 - RT_NOJIT execution mode with pack metadata and binary integrity evidence.
@@ -45,6 +52,7 @@ The EW MLP demo is designed as a fast credibility check of the full pipeline:
 
 - Latest stable tag: `v0.2.1`
 - Release assets are published via GitHub Releases and include reproducible bundle artifacts.
+- Checksums are provided as release assets for `v0.2.1` (for asset integrity verification).
 
 ## Build Details
 
