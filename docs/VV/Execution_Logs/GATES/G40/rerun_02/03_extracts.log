@@ -1,0 +1,4 @@
+# Extracts
+RESULT=PASS
+INFO binary_size=78916
+INFO binary_fnv1a32=28693229

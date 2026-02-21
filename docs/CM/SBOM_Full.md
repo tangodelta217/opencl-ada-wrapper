@@ -1,9 +1,9 @@
 # SBOM Full
 
-- generated_utc=2026-02-18T23:00:22Z
-- git_head=bdac2e785fc1934bfad826572b8b397ac9e4cb37
+- generated_utc=2026-02-20T00:07:16Z
+- git_head=374d9a880c9d58ead4e3bcda4beb588ef3956dcd
 - reproducible=1
-- source_date_epoch=1771455622
+- source_date_epoch=1771546036
 
 ## Toolchain Versions
 ```text
@@ -44,7 +44,7 @@ gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)
 | Path | SHA-256 |
 |---|---|
 | `tools/build.sh` | `6bdc0ad4ba3e8e319c902e005a33925bbe7ae297ff418ebaf754a073261e610b` |
-| `tools/run_smoke.sh` | `fdd04c59d0dd39c18fb8dc6e6aa30f92a75001af658426e329c0aeb5d7ed3752` |
+| `tools/run_smoke.sh` | `d921a40e2f4c9a2d3e140056883c1db8c6800b56af0a8628749a35bab36f5da3` |
 | `tools/package_rt_bundle.sh` | `c249d46cc05106e6c61bc99e8f8b6e83937174586b13df9ef4dbb2eb62a8d3bd` |
 | `tools/gen_sbom_full.sh` | `ffb4580215d52aa7ec94d40dec29672ed7ae12c5b0fdf8d3da8eac4eac455c4f` |
 | `tools/smoke_bundle_integrity.sh` | `9178421b97c3cdd675ac2320fdf64be72ccf30432b9acbe5cd4ac6bfa0178289` |

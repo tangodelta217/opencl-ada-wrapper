@@ -1,0 +1,116 @@
+[SMOKE RESULT LINES]
+54:gprbuild: "smoke_rt_load_pack_ew_mlp" up to date
+74:gprbuild: "bench_rt_pack_ew_mlp" up to date
+77:gprbuild: "demo_ew_mlp" up to date
+81:gprbuild: "smoke_ew_mlp_inference" up to date
+111:smoke_rt_load_pack_ew_mlp_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_load_pack_ew_mlp
+131:bench_rt_pack_ew_mlp_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/bench_rt_pack_ew_mlp
+137:smoke_ew_mlp_inference_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_ew_mlp_inference
+182:RESULT=PASS
+190:RESULT=PASS
+197:RESULT=PASS
+199:$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_rt_load_pack_ew_mlp
+215:RESULT=PASS
+216:smoke_rt_load_pack_ew_mlp_exit_code=0
+225:RESULT=PASS
+236:RESULT=PASS
+242:RESULT=PASS
+251:RESULT=PASS
+255:RESULT=PASS
+264:RESULT=PASS
+267:RESULT=PASS
+276:RESULT=PASS
+279:RESULT=PASS
+289:RESULT=PASS
+302:RESULT=PASS
+310:RESULT=PASS
+323:RESULT=PASS
+332:RESULT=PASS
+343:RESULT=PASS
+354:RESULT=PASS
+375:RESULT=PASS
+392:RESULT=PASS
+417:RESULT=PASS
+419:INFO bench_rt_pack_ew_mlp=SKIP_DISABLED (set OCLW_RUN_BENCH=1)
+432:RESULT=PASS
+446:RESULT=PASS
+456:RESULT=PASS
+466:RESULT=PASS
+475:RESULT=PASS
+484:RESULT=PASS
+487:RESULT=PASS
+499:RESULT=PASS
+502:RESULT=PASS
+505:RESULT=PASS
+509:RESULT=PASS
+511:$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_ew_mlp_inference
+522:RESULT=PASS
+523:smoke_ew_mlp_inference_exit_code=0
+527:RESULT=SKIP reason=il_create_controlled_failure
+537:RESULT=PASS
+544:RESULT=PASS
+551:RESULT=SKIP reason=num_devices_not_2
+556:RESULT=PASS
+561:smoke_rt_load_pack_ew_mlp_exit_code=0
+583:bench_rt_pack_ew_mlp_exit_code=0
+587:smoke_ew_mlp_inference_exit_code=0
+
+[DEMO RESULT LINES]
+136:INFO mode=RT_NOJIT
+143:INFO accuracy=1024/1024
+152:RESULT=PASS
+
+[BENCH RESULT LINES]
+74:gprbuild: "bench_rt_pack_ew_mlp" up to date
+131:bench_rt_pack_ew_mlp_executable=/home/tangodelta/opencl-ada-wrapper/tests/bin/bench_rt_pack_ew_mlp
+182:RESULT=PASS
+190:RESULT=PASS
+197:RESULT=PASS
+215:RESULT=PASS
+225:RESULT=PASS
+236:RESULT=PASS
+242:RESULT=PASS
+251:RESULT=PASS
+255:RESULT=PASS
+264:RESULT=PASS
+267:RESULT=PASS
+276:RESULT=PASS
+279:RESULT=PASS
+289:RESULT=PASS
+302:RESULT=PASS
+310:RESULT=PASS
+323:RESULT=PASS
+332:RESULT=PASS
+343:RESULT=PASS
+354:RESULT=PASS
+375:RESULT=PASS
+392:RESULT=PASS
+400:INFO init_ns=3904957
+409:INFO exec_host_ns_p50=94016
+411:INFO exec_host_ns_p99=173690
+417:RESULT=PASS
+419:$ /home/tangodelta/opencl-ada-wrapper/tests/bin/bench_rt_pack_ew_mlp
+424:INFO init_ns=22082093
+425:INFO exec_host_ns_p50=7060013
+426:INFO exec_host_ns_p99=11081682
+427:INFO vectors_per_sec=37914
+428:RESULT=PASS
+429:bench_rt_pack_ew_mlp_exit_code=0
+442:RESULT=PASS
+456:RESULT=PASS
+466:RESULT=PASS
+476:RESULT=PASS
+485:RESULT=PASS
+494:RESULT=PASS
+497:RESULT=PASS
+509:RESULT=PASS
+512:RESULT=PASS
+515:RESULT=PASS
+519:RESULT=PASS
+532:RESULT=PASS
+537:RESULT=SKIP reason=il_create_controlled_failure
+547:RESULT=PASS
+554:RESULT=PASS
+561:RESULT=SKIP reason=num_devices_not_2
+566:RESULT=PASS
+593:bench_rt_pack_ew_mlp_exit_code=0

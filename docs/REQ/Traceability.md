@@ -285,3 +285,18 @@ Threat model and OPS references:
 | OCLW-REQ-0005 | RT strict fail-closed ante TOCTOU de `manifest.kpack` | Test | OCLW-TST-3002 | `tests/smoke/smoke_rt_toctou_manifest_swap.adb` | `docs/VV/Execution_Logs/GATES/G32/rerun_01/G32_Report.md` (`smoke_rt_toctou_manifest_swap RESULT=PASS`) | PASS |
 | OCLW-REQ-0005 | RT strict fail-closed ante TOCTOU de `program.bin` | Test | OCLW-TST-3003 | `tests/smoke/smoke_rt_toctou_binary_swap.adb` | `docs/VV/Execution_Logs/GATES/G32/rerun_01/G32_Report.md` (`smoke_rt_toctou_binary_swap RESULT=PASS`) | PASS |
 | OCLW-REQ-0005 | Trusted crypto plugin policy (allowlist/perms/symlink rejection) en RT strict | Test | OCLW-TST-3004 | `tests/smoke/smoke_rt_plugin_allowlist_policy.adb` | `docs/VV/Execution_Logs/GATES/G33/rerun_01/G33_Report.md` (`smoke_rt_plugin_allowlist_policy RESULT=PASS`) | PASS |
+
+## EW MLP Demo Addendum (Planned)
+
+Primary demo documentation:
+- `docs/DEMO/EW_MLP_Demo.md`
+
+Planned primary evidence:
+- `docs/VV/Execution_Logs/local/ew_mlp_demo_report.md` (planned)
+
+| Requirement ID | Requirement focus | Verification method | Test ID | Planned test implementation | Planned evidence | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| OCLW-REQ-0401 | Correctitud bit-exact CPU vs OpenCL para inferencia MLP cuantizada | Test | OCLW-TST-0401 | `tests/smoke/smoke_ew_mlp_inference.adb` | `docs/VV/Execution_Logs/local/ew_mlp_demo_report.md` | IN_PROGRESS |
+| OCLW-REQ-0402 | Ruta RT no-JIT: carga de MLP desde Kernel Pack binario y ejecucion sin fallback a source | Test | OCLW-TST-0402 | `tests/smoke/smoke_rt_load_pack_ew_mlp.adb` (planned) | `docs/VV/Execution_Logs/local/ew_mlp_demo_report.md` | PLANNED |
+| OCLW-REQ-0403 | Salida estable/defense-friendly (`RESULT=PASS|FAIL|SKIP`, logs acotados) | Test + Inspection | OCLW-TST-0401, OCLW-TST-0402 | `tests/smoke/smoke_ew_mlp_inference.adb`, `tests/smoke/smoke_rt_load_pack_ew_mlp.adb` (planned) | `docs/VV/Execution_Logs/local/ew_mlp_demo_report.md` | IN_PROGRESS |
+| OCLW-REQ-0404 | Bench minimo con percentiles (`p50`/`p99`) y throughput | Test | OCLW-TST-0403 | `tests/bench/bench_rt_pack_ew_mlp.adb` (planned) | `docs/VV/Execution_Logs/local/ew_mlp_demo_report.md` | PLANNED |

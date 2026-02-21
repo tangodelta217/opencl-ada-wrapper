@@ -131,3 +131,63 @@ Expected stable output:
 - `INFO case_symlink=PASS expected=... got=...`
 - `INFO case_world_writable=PASS expected=OCLW_PLUGIN_UNSAFE_PERMS got=...`
 - `RESULT=PASS|FAIL|SKIP`
+
+## OCLW-TST-0401: `smoke_ew_mlp_inference`
+Purpose:
+- Validate deterministic EW MLP inference end-to-end in OpenCL and compare
+  bit-exact logits/classes against CPU reference.
+
+Preconditions:
+- `gprbuild -P tests/tests.gpr` completed.
+- At least one OpenCL platform/device is available; otherwise controlled SKIP.
+
+PASS criteria:
+- Device logits are exact match with CPU reference for all samples/classes.
+- Device class equals CPU class and expected synthetic label.
+- Final line is `RESULT=PASS`.
+
+FAIL criteria:
+- Any logit/class mismatch is detected.
+- Final line is `RESULT=FAIL`.
+
+Expected stable output:
+- `INFO batch=...`
+- `INFO accuracy=.../...`
+- `INFO confusion_row_0=...`
+- `INFO confusion_row_1=...`
+- `INFO confusion_row_2=...`
+- `INFO confusion_row_3=...`
+- `RESULT=PASS|FAIL|SKIP`
+
+## OCLW-TST-0402: `smoke_rt_load_pack_ew_mlp` (planned)
+Purpose:
+- Validate RT no-JIT loading of EW MLP pack (`manifest.kpack` + `program.bin`)
+  with strict fail-closed behavior.
+
+Preconditions:
+- EW MLP pack generation path available.
+- RT loader path available.
+
+PASS criteria:
+- Program is loaded from binary pack and inference executes without source
+  fallback.
+- Final line is `RESULT=PASS`.
+
+Expected stable output:
+- `RESULT=PASS|FAIL|SKIP`
+
+## OCLW-TST-0403: `bench_rt_pack_ew_mlp` (planned)
+Purpose:
+- Measure EW MLP RT pack execution metrics (`p50`/`p99`, throughput).
+
+Preconditions:
+- EW MLP RT path and bench executable available.
+
+PASS criteria:
+- Bench emits deterministic metrics lines and completes with `RESULT=PASS`.
+
+Expected stable output:
+- `INFO exec_host_ns_p50=...`
+- `INFO exec_host_ns_p99=...`
+- `INFO throughput=...`
+- `RESULT=PASS|FAIL|SKIP`

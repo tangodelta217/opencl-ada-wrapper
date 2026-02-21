@@ -34,6 +34,17 @@ join_csv() {
   fi
 }
 
+has_text() {
+  local needle="$1"
+  shift
+
+  if command -v rg >/dev/null 2>&1; then
+    rg -n -F -- "$needle" "$@" >/dev/null 2>&1
+  else
+    grep -R -n -F -- "$needle" "$@" >/dev/null 2>&1
+  fi
+}
+
 if [ ! -f "${TRACEABILITY_FILE}" ]; then
   echo "RESULT=FAIL"
   echo "INFO missing_tests=<traceability_file_missing>"
@@ -44,6 +55,7 @@ fi
 
 mapfile -t test_ids < <(grep -oE 'OCLW-TST-[0-9]{4}' "${TRACEABILITY_FILE}" | sort -u)
 mapfile -t gate_ids < <(grep -oE 'G[0-9]+[A-Z0-9]*' "${TRACEABILITY_FILE}" | sort -u)
+mapfile -t smoke_design_files < <(compgen -G "${SMOKE_DESIGN_GLOB}" || true)
 
 for test_id in "${test_ids[@]:-}"; do
   if [ -z "${test_id}" ]; then
@@ -55,11 +67,11 @@ for test_id in "${test_ids[@]:-}"; do
   test_id_alt="${test_id//-/_}"
   found=0
 
-  if rg -n -F "${test_id}" tests >/dev/null 2>&1; then
+  if has_text "${test_id}" tests; then
     found=1
-  elif rg -n -F "${test_id_alt}" tests >/dev/null 2>&1; then
+  elif has_text "${test_id_alt}" tests; then
     found=1
-  elif rg -n -F "${test_id}" ${SMOKE_DESIGN_GLOB} >/dev/null 2>&1; then
+  elif [ "${#smoke_design_files[@]}" -gt 0 ] && has_text "${test_id}" "${smoke_design_files[@]}"; then
     found=1
   fi
 

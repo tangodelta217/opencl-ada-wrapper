@@ -1,0 +1,13 @@
+$ /home/tangodelta/opencl-ada-wrapper/tests/bin/smoke_ew_mlp_inference
+INFO batch=256
+INFO accuracy=256/256
+INFO logits_mismatches=0
+INFO class_mismatches=0
+INFO cpu_expected_mismatches=0
+INFO class_out_of_range=0
+INFO confusion_row_0=64,0,0,0
+INFO confusion_row_1=0,64,0,0
+INFO confusion_row_2=0,0,64,0
+INFO confusion_row_3=0,0,0,64
+RESULT=PASS
+smoke_ew_mlp_inference_exit_code=0

@@ -38,4 +38,5 @@ dist/
 # OS/editor noise
 .DS_Store
 Thumbs.db
+# Local execution logs (non-release artifacts)
 docs/VV/Execution_Logs/local/

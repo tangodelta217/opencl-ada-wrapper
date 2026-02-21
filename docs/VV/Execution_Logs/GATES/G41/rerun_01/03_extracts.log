@@ -1,0 +1,4 @@
+# Extracts
+INFO mode=RT_NOJIT
+INFO accuracy=1024/1024
+RESULT=PASS

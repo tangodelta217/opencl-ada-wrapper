@@ -1,0 +1,7 @@
+bundle_path=dist/oclw_delivery_bundle_reproducible.tar.gz
+run1_exit_code=0
+run2_exit_code=0
+sha1=9e922e1f2eb0709244240d0e2b791a717a3fd02fd589e824ab5e8010deda6975
+sha2=9e922e1f2eb0709244240d0e2b791a717a3fd02fd589e824ab5e8010deda6975
+compare=MATCH
+result=PASS
